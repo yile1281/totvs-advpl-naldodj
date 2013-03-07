@@ -1,0 +1,12 @@
+#
+# $Id: tbignumber.hbp 17099 2013-02-05 12:15:39Z marinaldo.jesus $
+#
+
+-mt
+
+/DTBN_DBFILE /DTBN_MEMIO /D__MT__ /D__TBN_DYN_OBJ_SET__ /D__POWMT__
+
+tBigNtst.prg   -w2 /DPTEX_ASSIGN_VAR
+tbignumber.prg -w3
+
+-otBigNtst_dbfile_memio_mt_dyn_obj

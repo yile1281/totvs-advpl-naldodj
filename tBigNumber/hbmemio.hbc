@@ -1,0 +1,7 @@
+#
+# $Id: hbmemio.hbc 18181 2012-09-30 12:54:42Z vszakats $
+#
+
+description=MEMIO file I/O for RDDs
+
+libs=${_HB_DYNPREF}${hb_name}${_HB_DYNSUFF}

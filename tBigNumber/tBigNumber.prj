@@ -1,0 +1,51 @@
+Group tBigNumber
+   Version=7.0
+   VSSDB=
+   HasProperties=1
+   Properties
+      BeforeApply=
+      AfterApply=
+      Icon=
+      ID=
+      Version=
+      PalmName=
+      OutPut=
+   End
+   ProjectsCount=2
+   Project tBigNumber
+      FoldersCount=2
+      Folder Fontes
+         VSSPath=Fontes
+         FilesCount=2
+         File \svn\totvs-advpl-naldodj\tBigNumber\tBigNtst.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\tbignumber.prg
+             Type=T
+         End
+      End
+      Folder Definições
+         VSSPath=Definições
+         FilesCount=3
+         File \svn\totvs-advpl-naldodj\tBigNumber\tBigNumber.ch
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\tryexception.ch
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\paramtypex.ch
+             Type=T
+         End
+      End
+   End
+   Project NPerfeitos
+      FoldersCount=1
+      Folder Fontes
+         VSSPath=Nova Pasta1
+         FilesCount=1
+         File \svn\totvs-advpl-naldodj\tBigNumber\nPerfeitos\totvs_protheus\u_NPerfeitos.prg
+             Type=T
+         End
+      End
+   End
+End

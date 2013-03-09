@@ -125,7 +125,7 @@ End Class
 	Sintaxe		: tBigNumber():New( uBigN  ) -> self
 */
 #IFDEF __PROTHEUS__
-	User Function tBigNumber( uBigN , nAcc )
+	User Function tBigNumber( uBigN )
 	Return( tBigNumber():New( @uBigN ) )
 #ENDIF
 

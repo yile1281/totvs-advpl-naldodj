@@ -114,6 +114,8 @@ CLASS tBigNumber
 	Method Randomize( uB , uE , nExit )
 
 	Method millerRabin( uI )
+	
+	Method FI()
                     
 End Class
 
@@ -2721,6 +2723,52 @@ Static Function mrPass(uA,uS,uD,uN)
 	END SEQUENCE
 
 Return( lmrP )
+
+/*
+	Method		: FI
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 10/03/2013
+	Descricao	: Euler's totient function
+	Sintaxe		: tBigNumber():FI() -> oTBigN
+	Ref.:		: ( Euler's totient function ) http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=primeNumbers
+	
+	int fi(int n) 
+     { 
+       int result = n; 
+       for(int i=2;i*i <= n;i++) 
+       { 
+         if (n % i == 0) result -= result / i; 
+         while (n % i == 0) n /= i; 
+       } 
+       if (n > 1) result -= result / n; 
+       return result; 
+     } 
+	
+*/
+Method FI() CLASS tBigNumber
+
+	Local oT	:= tBigNumber():New( self:Int( .T. ) )
+	
+	Local o0	:= tBigNumber():New()		
+	Local o1	:= tBigNumber():New( "1" )
+
+	Local oI	:= tBigNumber():New( "2" )
+	Local oN	:= tBigNumber():New( oT )
+
+	While oI:Mult( oI ):lte( self )
+		IF ( oN:Mod( oI ):eq( o0 ) )
+			oT:SetValue( oT:Sub( oT:Div( oI , .F. ) ) )
+		EndIF
+		While ( oN:Mod( oI ):eq( o0 ) )
+			oN:SetValue( oN:Div( oI , .F. ) )
+		End While
+		oI:SetValue( oI:Add( o1 ) )
+	End While
+	IF ( oN:gt( o1 ) )
+		oT:SetValue( oT:Sub( oT:Div( oN , .F. ) ) )		
+	EndIF
+
+Return( oT )
 
 /*
 	Funcao		: Mult

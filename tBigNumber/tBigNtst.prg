@@ -103,6 +103,8 @@ User Function tBigNTst()
 
 	__ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
 
+	__tbnSleep()
+
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste GCD/LCM 0 -------------- ")
@@ -128,6 +130,7 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	__tbnSleep()
+
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste HEX16 0 -------------- ")
@@ -484,6 +487,23 @@ User Function tBigNTst()
 	__ConOut(fhLog," ------------ DIV Teste 2 -------------- END ")
 	
 	__ConOut(fhLog,"")
+
+	__tbnSleep()
+
+	__ConOut(fhLog," BEGIN ------------ Teste FI 0 -------------- ")
+	//http://www.javascripter.net/math/calculators/eulertotientfunction.htm
+	
+	__ConOut(fhLog,"")
+
+	For n := 1 To N_TEST
+		ASSIGN cN := LTrim(Str(n))
+		__ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
+		__ConOut(fhLog,"---------------------------------------------------------")
+	Next n
+	
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," ------------ Teste FI  0 -------------- END ")
 
 	__tbnSleep()
 

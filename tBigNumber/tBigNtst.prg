@@ -43,7 +43,7 @@ User Function tBigNTst()
 #ENDIF	
 	
 	Private __CRLF	AS CHARACTER VALUE CRLF
-    
+
 	ASSIGN fhLog := fCreate(cLog , FC_NORMAL)
 	fClose(fhLog)
 	ASSIGN fhLog := fOpen(cLog , FO_READWRITE + FO_SHARED)

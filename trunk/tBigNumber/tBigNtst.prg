@@ -557,7 +557,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	otBigN:SysSQRT(0)
+*	otBigN:SysSQRT(0)
 
 	__ConOut(fhLog,"")
 

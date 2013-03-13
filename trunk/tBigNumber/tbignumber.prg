@@ -11,8 +11,8 @@ THREAD Static __aFiles
 THREAD Static __nthRootAcc
 THREAD Static __nSetDecimals
 
-#DEFINE RANDOM_MAX_EXIT	5
-#DEFINE EXIT_MAX_RANDOM	50
+#DEFINE RANDOM_MAX_EXIT		5
+#DEFINE EXIT_MAX_RANDOM		50
 
 /*
 
@@ -685,13 +685,15 @@ Method Add( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		n1	:= Val(__adoN1:ExactValue())
-		n2	:= Val(__adoN2:ExactValue())
-		IF ( ( ( n1 <= 999999999.99999 ) .and. __adoN1:nDec <= 4 ) .and. ( ( n2 <= 999999999.99999 ) .and. __adoN2:nDec <= 4 ) )
-			cBigNT	:= LTrim(Str(n1+n2))
-			__adoNR:SetValue( cBigNT )
-			BREAK
-		EndIF
+		IF ( ( __adoN1:nSize <= 14 ) .and. ( __adoN2:nSize <= 14 ) )
+			n1	:= Val(__adoN1:ExactValue())
+			n2	:= Val(__adoN2:ExactValue())
+			IF ( ( ( n1 <= 999999999.99999 ) .and. __adoN1:nDec <= 4 ) .and. ( ( n2 <= 999999999.99999 ) .and. __adoN2:nDec <= 4 ) )
+				cBigNT	:= LTrim(Str(n1+n2))
+				__adoNR:SetValue( cBigNT )
+				BREAK
+			EndIF
+		EndIF	
 
 	    nDec	:= __adoN1:nDec
 	    nSize	:= __adoN1:nSize
@@ -815,14 +817,16 @@ Method Sub( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		n1	:= Val(__sboN1:ExactValue())
-		n2	:= Val(__sboN2:ExactValue())
-		IF ( ( ( n1 <= 999999999.99999 ) .and. ( __sboN1:nDec <= 4 ) ) .and. ( ( n2 <= 999999999.99999 ) .and. ( __sboN2:nDec <= 4 ) ) )
-			cBigNT	:= LTrim(Str(n1-n2))
-			__sboNR:SetValue( cBigNT )
-			BREAK
-		EndIF
-
+		IF ( ( __sboN1:nSize <= 14 ) .and. ( __sboN2:nSize <= 14 ) )
+			n1	:= Val(__sboN1:ExactValue())
+			n2	:= Val(__sboN2:ExactValue())
+			IF ( ( ( n1 <= 999999999.99999 ) .and. ( __sboN1:nDec <= 4 ) ) .and. ( ( n2 <= 999999999.99999 ) .and. ( __sboN2:nDec <= 4 ) ) )
+				cBigNT	:= LTrim(Str(n1-n2))
+				__sboNR:SetValue( cBigNT )
+				BREAK
+			EndIF
+		EndIF	
+	
 	    nDec	:= __sboN1:nDec
 	    nSize	:= __sboN1:nSize
 	
@@ -945,13 +949,15 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		n1	:= Val(__mtoN1:ExactValue())
-		n2	:= Val(__mtoN2:ExactValue())
-		IF ( ( ( n1 <= 2999999.90 ) .and. ( __mtoN1:nDec <= 2 ) ) .and. ( ( n2 <= 2999999.90 ) .and. __mtoN2:nDec <= 2 ) )
-			cBigNT	:= LTrim(Str(n1*n2))
-			__mtoNR:SetValue( cBigNT )
-			BREAK
-		EndIF
+		IF ( ( __mtoN1:nSize <= 9 ) .and. ( __mtoN2:nSize <= 9 ) )
+			n1	:= Val(__mtoN1:ExactValue())
+			n2	:= Val(__mtoN2:ExactValue())
+			IF ( ( ( n1 <= 2999999.90 ) .and. ( __mtoN1:nDec <= 2 ) ) .and. ( ( n2 <= 2999999.90 ) .and. __mtoN2:nDec <= 2 ) )
+				cBigNT	:= LTrim(Str(n1*n2))
+				__mtoNR:SetValue( cBigNT )
+				BREAK
+			EndIF
+		EndIF	
 
 	    nDec	:= ( __mtoN1:nDec * 2 )
 	    nSize	:= __mtoN1:nSize
@@ -1764,13 +1770,13 @@ Method LCM( uBigN ) CLASS tBigNumber
 	BEGIN SEQUENCE
 
 		While ( .T. )
-			While ( oN1:Mod( oNI ):eq(o0) .or. oN2:Mod( oNI ):eq(o0) )
+			While ( oN1:Mod( oNI ):eq( o0 ) .or. oN2:Mod( oNI ):eq( o0 ) )
 				oLCM:SetValue( oLCM:Mult( oNI ) )
-				IF oN1:Mod( oNI ):eq(o0)
-					oN1:SetValue( oN1:Div( oNI ) )
+				IF oN1:Mod( oNI ):eq( o0 )
+					oN1:SetValue( oN1:Div( oNI , .F. ) )
 				EndIF
-				IF oN2:Mod( oNI ):eq(o0)
-					oN2:SetValue( oN2:Div( oNI ) )
+				IF oN2:Mod( oNI ):eq( o0 )
+					oN2:SetValue( oN2:Div( oNI , .F. ) )
 				EndIF
 			End While
 			IF ( oN1:eq( o1 ) .and. oN2:eq( o1 ) )

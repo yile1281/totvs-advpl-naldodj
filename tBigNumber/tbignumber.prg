@@ -3405,7 +3405,7 @@ Return( othRoot )
 					  dbCreate(cFile,aStru,NIL,.T.,cAlias)
 					  lSuccess	:= .T.
 					Catch
-					  cFile	:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
+					  cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
 					  lSuccess	:= .F.
 					End
 				End While	

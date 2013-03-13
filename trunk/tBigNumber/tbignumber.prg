@@ -659,6 +659,9 @@ Method Add( uBigN ) CLASS tBigNumber
 	Local lInv
 	Local lAdd		:= .T.
 
+	Local n1
+	Local n2
+
 	Local nAcc		:= __nSetDecimals
 	Local nDec		
 	Local nSize 	
@@ -669,7 +672,6 @@ Method Add( uBigN ) CLASS tBigNumber
 	Local oThread
 	#ENDIF
 #ENDIF
-
 	THREAD Static __adoNR
 	THREAD Static __adoN1
 	THREAD Static __adoN2
@@ -680,77 +682,89 @@ Method Add( uBigN ) CLASS tBigNumber
 
 	__adoN1:SetValue( __adoN1:Normalize( self  , self  , uBigN ) , NIL , .F. )
 	__adoN2:SetValue( __adoN2:Normalize( uBigN , uBigN , self  ) , NIL , .F. )
+
+	BEGIN SEQUENCE
+
+		n1	:= Val(__adoN1:ExactValue())
+		n2	:= Val(__adoN2:ExactValue())
+		IF ( ( ( n1 <= 999999999.99999 ) .and. __adoN1:nDec <= 4 ) .and. ( ( n2 <= 999999999.99999 ) .and. __adoN2:nDec <= 4 ) )
+			cBigNT	:= LTrim(Str(n1+n2))
+			__adoNR:SetValue( cBigNT )
+			BREAK
+		EndIF
+
+	    nDec	:= __adoN1:nDec
+	    nSize	:= __adoN1:nSize
 	
-    nDec	:= __adoN1:nDec
-    nSize	:= __adoN1:nSize
-
-    cBigN1	:= __adoN1:Int()
-    cBigN1	+= __adoN1:Dec()
-
-    cBigN2	:= __adoN2:Int()
-    cBigN2	+= __adoN2:Dec()
-
-    lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( __adoN2:lNeg ) ) .or. ( .NOT.( __adoN1:lNeg ) .and. __adoN2:lNeg ) )
-
-	IF ( lNeg )
-		lAdd	:= .F.
-		lInv	:= ( cBigN1 < cBigN2 )
-		lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( lInv ) ) .or. ( __adoN2:lNeg .and. lInv ) )
-		IF ( lInv )
-			cBigNT	:= cBigN1
-			cBigN1	:= cBigN2
-			cBigN2	:= cBigNT
-			cBigNT	:= NIL
-		EndIF
-    Else
-    	lNeg	:= __adoN1:lNeg
-    EndIF
-
-	IF ( lAdd )
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
+	    cBigN1	:= __adoN1:Int()
+	    cBigN1	+= __adoN1:Dec()
+	
+	    cBigN2	:= __adoN2:Int()
+	    cBigN2	+= __adoN2:Dec()
+	
+	    lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( __adoN2:lNeg ) ) .or. ( .NOT.( __adoN1:lNeg ) .and. __adoN2:lNeg ) )
+	
+		IF ( lNeg )
+			lAdd	:= .F.
+			lInv	:= ( cBigN1 < cBigN2 )
+			lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( lInv ) ) .or. ( __adoN2:lNeg .and. lInv ) )
+			IF ( lInv )
+				cBigNT	:= cBigN1
+				cBigN1	:= cBigN2
+				cBigN2	:= cBigNT
+				cBigNT	:= NIL
+			EndIF
+	    Else
+	    	lNeg	:= __adoN1:lNeg
+	    EndIF
+	
+		IF ( lAdd )
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+				#ELSE
+					xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+				#ENDIF
+				__adoNR:SetValue( xResult , NIL , .F. )
 			#ELSE
-				xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )			
 			#ENDIF
-			__adoNR:SetValue( xResult , NIL , .F. )
-		#ELSE
-			__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )			
-		#ENDIF
-	Else
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
+		Else
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+				#ELSE
+					xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+				#ENDIF
+				__adoNR:SetValue( xResult , NIL , .F. )
 			#ELSE
-				xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )
 			#ENDIF
-			__adoNR:SetValue( xResult , NIL , .F. )
-		#ELSE
-			__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )
-		#ENDIF
-	EndIF
-
-    cBigNT	:= __adoNR:Int()
-    
-    cDec	:= SubStr( cBigNT , -nDec  )
-    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
-
-    cBigNT	:= cInt
-    cBigNT	+= "."
-    cBigNT	+= cDec
-
-	__adoNR:SetValue( cBigNT )
-
-	IF ( lNeg )
-		IF ( __adoNR:gt( "0" ) )
-			__adoNR:cSig := "-"
-			__adoNR:lNeg	:= lNeg
 		EndIF
-	EndIF
+	
+	    cBigNT	:= __adoNR:Int()
+	    
+	    cDec	:= SubStr( cBigNT , -nDec  )
+	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	
+	    cBigNT	:= cInt
+	    cBigNT	+= "."
+	    cBigNT	+= cDec
+	
+		__adoNR:SetValue( cBigNT )
+	
+		IF ( lNeg )
+			IF ( __adoNR:gt( "0" ) )
+				__adoNR:cSig	:= "-"
+				__adoNR:lNeg	:= lNeg
+			EndIF
+		EndIF
+
+	END SEQUENCE
 
 Return( __adoNR )
 
@@ -774,6 +788,9 @@ Method Sub( uBigN ) CLASS tBigNumber
 	Local lInv		
 	Local lSub	:= .T.
 
+	Local n1
+	Local n2
+
 	Local nAcc	:= __nSetDecimals
 	Local nDec		
 	Local nSize 	
@@ -795,77 +812,89 @@ Method Sub( uBigN ) CLASS tBigNumber
 
 	__sboN1:SetValue( __sboN1:Normalize( self  , self  , uBigN ) , NIL , .F. )
 	__sboN2:SetValue( __sboN2:Normalize( uBigN , uBigN , self  ) , NIL , .F. )
-	
-    nDec	:= __sboN1:nDec
-    nSize	:= __sboN1:nSize
 
-    cBigN1	:= __sboN1:Int()
-    cBigN1	+= __sboN1:Dec()
+	BEGIN SEQUENCE
 
-    cBigN2	:= __sboN2:Int()
-    cBigN2	+= __sboN2:Dec()
-
-    lNeg	:= ( ( __sboN1:lNeg .and. .NOT.( __sboN2:lNeg ) ) .or. ( .NOT.( __sboN1:lNeg ) .and. __sboN2:lNeg ) )
-
-	IF ( lNeg )
-		lSub	:= .F.
-		lNeg	:= __sboN1:lNeg
-	Else
-		lInv	:= ( cBigN1 < cBigN2 )
-		lNeg	:= ( __sboN1:lNeg .or. lInv )
-		IF ( lInv )
-			cBigNT	:= cBigN1
-			cBigN1	:= cBigN2
-			cBigN2	:= cBigNT
-			cBigNT	:= NIL
+		n1	:= Val(__sboN1:ExactValue())
+		n2	:= Val(__sboN2:ExactValue())
+		IF ( ( ( n1 <= 999999999.99999 ) .and. ( __sboN1:nDec <= 4 ) ) .and. ( ( n2 <= 999999999.99999 ) .and. ( __sboN2:nDec <= 4 ) ) )
+			cBigNT	:= LTrim(Str(n1-n2))
+			__sboNR:SetValue( cBigNT )
+			BREAK
 		EndIF
-	EndIF
 
-    IF ( lSub )
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
-		    #ELSE
-		    	xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-		    #ENDIF
-		    __sboNR:SetValue( xResult , NIL , .F. )
-    	#ELSE
-			__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )    		
-    	#ENDIF
-    Else
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
-		    #ELSE
-		    	xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-		    #ENDIF
-		    __sboNR:SetValue( xResult , NIL , .F. )
-    	#ELSE
-			__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )    		
-    	#ENDIF
-    EndIF
-
-    cBigNT	:= __sboNR:Int()
-    
-    cDec	:= SubStr( cBigNT , -nDec  )
-    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
-    
-    cBigNT	:= cInt
-    cBigNT	+= "."
-    cBigNT	+= cDec
+	    nDec	:= __sboN1:nDec
+	    nSize	:= __sboN1:nSize
 	
-	__sboNR:SetValue( cBigNT )
-
-	IF ( lNeg )
-		IF ( __sboNR:gt( "0" ) )
-		    __sboNR:cSig := "-"
-		    __sboNR:lNeg	:= lNeg
+	    cBigN1	:= __sboN1:Int()
+	    cBigN1	+= __sboN1:Dec()
+	
+	    cBigN2	:= __sboN2:Int()
+	    cBigN2	+= __sboN2:Dec()
+	
+	    lNeg	:= ( ( __sboN1:lNeg .and. .NOT.( __sboN2:lNeg ) ) .or. ( .NOT.( __sboN1:lNeg ) .and. __sboN2:lNeg ) )
+	
+		IF ( lNeg )
+			lSub	:= .F.
+			lNeg	:= __sboN1:lNeg
+		Else
+			lInv	:= ( cBigN1 < cBigN2 )
+			lNeg	:= ( __sboN1:lNeg .or. lInv )
+			IF ( lInv )
+				cBigNT	:= cBigN1
+				cBigN1	:= cBigN2
+				cBigN2	:= cBigNT
+				cBigNT	:= NIL
+			EndIF
 		EndIF
-	EndIF
+	
+	    IF ( lSub )
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+			    #ELSE
+			    	xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+			    #ENDIF
+			    __sboNR:SetValue( xResult , NIL , .F. )
+	    	#ELSE
+				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )    		
+	    	#ENDIF
+	    Else
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+			    #ELSE
+			    	xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+			    #ENDIF
+			    __sboNR:SetValue( xResult , NIL , .F. )
+	    	#ELSE
+				__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )    		
+	    	#ENDIF
+	    EndIF
+	
+	    cBigNT	:= __sboNR:Int()
+	    
+	    cDec	:= SubStr( cBigNT , -nDec  )
+	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	    
+	    cBigNT	:= cInt
+	    cBigNT	+= "."
+	    cBigNT	+= cDec
+		
+		__sboNR:SetValue( cBigNT )
+	
+		IF ( lNeg )
+			IF ( __sboNR:gt( "0" ) )
+			    __sboNR:cSig := "-"
+			    __sboNR:lNeg	:= lNeg
+			EndIF
+		EndIF
+
+	END SEQUENCE
 
 Return( __sboNR )
 
@@ -889,6 +918,9 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	Local lNeg1 
 	Local lNeg2 
 
+	Local n1
+	Local n2
+
 	Local nAcc	:= __nSetDecimals
 	Local nDec	
 	Local nSize 
@@ -910,71 +942,83 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 
 	__mtoN1:SetValue( __mtoN1:Normalize( self  , self  , uBigN ) , NIL , .F. )
 	__mtoN2:SetValue( __mtoN2:Normalize( uBigN , uBigN , self  ) , NIL , .F. )
-	
-    nDec	:= ( __mtoN1:nDec * 2 )
-    nSize	:= __mtoN1:nSize
 
-    lNeg1 	:= __mtoN1:lNeg
-    lNeg2	:= __mtoN2:lNeg	
-    lNeg	:= ( lNeg1 .and. .NOT.( lNeg2 ) ) .or. ( .NOT.( lNeg1 ) .and. lNeg2 )
+	BEGIN SEQUENCE
 
-    cBigN1	:= __mtoN1:Int()
-    cBigN1	+= __mtoN1:Dec()
-
-    cBigN2	:= __mtoN2:Int()
-    cBigN2	+= __mtoN2:Dec()
-
-    DEFAULT __lMult := .F.
-
-    IF ( __lMult )
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "__MultThread" , @cBigN1 , @cBigN2 , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
-			#ELSE
-				xResult := StartJob( "U___MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nAcc )
-			#ENDIF
-			__mtoNR:SetValue( xResult , NIL , .F. )
-    	#ELSE
-			__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 , @nAcc ) , NIL , .F. )    		
-    	#ENDIF
-    Else
-		#IFDEF __MT__
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
-	    	#ELSE
-		    	xResult := StartJob( "U_MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
-	    	#ENDIF
-	    	__mtoNR:SetValue( xResult , NIL , .F. )
-    	#ELSE
-			__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )
-    	#ENDIF
-    EndIF	
-
-    cBigNT	:= __mtoNR:Int()
-    
-    cDec	:= SubStr( cBigNT , -nDec  )
-    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
-    
-    cBigNT	:= cInt
-    cBigNT	+= "."
-    cBigNT	+= cDec
-	
-	__mtoNR:SetValue( cBigNT )
-    
-    cBigNT	:= __mtoNR:ExactValue()
-	
-	__mtoNR:SetValue( cBigNT )
-
-	IF ( lNeg )
-		IF ( __mtoNR:gt( "0" ) )
-		    __mtoNR:cSig := "-"
-		    __mtoNR:lNeg	:= lNeg
+		n1	:= Val(__mtoN1:ExactValue())
+		n2	:= Val(__mtoN2:ExactValue())
+		IF ( ( ( n1 <= 2999999.90 ) .and. ( __mtoN1:nDec <= 2 ) ) .and. ( ( n2 <= 2999999.90 ) .and. __mtoN2:nDec <= 2 ) )
+			cBigNT	:= LTrim(Str(n1*n2))
+			__mtoNR:SetValue( cBigNT )
+			BREAK
 		EndIF
-	EndIF
+
+	    nDec	:= ( __mtoN1:nDec * 2 )
+	    nSize	:= __mtoN1:nSize
+	
+	    lNeg1 	:= __mtoN1:lNeg
+	    lNeg2	:= __mtoN2:lNeg	
+	    lNeg	:= ( lNeg1 .and. .NOT.( lNeg2 ) ) .or. ( .NOT.( lNeg1 ) .and. lNeg2 )
+	
+	    cBigN1	:= __mtoN1:Int()
+	    cBigN1	+= __mtoN1:Dec()
+	
+	    cBigN2	:= __mtoN2:Int()
+	    cBigN2	+= __mtoN2:Dec()
+	
+	    DEFAULT __lMult := .F.
+	
+	    IF ( __lMult )
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "__MultThread" , @cBigN1 , @cBigN2 , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+				#ELSE
+					xResult := StartJob( "U___MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nAcc )
+				#ENDIF
+				__mtoNR:SetValue( xResult , NIL , .F. )
+	    	#ELSE
+				__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 , @nAcc ) , NIL , .F. )    		
+	    	#ENDIF
+	    Else
+			#IFDEF __MT__
+				#IFNDEF __PROTHEUS__
+					oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					hb_threadJoin( oThread , @xResult )
+					hb_threadWaitForAll( { oThread } )
+		    	#ELSE
+			    	xResult := StartJob( "U_MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+		    	#ENDIF
+		    	__mtoNR:SetValue( xResult , NIL , .F. )
+	    	#ELSE
+				__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , .F. )
+	    	#ENDIF
+	    EndIF	
+	
+	    cBigNT	:= __mtoNR:Int()
+	    
+	    cDec	:= SubStr( cBigNT , -nDec  )
+	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	    
+	    cBigNT	:= cInt
+	    cBigNT	+= "."
+	    cBigNT	+= cDec
+		
+		__mtoNR:SetValue( cBigNT )
+	    
+	    cBigNT	:= __mtoNR:ExactValue()
+		
+		__mtoNR:SetValue( cBigNT )
+	
+		IF ( lNeg )
+			IF ( __mtoNR:gt( "0" ) )
+			    __mtoNR:cSig := "-"
+			    __mtoNR:lNeg	:= lNeg
+			EndIF
+		EndIF
+
+	END SEQUENCE
 
 Return( __mtoNR )
 

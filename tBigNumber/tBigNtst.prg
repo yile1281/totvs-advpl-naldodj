@@ -38,7 +38,7 @@ User Function tBigNTst()
 	Local fhLog		AS NUMBER
 	Local nSetDec	AS NUMBER	
 
-#IFDEF __HARBOUR__	
+#IFDEF __HARBOUR__
 	MEMVAR __CRLF
 #ENDIF	
 	
@@ -49,8 +49,6 @@ User Function tBigNTst()
 	ASSIGN fhLog := fOpen(cLog , FO_READWRITE + FO_SHARED)
 
 	otBigN:SetDecimals(ACC_SET)
-	
-	otBigN:Randomize()
 
 	Set(_SET_DECIMALS , ACC_SET)
 

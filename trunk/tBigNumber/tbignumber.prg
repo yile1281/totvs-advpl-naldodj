@@ -2703,7 +2703,7 @@ Method millerRabin( uI ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF ( oN:lte(o1) )
+		IF ( oN:lte( o1 ) )
 			lPrime	:= .F.
 			BREAK
 		EndIF
@@ -2711,7 +2711,7 @@ Method millerRabin( uI ) CLASS tBigNumber
 		DEFAULT uI		:= "2"
 	
 		While ( oD:Mod( o2 ):eq( o0 ) )
-			oD:SetValue( oD:Div( o2 ) )
+			oD:SetValue( oD:Div( o2 , .F. ) )
 			oS:SetValue( oS:Add( o1 ) )
 		End While
 	

@@ -2759,7 +2759,7 @@ Static Function mrPass(uA,uS,uD,uN)
 			BREAK
 		EndIF
 
-		While ( oW:gt(o0) )
+		While ( oW:gt( o0 ) )
 			lmrP	:= 	oP:eq( oM )
 			IF ( lmrP )
 				BREAK

@@ -45,12 +45,12 @@
 		#DEFINE NP_SLEEP_MED	 300
 		#DEFINE NP_SLEEP_MAX	 500
 		#IFDEF NP_CTREE
-			Static __cNPRDD AS CHARACTER VALUE "CTREECDX"
+			Static __cNPRDD		AS CHARACTER VALUE "CTREECDX"
 			Static __lTopConn	AS LOGICAL		VALUE .F.
 			Static __lCtreeCDX	AS LOGICAL		VALUE .T.
 			Static __ldbfCDXAds	AS LOGICAL		VALUE .F.
 		#ELSE		
-			Static __cNPRDD	AS CHARACTER VALUE "DBFCDXADS"
+			Static __cNPRDD		AS CHARACTER VALUE "DBFCDXADS"
 			Static __lTopConn	AS LOGICAL		VALUE .F.
 			Static __lCtreeCDX	AS LOGICAL		VALUE .F.
 			Static __ldbfCDXAds	AS LOGICAL		VALUE .T.
@@ -459,7 +459,7 @@
 		PTInternal( 1 , "[NP][U_GMathCall][Interval: "+cInterval+"][Start]" )
 		Sleep(NP_SLEEP_MIN)
 	
-		lRet			:= MathIPNum( @cNI , @cNF , @lGridC )
+		ASSIGN lRet			:= MathIPNum( @cNI , @cNF , @lGridC )
 	
 		PTInternal( 1 , "[NP][U_GMathCall][Interval: "+cInterval+"][Finish]" )
 		Sleep(NP_SLEEP_MIN)

@@ -5,7 +5,7 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET	 17
+#DEFINE ACC_SET	 25
 #DEFINE __SLEEP 0
 
 #DEFINE N_TEST 50
@@ -41,7 +41,7 @@ User Function tBigNTst()
 #IFDEF __HARBOUR__
 	MEMVAR __CRLF
 #ENDIF	
-	
+
 	Private __CRLF	AS CHARACTER VALUE CRLF
 
 	ASSIGN fhLog := fCreate(cLog , FC_NORMAL)
@@ -505,7 +505,8 @@ User Function tBigNTst()
 
 	__tbnSleep()
 
-	otBigN:SysSQRT(999999999999999)
+*	otBigN:SysSQRT(999999999999999)
+	otBigN:SysSQRT(0)
 
 	__ConOut(fhLog,"")
 

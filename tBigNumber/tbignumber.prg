@@ -1906,11 +1906,11 @@ Return( oSQRT )
 Method SysSQRT( uSet ) CLASS tBigNumber
 
 	Local cType
-	Local oSysSQRT	:= tBigNumber():New()
+	Local oSysSQRT		:= tBigNumber():New()
 
 	THREAD Static __uSysSQRT
 
-	DEFAULT __uSysSQRT	:= "999999999999999"
+	DEFAULT __uSysSQRT	:= "9999999999999999"
 	DEFAULT uSet 		:= __uSysSQRT
 
 	__uSysSQRT			:= uSet
@@ -2979,7 +2979,11 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 	o1divE:SetValue( o1:Div(oRootE) )
 	oESub1:SetValue( oRootE:Sub(o1) )
 
-	othRootT:SetValue(oRootB:Div(oRootE))
+	IF oRootE:eq("2")
+		othRootT:SetValue(__sqrt(oRootB,2))
+	Else
+		othRootT:SetValue(oRootB:Div(oRootE))
+	EndIF	
 
 	While ( oAccNo:gt(oAccTo) )
 		oT1:SetValue(oRootB:Div(othRootT:Pow(oESub1)))
@@ -2995,6 +2999,23 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 	End While
 
 Return( othRoot )  
+
+Static Function __sqrt(p,n)
+	Local x
+	Local i
+	local t
+	p := tBigNumber():New(p)
+	IF p:lte( "9999999999999999" )
+		x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
+	Else
+		DEFAULT n := 1
+		t := tBigNumber():New("2")
+		x := p:Div(t)
+		for i := 1 To n
+			x:SetValue(x:pow(t):Add(p):Div(t:Mult(x)))
+		next i
+	EndIF
+return(x)
 
 #IFDEF TBN_DBFILE
 

@@ -482,8 +482,8 @@
 		Local cThread		AS CHARACTER
 		Local cEnvServer	AS CHARACTER
 
-		Local cNPFile
-		Local cIntExec
+		Local cNPFile		AS CHARACTER
+		Local cIntExec		AS CHARACTER
 		Local cInterval		AS CHARACTER
 	
 		Local lTTS			AS LOGICAL

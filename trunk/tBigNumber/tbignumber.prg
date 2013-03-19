@@ -116,6 +116,8 @@ CLASS tBigNumber
 	Method millerRabin( uI )
 	
 	Method FI()
+	
+	Method FPrimes()
                     
 End Class
 
@@ -2819,6 +2821,55 @@ Method FI() CLASS tBigNumber
 	EndIF
 
 Return( oT )
+
+/*
+	Method		: FPrimes
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 10/03/2013
+	Descricao	: Fatores Primos
+	Sintaxe		: tBigNumber():FPrimes -> aFPrimes
+*/
+Method FPrimes() CLASS tBigNumber
+	
+	Local aFPrimes	:= Array(0)
+	
+	Local cP		:= ""
+
+	Local o0		:= tBigNumber():New()
+	Local o1		:= tBigNumber():New( "1" )
+	Local oN		:= tBigNumber():New( self )
+	Local oP		:= tBigNumber():New()
+
+	Local otP		:= tPrime():New()
+	
+	Local nP
+
+	otP:IsPReset()
+	otP:NextPReset()
+
+	While otP:NextPrime(cP)
+		cP := LTrim( otP:cPrime )
+		oP:SetValue( cP )
+		IF ( oP:gte( oN ) .or. otP:IsPrime( oN:Int() ) )
+			cP := oN:Int(.F.)
+			aAdd( aFPrimes , { cP , 1 } )
+			EXIT
+		EndIF
+		While ( oN:Mod( oP ):eq( o0 ) )
+			nP := aScan( aFPrimes , { |e| e[1] == cP } )
+			IF ( nP == 0 )
+				aAdd( aFPrimes , { cP , 1 } )
+			Else
+				aFPrimes[nP][2]++ 
+			EndIF
+			oN:SetValue( oN:Div( oP , .F. ) )
+		End While
+		IF ( oN:lte( o1 ) )
+			EXIT
+		EndIF
+	End While
+
+Return( aFPrimes )
 
 /*
 	Funcao		: Mult

@@ -3,6 +3,15 @@
 #include "tBigNumber.ch"
 
 THREAD Static __aPTables
+THREAD Static __nPTables
+
+THREAD Static __oIPfRead
+THREAD Static __nIPfRead
+THREAD Static __aIPLRead
+
+THREAD Static __oNPfRead
+THREAD Static __nNPfRead
+THREAD Static __aNPLRead
 
 /*
 	Class		: tPrime
@@ -26,7 +35,12 @@ CLASS tPrime
 	Method ClassName()
 
 	Method IsPrime(cN)
+	Method IsPReset()
+
 	Method NextPrime(cN)
+	Method NextPReset()
+
+	Method ResetAll()
 
 END CLASS
 
@@ -66,9 +80,10 @@ Method New( cPath ) CLASS tPrime
 	Local nFiles
 	Local ofRead
 
-	IF ( __aPTables == NIL )
+	DEFAULT __aPTables	:= Array(0)
+
+	IF Empty( __aPTables )
 		self:nSize	:= 10
-        __aPTables	:= Array(0)
         #IFDEF __HARBOUR__
 	        DEFAULT cPath := hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir()+hb_ps()+"PrimesTables"+hb_ps()
 		#ELSE //__PROTHEUS__
@@ -151,7 +166,18 @@ Method New( cPath ) CLASS tPrime
 			self:cFPrime	:= __aPTables[1][2]
 			self:cLPrime	:= __aPTables[nFiles][3]
 		EndIF	
-		
+
+		__nPTables	:= nFiles
+
+	Else
+
+		nFiles	:= __nPTables
+		IF ( nFiles > 0 )
+			self:cFPrime	:= __aPTables[1][2]
+			self:cLPrime	:= __aPTables[nFiles][3]
+			self:nSize 		:= Len( self:cLPrime )
+		EndIF
+
 	EndIF
 
     self:cPrime	:= ""
@@ -197,10 +223,6 @@ Method IsPrime( cN ) CLASS tPrime
 	
 	Local nPrime
 	Local nTable
-	
-	THREAD Static __oIPfRead
-	THREAD Static __nIPfRead
-	THREAD Static __aIPLRead
 
 	BEGIN SEQUENCE
 
@@ -221,7 +243,7 @@ Method IsPrime( cN ) CLASS tPrime
 		DEFAULT __aIPLRead	:= Array(0)
 
 		IF .NOT.( __nIPfRead == nTable )
-			aSize( __aIPLRead ,  0 )
+			Self:IsPReset()
 			__nIPfRead := nTable
 			__oIPfRead:Close(.T.)
 			__oIPfRead:Open(__aPTables[nTable][1])
@@ -257,6 +279,9 @@ Method IsPrime( cN ) CLASS tPrime
 			IF ( lPrime := ( nPrime > 0 ) )
 				EXIT
 			EndIF	
+			IF ( aScan( aLine , { |x| PadL(x,self:nSize) > cN } ) > 0 )
+				EXIT
+			EndIF
 		End While
 
 		aSize( __aIPLRead ,  0 )
@@ -268,6 +293,13 @@ Method IsPrime( cN ) CLASS tPrime
 	END SEQUENCE
 
 Return( lPrime )
+
+Method IsPReset() CLASS tPrime
+	__nIPfRead	:= NIL
+	IF .NOT.( __aIPLRead == NIL )
+		aSize( __aIPLRead , 0 )
+	EndIF
+Return( .T. )
 
 /*
 	Method		: NextPrime
@@ -288,10 +320,6 @@ Method NextPrime( cN ) CLASS tPrime
 	Local nPrime
 	Local nTable
 
-	THREAD Static __oNPfRead
-	THREAD Static __nNPfRead
-	THREAD Static __aNPLRead
-	
 	BEGIN SEQUENCE
 	
 		IF Empty( __aPTables )
@@ -316,7 +344,7 @@ Method NextPrime( cN ) CLASS tPrime
 		DEFAULT __aNPLRead	:= Array(0)
 
 		IF .NOT.( __nNPfRead == nTable )
-			aSize( __aNPLRead ,  0 )
+			Self:NextPReset()
 			__nNPfRead := nTable
 			__oNPfRead:Close(.T.)
 			__oNPfRead:Open(__aPTables[nTable][1])
@@ -367,3 +395,19 @@ Method NextPrime( cN ) CLASS tPrime
 	END SEQUENCE
 
 Return( lPrime )
+
+Method NextPReset() CLASS tPrime
+	__nNPfRead	:= 0
+	IF .NOT.( __aNPLRead == NIL )
+		aSize( __aNPLRead , 0 )		
+	EndIF
+Return( .T. )
+
+Method ResetAll() CLASS tPrime
+	__nPTables	:= 0
+	IF .NOT.( __aPTables == NIL )
+		aSize( __aPTables , 0 )
+	EndIF
+	Self:IsPReset()
+	Self:NextPReset()
+Return( .T. )

@@ -117,12 +117,13 @@ METHOD Open( cFile , nMode ) CLASS tfRead
 	ELSE
 		// The file is already open, so rewind to the beginning.
 		IF ( self:Seek( 0 ) == 0 )
-			self:lEOF := .F.              // Definitely not at EOF
+			self:lEOF := .F.			// Definitely not at EOF
 		ELSE
-			self:nError := FERROR()       // Save error code if not at BOF
+			self:nError := FERROR()		// Save error code if not at BOF
 		ENDIF
-		self:cBuffer := ""               // Clear the readahead buffer
 	ENDIF
+
+	self:cBuffer := ""               	// Clear the readahead buffer
 
 RETURN Self
 
@@ -246,13 +247,15 @@ METHOD Close(lFClear) CLASS tfRead
 		// No, so close it already!
 		FCLOSE( self:nfHandle )
 		self:nError 	:= FERROR()
-		self:nfHandle	:= -1                // The file is no longer open
-		self:lEOF   	:= .T.               // So force an EOF condition
+		self:nfHandle	:= -1	// The file is no longer open
+		self:lEOF   	:= .T.	// So force an EOF condition
 	ENDIF
 
 	IF ( IF( lFClear == NIL , .F. , lFClear ) )
 		self:cFile := ""
 	EndIF
+
+	self:cBuffer := ""			// Clear the readahead buffer
 
 RETURN Self
 

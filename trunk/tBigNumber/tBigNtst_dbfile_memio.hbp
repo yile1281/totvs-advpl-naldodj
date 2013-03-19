@@ -6,8 +6,6 @@
 
 /DTBN_DBFILE /DTBN_MEMIO /D__POWMT__
 
--b
-
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3
 tfread.prg -w3

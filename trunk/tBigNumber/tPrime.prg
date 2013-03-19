@@ -220,18 +220,19 @@ Method IsPrime( cN ) CLASS tPrime
 		DEFAULT __oIPfRead	:= tfRead():New()
 		DEFAULT __aIPLRead	:= Array(0)
 
-		nPrime	:= aScan( __aIPLRead , { |x| PadL(x,self:nSize) == cN } )
-		IF ( lPrime := ( nPrime > 0 ) )
-			BREAK
-		EndIF	
-
 		IF .NOT.( __nIPfRead == nTable )
+			aSize( __aIPLRead ,  0 )
 			__nIPfRead := nTable
 			__oIPfRead:Close(.T.)
 			__oIPfRead:Open(__aPTables[nTable][1])
 			__oIPfRead:nReadSize := MIN( 65535 , ( __aPTables[nTable][4] + 2 ) * 64 )
 			__oIPfRead:ReadLine()
 		EndIF
+
+		nPrime	:= aScan( __aIPLRead , { |x| PadL(x,self:nSize) == cN } )
+		IF ( lPrime := ( nPrime > 0 ) )
+			BREAK
+		EndIF	
 
 		While __oIPfRead:MoreToRead()
 			cLine := __oIPfRead:ReadLine()
@@ -299,6 +300,7 @@ Method NextPrime( cN ) CLASS tPrime
 
 		DEFAULT cN 	:= self:cPrime
 		cN			:= PadL( cN , self:nSize )
+		self:cPrime	:= cN
 
 		IF Empty( cN )
 			nTable := 1
@@ -313,19 +315,20 @@ Method NextPrime( cN ) CLASS tPrime
 		DEFAULT __oNPfRead	:= tfRead():New()
 		DEFAULT __aNPLRead	:= Array(0)
 
-		nPrime	:= aScan( __aNPLRead , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
-		IF ( lPrime := ( nPrime > 0 ) )
-			self:cPrime := cPrime
-			BREAK
-		EndIF	
-
 		IF .NOT.( __nNPfRead == nTable )
+			aSize( __aNPLRead ,  0 )
 			__nNPfRead := nTable
 			__oNPfRead:Close(.T.)
 			__oNPfRead:Open(__aPTables[nTable][1])
 			__oNPfRead:nReadSize := MIN( 65535 , ( __aPTables[nTable][4] + 2 ) * 64 )
 			__oNPfRead:ReadLine()
 		EndIF
+
+		nPrime	:= aScan( __aNPLRead , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
+		IF ( lPrime := ( nPrime > 0 ) )
+			self:cPrime := cPrime
+			BREAK
+		EndIF	
 
 		While __oNPfRead:MoreToRead()
 			cLine := __oNPfRead:ReadLine()

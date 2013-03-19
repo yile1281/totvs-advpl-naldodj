@@ -365,7 +365,7 @@ Return( uBigNR )
 */
 Method ExactValue( lAbs , lObj ) CLASS tBigNumber
 
-	Local cDec 
+	Local cDec
 
 	Local uBigNR
 

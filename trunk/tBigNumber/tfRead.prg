@@ -20,6 +20,9 @@
 
 #define oF_DEFAULT_READ_SIZE  4096
 
+Static __cCHR13
+Static __cCHR10
+
 /*
  Original: $Id: fileread.prg,v 1.1 2005/10/13 12:01:10 lf_sfnet Exp $
 
@@ -42,7 +45,7 @@ CLASS tfRead
 	METHOD ClassName()					// Returns ClassName
 	METHOD Open(cFile,nMode)			// Open the file for reading
 	METHOD Seek(nOffset,nOrigin)		// sets the file pointer in the file
-	METHOD Close()						// Close the file when done
+	METHOD Close(lFClear)				// Close the file when done
 	METHOD ReadLine()					// Read a line from the file
 	METHOD Name()						// Retunrs the file name
 	METHOD IsOpen()						// Returns .T. if file is open
@@ -55,29 +58,32 @@ END CLASS
 
 METHOD New( cFile, nSize ) CLASS tfRead
 
-   IF nSize == NIL .OR. nSize < 1
-      // The readahead size can be set to as little as 1 byte, or as much as
-      // 65535 bytes, but venturing out of bounds forces the default size.
-      nSize := oF_DEFAULT_READ_SIZE
-   ENDIF
+	__cCHR13	:= IF( __cCHR13 == NIL , CHR(13) , __cCHR13 )
+	__cCHR10	:= IF( __cCHR10 == NIL , CHR(10) , __cCHR10 )
 
-   IF ( cFile == NIL )
+	IF nSize == NIL .OR. nSize < 1
+		// The readahead size can be set to as little as 1 byte, or as much as
+		// 65535 bytes, but venturing out of bounds forces the default size.
+		nSize := oF_DEFAULT_READ_SIZE
+	ENDIF
+
+	IF ( cFile == NIL )
 		cFile := ""
-   EndIF
+	EndIF
 
-   self:cFile     := cFile             // Save the file name
-   self:nfHandle  := -1                // It's not open yet
-   self:lEOF      := .T.               // So it must be at EOF
-   self:nError    := 0                 // But there haven't been any errors
-   self:nLastOp   := oF_CREATE_OBJECT  // Because we just created the class
-   self:cBuffer   := ""                // and nothing has been read yet
-   self:nReadSize := nSize             // But will be in this size chunks
+	self:cFile     := cFile             // Save the file name
+	self:nfHandle  := -1                // It's not open yet
+	self:lEOF      := .T.               // So it must be at EOF
+	self:nError    := 0                 // But there haven't been any errors
+	self:nLastOp   := oF_CREATE_OBJECT  // Because we just created the class
+	self:cBuffer   := ""                // and nothing has been read yet
+	self:nReadSize := nSize             // But will be in this size chunks
 
 RETURN Self
 
 #IFDEF __PROTHEUS__
-	User Function tfRead()
-	Return( tfRead():New() )
+	User Function tfRead(cFile,nSize)
+	Return( tfRead():New(@cFile,@nSize) )
 #ENDIF
 
 METHOD ClassName() CLASS tfRead
@@ -85,32 +91,38 @@ Return("TFREAD")
 
 METHOD Open( cFile , nMode ) CLASS tfRead
 
-   IF self:nfHandle == -1
-   	  IF Empty( self:cFile ) .and. !Empty(cFile)
-	   	  self:cFile := cFile
-   	  EndIF	
-      // Only open the file if it isn't already open.
-      IF nMode == NIL
-         nMode := FO_READ + FO_SHARED   // Default to shared read-only mode
-      ENDIF
-      self:nLastOp 	:= oF_OPEN_FILE
-      self:nfHandle	:= FOPEN( self:cFile, nMode )   // Try to open the file
-      IF self:nfHandle == -1
-         self:nError := FERROR()       // It didn't work
-         self:lEOF   := .T.            // So force EOF
-      ELSE
-         self:nError := 0              // It worked
-         self:lEOF   := .F.            // So clear EOF
-      ENDIF
-   ELSE
-      // The file is already open, so rewind to the beginning.
-      IF ( self:Seek( 0 ) == 0 )
-         self:lEOF := .F.              // Definitely not at EOF
-      ELSE
-         self:nError := FERROR()       // Save error code if not at BOF
-      ENDIF
-      self:cBuffer := ""               // Clear the readahead buffer
-   ENDIF
+	IF .NOT.( cFile == NIL )
+		IF .NOT.( cFile == self:cFile )
+			self:Close(.T.)
+		EndIF
+	EndIF
+
+	IF ( self:nfHandle == -1 )
+		IF Empty( self:cFile ) .and. .NOT.(Empty(cFile))
+			self:cFile := cFile
+		EndIF	
+		// Only open the file if it isn't already open.
+		IF nMode == NIL
+			nMode := FO_READ + FO_SHARED   // Default to shared read-only mode
+		ENDIF
+		self:nLastOp 	:= oF_OPEN_FILE
+		self:nfHandle	:= FOPEN( self:cFile, nMode )   // Try to open the file
+		IF ( self:nfHandle == -1 )
+			self:nError := FERROR()       // It didn't work
+			self:lEOF   := .T.            // So force EOF
+		ELSE
+			self:nError := 0              // It worked
+			self:lEOF   := .F.            // So clear EOF
+		ENDIF
+	ELSE
+		// The file is already open, so rewind to the beginning.
+		IF ( self:Seek( 0 ) == 0 )
+			self:lEOF := .F.              // Definitely not at EOF
+		ELSE
+			self:nError := FERROR()       // Save error code if not at BOF
+		ENDIF
+		self:cBuffer := ""               // Clear the readahead buffer
+	ENDIF
 
 RETURN Self
 
@@ -120,13 +132,15 @@ METHOD Seek(nOffset,nOrigin) CLASS tfRead
 
 	self:nLastOp	:= oF_SEEK_FILE
 	self:cBuffer 	:= ""				// Clear the readahead buffer
-	IF self:IsOpen()
-		nOffset 	:= IF(nOffset==NIL,FS_SET,nOffset)
-		nOrigin 	:= IF(nOrigin==NIL,FS_RELATIVE,nOrigin)
-		nPosition	:= FSEEK( self:nfHandle , nOffset , nOrigin )
+	IF ( self:nfHandle == -1 )
+		self:nError := -1                // Set unknown error if file not open
+	Else
+		nOffset 		:= IF(nOffset==NIL,FS_SET,nOffset)
+		nOrigin 		:= IF(nOrigin==NIL,FS_RELATIVE,nOrigin)
+		nPosition		:= FSEEK( self:nfHandle , nOffset , nOrigin )
+		self:nError 	:= FERROR()
 	EndIF
-	self:nError 	:= FERROR()
-
+	
 Return( nPosition )
 
 METHOD ReadLine() CLASS tfRead
@@ -136,7 +150,7 @@ METHOD ReadLine() CLASS tfRead
 
    self:nLastOp := oF_READ_FILE
 
-   IF self:nfHandle == -1
+   IF ( self:nfHandle == -1 )
       self:nError := -1                // Set unknown error if file not open
    ELSE
       // Is there a whole line in the readahead buffer?
@@ -179,12 +193,14 @@ METHOD ReadLine() CLASS tfRead
          ENDIF
          // Deal with multiple possible end of line conditions.
          DO CASE
-            CASE SUBSTR( self:cBuffer, nPos, 3 ) == CHR( 13 ) + CHR( 13 ) + CHR( 10 )
+            CASE SUBSTR( self:cBuffer, nPos, 3 ) == __cCHR10 + __cCHR13 + __cCHR10
+               nPos += 3
+            CASE SUBSTR( self:cBuffer, nPos, 3 ) == __cCHR13 + __cCHR13 + __cCHR10
                // It's a messed up DOS newline (such as that created by a program
                // that uses "\r\n" as newline when writing to a text mode file,
                // which causes the '\n' to expand to "\r\n", giving "\r\r\n").
                nPos += 3
-            CASE SUBSTR( self:cBuffer, nPos, 2 ) == CHR( 13 ) + CHR( 10 )
+            CASE SUBSTR( self:cBuffer, nPos, 2 ) == __cCHR13 + __cCHR10
                // It's a standard DOS newline
                nPos += 2
             OTHERWISE
@@ -202,8 +218,8 @@ Static Function f_EOL_pos( oFile )
    LOCAL nCRpos, nLFpos, nPos
 
    // Look for both CR and LF in the file read buffer.
-   nCRpos := AT( CHR( 13 ), oFile:cBuffer )
-   nLFpos := AT( CHR( 10 ), oFile:cBuffer )
+   nCRpos := AT( __cCHR13, oFile:cBuffer )
+   nLFpos := AT( __cCHR10, oFile:cBuffer )
    DO CASE
       CASE nCRpos == 0
          // If there's no CR, use the LF position.
@@ -218,23 +234,25 @@ Static Function f_EOL_pos( oFile )
 
 RETURN nPos
 
-METHOD Close() CLASS tfRead
+METHOD Close(lFClear) CLASS tfRead
 
-   self:nLastOp := oF_CLOSE_FILE
-   self:lEOF := .T.
-   // Is the file already closed.
-   IF self:nfHandle == -1
-      // Yes, so indicate an unknown error.
-      self:nError := -1
-   ELSE
-      // No, so close it already!
-      FCLOSE( self:nfHandle )
-      self:nError 	:= FERROR()
-      self:nfHandle := -1                // The file is no longer open
-      self:lEOF   	:= .T.               // So force an EOF condition
-   ENDIF
+	self:nLastOp := oF_CLOSE_FILE
+	self:lEOF := .T.
+	// Is the file already closed.
+	IF ( self:nfHandle == -1 )
+		// Yes, so indicate an unknown error.
+		self:nError := -1
+	ELSE
+		// No, so close it already!
+		FCLOSE( self:nfHandle )
+		self:nError 	:= FERROR()
+		self:nfHandle	:= -1                // The file is no longer open
+		self:lEOF   	:= .T.               // So force an EOF condition
+	ENDIF
 
-   self:cFile := ""
+	IF ( IF( lFClear == NIL , .F. , lFClear ) )
+		self:cFile := ""
+	EndIF
 
 RETURN Self
 

@@ -87,6 +87,23 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
+	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
+	
+	__ConOut(fhLog,"")
+
+	While oPrime:NextPrime()
+		__ConOut(fhLog,'tPrime():NextPrime()',"RESULT: "+oPrime:cPrime)	
+		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
+	End While
+
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
+
+	__tbnSleep()
+
+	__ConOut(fhLog,"")
+
 	__ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
 	
 	__ConOut(fhLog,"")
@@ -849,25 +866,6 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
-	
-	__ConOut(fhLog,"")
-
-	While oPrime:NextPrime()
-		__ConOut(fhLog,'tPrime():NextPrime()',"RESULT: "+oPrime:cPrime)	
-		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
-	End While
-
-	__ConOut(fhLog,"")
-
-	__ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
-
-	__tbnSleep()
-
-	__ConOut(fhLog,"")
-
-	__ConOut(fhLog,"")
-
 	__ConOut(fhLog,"---------------------------------------------------------")
 	__ConOut(fhLog,"")
 	__ConOut(fhLog,"---------------------------------------------------------")
@@ -963,4 +961,4 @@ Return(lHarbour)
 			s := ""
    		ENDSWITCH
 	Return(s)
-#ENDIF
+#ENDIF 

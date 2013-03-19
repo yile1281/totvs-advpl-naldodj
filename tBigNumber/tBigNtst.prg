@@ -19,6 +19,14 @@ User Function tBigNTst()
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local oPrime	AS OBJECT CLASS "TPRIME" 	 VALUE tPrime():New() 
+	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
+															 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
+															 "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
+															 "32458051",  "32458057",  "32458073",  "32458079",  "32458091",  "32458093",  "32458109",  "32458123",;
+															 "49981171",  "49981199",  "49981219",  "49981237",  "49981247",  "49981249",  "49981259",  "49981271",;
+															 "67874921",  "67874959",  "67874969",  "67874987",  "67875007",  "67875019",  "67875029",  "67875061",;
+															"982451501", "982451549", "982451567", "982451579", "982451581", "982451609", "982451629", "982451653";
+													   } 
 
 #IFDEF __HARBOUR__
 	Local cLog		AS CHARACTER VALUE "tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
@@ -91,10 +99,12 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	While oPrime:NextPrime()
-		__ConOut(fhLog,'tPrime():NextPrime()',"RESULT: "+oPrime:cPrime)	
+	For n := 1 To Len( aPrimes )
+		cN := PadL( aPrimes[n] , oPrime:nSize )
+		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))	
+		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)	
 		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
-	End While
+	Next n	
 
 	__ConOut(fhLog,"")
 

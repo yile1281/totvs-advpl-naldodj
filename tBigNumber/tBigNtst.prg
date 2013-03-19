@@ -19,6 +19,7 @@ User Function tBigNTst()
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local oPrime	AS OBJECT CLASS "TPRIME" 	 VALUE tPrime():New() 
+	Local aFPrimes	AS ARRAY
 	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
 															 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
 															 "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
@@ -95,16 +96,21 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
+
 	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 	
 	__ConOut(fhLog,"")
 
-	For n := 1 To Len( aPrimes )
-		cN := PadL( aPrimes[n] , oPrime:nSize )
-		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))	
-		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)	
-		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
-	Next n	
+	For n := 1 To 1000
+		ASSIGN cN			:= LTrim(Str(n))
+		ASSIGN aFPrimes	:= otBigN:SetValue(cN):FPrimes()
+		For x := 1 To Len( aFPrimes )
+			For w := 1 To aFPrimes[x][2]
+				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aFPrimes[x][1])
+			Next w	
+		Next x	
+		__ConOut(fhLog,"---------------------------------------------------------")
+	Next n
 
 	__ConOut(fhLog,"")
 
@@ -112,6 +118,28 @@ User Function tBigNTst()
 
 	__tbnSleep()
 
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," BEGIN ------------ Teste Prime 1 -------------- ")
+	
+	__ConOut(fhLog,"")
+
+	oPrime:IsPReset()
+	oPrime:NextPReset()
+
+	For n := 1 To Len( aPrimes )
+		ASSIGN cN := PadL( aPrimes[n] , oPrime:nSize )
+		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))	
+		__ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)	
+		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
+	Next n	
+
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," ------------ Teste Prime 1 -------------- END ")
+
+	__tbnSleep()
+	
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")

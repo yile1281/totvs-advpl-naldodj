@@ -300,4 +300,4 @@ METHOD ErrorMsg( cText ) CLASS tfRead
       cMessage := IF( EMPTY( cText ), "", cText ) + "Error " + ALLTRIM( STR( self:nError ) ) + " " + s_cAction[ nTemp ] + " " + self:cFile
    ENDIF
 
-RETURN cMessage
+	RETURN cMessage

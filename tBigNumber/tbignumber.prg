@@ -2825,7 +2825,7 @@ Return( oT )
 /*
 	Method		: FPrimes
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 10/03/2013
+	Data		: 19/03/2013
 	Descricao	: Fatores Primos
 	Sintaxe		: tBigNumber():FPrimes -> aFPrimes
 */

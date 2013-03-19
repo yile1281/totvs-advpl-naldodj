@@ -47,7 +47,7 @@ END CLASS
 /*
 	Função		: tPrime():New
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 04/02/2013
+	Data		: 16/03/2013
 	Descricao	: Instancia um novo Objeto tPrime
 	Sintaxe		: tPrime():New() -> self
 */
@@ -59,7 +59,7 @@ END CLASS
 /*
 	Method		: New
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 04/02/2013
+	Data		: 16/03/2013
 	Descricao	: CONSTRUCTOR
 	Sintaxe		: tPrime():New( cPath ) -> self
 */
@@ -199,7 +199,7 @@ Return( self )
 /*
 	Method		: ClassName
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 04/02/2013
+	Data		: 16/03/2013
 	Descricao	: ClassName
 	Sintaxe		: tPrime():ClassName() -> cClassName
 */
@@ -209,7 +209,7 @@ Return( "TPRIME" )
 /*
 	Method		: IsPrime
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 04/02/2013
+	Data		: 16/03/2013
 	Descricao	: Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
 	Sintaxe		: tPrime():IsPrime( cN ) -> lPrime
 */
@@ -294,6 +294,13 @@ Method IsPrime( cN ) CLASS tPrime
 
 Return( lPrime )
 
+/*
+	Method		: IsPReset
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 16/03/2013
+	Descricao	: Reset IsPrime Cache
+	Sintaxe		: tPrime():IsPReset() -> .T.
+*/
 Method IsPReset() CLASS tPrime
 	__nIPfRead	:= NIL
 	IF .NOT.( __aIPLRead == NIL )
@@ -304,7 +311,7 @@ Return( .T. )
 /*
 	Method		: NextPrime
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-	Data		: 04/02/2013
+	Data		: 16/03/2013
 	Descricao	: Obtem o Proximo Numero da Tabela de Numeros Primos
 	Sintaxe		: tPrime():NextPrime( cN ) -> lPrime
 */
@@ -396,6 +403,13 @@ Method NextPrime( cN ) CLASS tPrime
 
 Return( lPrime )
 
+/*
+	Method		: NextPReset
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 16/03/2013
+	Descricao	: Reset NextPrime Cache
+	Sintaxe		: tPrime():NextPReset() -> .T.
+*/
 Method NextPReset() CLASS tPrime
 	__nNPfRead	:= 0
 	IF .NOT.( __aNPLRead == NIL )
@@ -403,6 +417,13 @@ Method NextPReset() CLASS tPrime
 	EndIF
 Return( .T. )
 
+/*
+	Method		: ResetAll
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 16/03/2013
+	Descricao	: Reset All Cache
+	Sintaxe		: tPrime():ResetAll() -> .T.
+*/
 Method ResetAll() CLASS tPrime
 	__nPTables	:= 0
 	IF .NOT.( __aPTables == NIL )

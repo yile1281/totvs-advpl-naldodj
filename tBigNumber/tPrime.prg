@@ -88,10 +88,10 @@ Method New( cPath ) CLASS tPrime
 				IF Empty(cLine)
 					Loop
     			EndIF
+    			nLine	:= Max(nLine,Len(cLine))
     			While ( "  " $ cLine )
     				cLine	:= StrTran(cLine,"  "," ")
     			End While	
-    			nLine	:= Max(nLine,Len(cLine))
     			While ( SubStr(cLine,1,1) == " " )
     				cLine := SubStr(cLine,2)
     			End While
@@ -109,16 +109,15 @@ Method New( cPath ) CLASS tPrime
 			    EXIT
 			End While
 			ofRead:Seek( -nLine , FS_END )
-			nLine	:= 0
 			While ofRead:MoreToRead()
 				cLine := ofRead:ReadLine()
 				IF Empty(cLine)
 					Loop
     			EndIF
+    			nLine	:= Max(nLine,Len(cLine))
     			While ( "  " $ cLine )
     				cLine	:= StrTran(cLine,"  "," ")
     			End While	
-    			nLine	:= Max(nLine,Len(cLine))
     			While ( SubStr(cLine,1,1) == " " )
     				cLine := SubStr(cLine,2)
     			End While
@@ -135,9 +134,10 @@ Method New( cPath ) CLASS tPrime
 			    cLPrime := PadL(cLPrime,nSize)
 				EXIT
 			End While
-			ofRead:Close()
-			aAdd( __aPTables , { cFile , cFPrime , cLPrime } )
+			ofRead:Close(.T.)
+			aAdd( __aPTables , { cFile , cFPrime , cLPrime , nLine } )
 		Next nFile
+
 		nFiles	:= Len( __aPTables )
 		IF ( nFiles > 0 )
 			IF ( nSize > self:nSize )
@@ -192,14 +192,15 @@ Method IsPrime( cN ) CLASS tPrime
 	Local aLine
 
 	Local cLine
-	Local cPrime
 	
 	Local lPrime	:= .F.
 	
 	Local nPrime
 	Local nTable
 	
-	Local ofRead
+	THREAD Static __oIPfRead
+	THREAD Static __nIPfRead
+	THREAD Static __aIPLRead
 
 	BEGIN SEQUENCE
 
@@ -216,13 +217,24 @@ Method IsPrime( cN ) CLASS tPrime
 			BREAK
 		ENDIF
 
-		ofRead		:= tfRead():New(__aPTables[nTable][1])		
-		
-		ofRead:Open()
-		ofRead:ReadLine()
+		DEFAULT __oIPfRead	:= tfRead():New()
+		DEFAULT __aIPLRead	:= Array(0)
 
-		While ofRead:MoreToRead()
-			cLine := ofRead:ReadLine()
+		nPrime	:= aScan( __aIPLRead , { |x| PadL(x,self:nSize) == cN } )
+		IF ( lPrime := ( nPrime > 0 ) )
+			BREAK
+		EndIF	
+
+		IF .NOT.( __nIPfRead == nTable )
+			__nIPfRead := nTable
+			__oIPfRead:Close(.T.)
+			__oIPfRead:Open(__aPTables[nTable][1])
+			__oIPfRead:nReadSize := MIN( 65535 , ( __aPTables[nTable][4] + 2 ) * 64 )
+			__oIPfRead:ReadLine()
+		EndIF
+
+		While __oIPfRead:MoreToRead()
+			cLine := __oIPfRead:ReadLine()
 			IF Empty(cLine)
 				Loop
     		EndIF
@@ -241,17 +253,18 @@ Method IsPrime( cN ) CLASS tPrime
 			    aLine := StrTokArr(cLine," ")
 		    #ENDIF
 			nPrime	:= aScan( aLine , { |x| PadL(x,self:nSize) == cN } )
-			IF ( nPrime > 0 )
-				cPrime	:= PadL(aLine[nPrime],self:nSize)
+			IF ( lPrime := ( nPrime > 0 ) )
 				EXIT
 			EndIF	
 		End While
 
-		ofRead:Close()
+		aSize( __aIPLRead ,  0 )
+
+		IF .NOT.( Empty( aLine ) )
+			aEval( aLine , { |x| aAdd( __aIPLRead , x ) } )
+		EndIF
 
 	END SEQUENCE
-
-	lPrime	:= ( cPrime == cN )
 
 Return( lPrime )
 
@@ -269,12 +282,14 @@ Method NextPrime( cN ) CLASS tPrime
 	Local cLine
 	Local cPrime
 	
-	Local lPrime
+	Local lPrime	:= .F.
 	
 	Local nPrime
 	Local nTable
-	
-	Local ofRead
+
+	THREAD Static __oNPfRead
+	THREAD Static __nNPfRead
+	THREAD Static __aNPLRead
 	
 	BEGIN SEQUENCE
 	
@@ -295,13 +310,25 @@ Method NextPrime( cN ) CLASS tPrime
 			BREAK
 		ENDIF
 
-		ofRead		:= tfRead():New(__aPTables[nTable][1])		
-		
-		ofRead:Open()
-		ofRead:ReadLine()
+		DEFAULT __oNPfRead	:= tfRead():New()
+		DEFAULT __aNPLRead	:= Array(0)
 
-		While ofRead:MoreToRead()
-			cLine := ofRead:ReadLine()
+		nPrime	:= aScan( __aNPLRead , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
+		IF ( lPrime := ( nPrime > 0 ) )
+			self:cPrime := cPrime
+			BREAK
+		EndIF	
+
+		IF .NOT.( __nNPfRead == nTable )
+			__nNPfRead := nTable
+			__oNPfRead:Close(.T.)
+			__oNPfRead:Open(__aPTables[nTable][1])
+			__oNPfRead:nReadSize := MIN( 65535 , ( __aPTables[nTable][4] + 2 ) * 64 )
+			__oNPfRead:ReadLine()
+		EndIF
+
+		While __oNPfRead:MoreToRead()
+			cLine := __oNPfRead:ReadLine()
 			IF Empty(cLine)
 				Loop
     		EndIF
@@ -319,19 +346,21 @@ Method NextPrime( cN ) CLASS tPrime
     		#ELSE //__PROTHEUS__
 			    aLine := StrTokArr(cLine," ")
 		    #ENDIF
-			nPrime	:= aScan( aLine , { |x| PadL(x,self:nSize) > cN } )
-			IF ( nPrime > 0 )
-				cPrime	:= PadL(aLine[nPrime],self:nSize)
+			nPrime	:= aScan( aLine , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
+			IF ( lPrime := ( nPrime > 0 ) )
 				EXIT
 			EndIF	
 		End While
 
-		ofRead:Close()
-		
-		self:cPrime := cPrime
+		aSize( __aNPLRead ,  0 )
+
+		IF .NOT.( Empty( aLine ) )
+			aEval( aLine , { |x| aAdd( __aNPLRead , x ) } )
+		EndIF
+
+		DEFAULT cPrime	:= ""
+		self:cPrime 	:= cPrime
 
 	END SEQUENCE
-
-	lPrime	:= .NOT.( Empty( cPrime ) )
 
 Return( lPrime )

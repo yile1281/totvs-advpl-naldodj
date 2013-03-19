@@ -18,6 +18,7 @@ User Function tBigNTst()
 
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+	Local oPrime	AS OBJECT CLASS "TPRIME" 	 VALUE tPrime():New() 
 
 #IFDEF __HARBOUR__
 	Local cLog		AS CHARACTER VALUE "tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
@@ -845,6 +846,25 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	__tbnSleep()
+	
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
+	
+	__ConOut(fhLog,"")
+
+	While oPrime:NextPrime()
+		__ConOut(fhLog,'tPrime():NextPrime()',"RESULT: "+oPrime:cPrime)	
+		__ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))	
+	End While
+
+	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
+
+	__tbnSleep()
+
+	__ConOut(fhLog,"")
 
 	__ConOut(fhLog,"")
 

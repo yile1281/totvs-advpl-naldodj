@@ -6,7 +6,11 @@
 
 /DTBN_DBFILE /D__POWMT__
 
-tBigNtst.prg   -w2 /DPTEX_ASSIGN_VAR
+-b
+
+tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3
+tfread.prg -w3
+tprime.prg -w3
 
 -otBigNtst_dbfile

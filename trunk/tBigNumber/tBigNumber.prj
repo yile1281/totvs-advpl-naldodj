@@ -16,17 +16,23 @@ Group tBigNumber
       FoldersCount=2
       Folder Fontes
          VSSPath=Fontes
-         FilesCount=2
+         FilesCount=4
          File \svn\totvs-advpl-naldodj\tBigNumber\tBigNtst.prg
              Type=T
          End
          File \svn\totvs-advpl-naldodj\tBigNumber\tbignumber.prg
              Type=T
          End
+         File \svn\totvs-advpl-naldodj\tBigNumber\tPrime.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\tfRead.prg
+             Type=T
+         End
       End
       Folder Definições
          VSSPath=Definições
-         FilesCount=3
+         FilesCount=4
          File \svn\totvs-advpl-naldodj\tBigNumber\tBigNumber.ch
              Type=T
          End
@@ -34,6 +40,9 @@ Group tBigNumber
              Type=T
          End
          File \svn\totvs-advpl-naldodj\tBigNumber\paramtypex.ch
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\directry.ch
              Type=T
          End
       End

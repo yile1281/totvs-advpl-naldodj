@@ -67,7 +67,7 @@ METHOD New( cFile, nSize ) CLASS tfRead
 		nSize := oF_DEFAULT_READ_SIZE
 	ENDIF
 
-	IF ( cFile == NIL )
+	IF cFile == NIL
 		cFile := ""
 	EndIF
 
@@ -97,7 +97,7 @@ METHOD Open( cFile , nMode ) CLASS tfRead
 		EndIF
 	EndIF
 
-	IF ( self:nfHandle == -1 )
+	IF self:nfHandle == -1
 		IF Empty( self:cFile ) .and. .NOT.(Empty(cFile))
 			self:cFile := cFile
 		EndIF	
@@ -107,7 +107,7 @@ METHOD Open( cFile , nMode ) CLASS tfRead
 		ENDIF
 		self:nLastOp 	:= oF_OPEN_FILE
 		self:nfHandle	:= FOPEN( self:cFile, nMode )   // Try to open the file
-		IF ( self:nfHandle == -1 )
+		IF self:nfHandle == -1
 			self:nError := FERROR()       // It didn't work
 			self:lEOF   := .T.            // So force EOF
 		ELSE
@@ -116,7 +116,7 @@ METHOD Open( cFile , nMode ) CLASS tfRead
 		ENDIF
 	ELSE
 		// The file is already open, so rewind to the beginning.
-		IF ( self:Seek( 0 ) == 0 )
+		IF self:Seek( 0 ) == 0
 			self:lEOF := .F.			// Definitely not at EOF
 		ELSE
 			self:nError := FERROR()		// Save error code if not at BOF
@@ -133,7 +133,7 @@ METHOD Seek(nOffset,nOrigin) CLASS tfRead
 
 	self:nLastOp	:= oF_SEEK_FILE
 	self:cBuffer 	:= ""				// Clear the readahead buffer
-	IF ( self:nfHandle == -1 )
+	IF self:nfHandle == -1
 		self:nError := -1                // Set unknown error if file not open
 	Else
 		nOffset 		:= IF(nOffset==NIL,FS_SET,nOffset)
@@ -151,7 +151,7 @@ METHOD ReadLine() CLASS tfRead
 
    self:nLastOp := oF_READ_FILE
 
-   IF ( self:nfHandle == -1 )
+   IF self:nfHandle == -1
       self:nError := -1                // Set unknown error if file not open
    ELSE
       // Is there a whole line in the readahead buffer?
@@ -240,7 +240,7 @@ METHOD Close(lFClear) CLASS tfRead
 	self:nLastOp := oF_CLOSE_FILE
 	self:lEOF := .T.
 	// Is the file already closed.
-	IF ( self:nfHandle == -1 )
+	IF self:nfHandle == -1
 		// Yes, so indicate an unknown error.
 		self:nError := -1
 	ELSE
@@ -251,7 +251,7 @@ METHOD Close(lFClear) CLASS tfRead
 		self:lEOF   	:= .T.	// So force an EOF condition
 	ENDIF
 
-	IF ( IF( lFClear == NIL , .F. , lFClear ) )
+	IF IF( lFClear == NIL , .F. , lFClear )
 		self:cFile := ""
 	EndIF
 

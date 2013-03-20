@@ -889,8 +889,8 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	n := 0
-	While ( n <= 9000 )
-		IF ( n <= 3 )
+	While ( n <= 1000 )
+		IF ( n < 3 )
 			ASSIGN n += 1
 		Else
 			ASSIGN n += 2

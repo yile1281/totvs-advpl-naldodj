@@ -104,13 +104,13 @@ Method New( cPath ) CLASS tPrime
 					Loop
     			EndIF
     			nLine	:= Max(nLine,Len(cLine))
-    			While ( "  " $ cLine )
+    			While "  " $ cLine
     				cLine	:= StrTran(cLine,"  "," ")
     			End While	
-    			While ( SubStr(cLine,1,1) == " " )
+    			While SubStr(cLine,1,1) == " "
     				cLine := SubStr(cLine,2)
     			End While
-    			While ( SubStr(cLine,-1) == " " )
+    			While SubStr(cLine,-1) == " "
     				cLine := SubStr(cLine,1,Len(cLine)-1)
     			End While
     			#IFDEF __HARBOUR__
@@ -130,13 +130,13 @@ Method New( cPath ) CLASS tPrime
 					Loop
     			EndIF
     			nLine	:= Max(nLine,Len(cLine))
-    			While ( "  " $ cLine )
+    			While "  " $ cLine
     				cLine	:= StrTran(cLine,"  "," ")
     			End While	
-    			While ( SubStr(cLine,1,1) == " " )
+    			While SubStr(cLine,1,1) == " "
     				cLine := SubStr(cLine,2)
     			End While
-    			While ( SubStr(cLine,-1) == " " )
+    			While SubStr(cLine,-1) == " "
     				cLine := SubStr(cLine,1,Len(cLine)-1)
     			End While
     			#IFDEF __HARBOUR__
@@ -154,8 +154,8 @@ Method New( cPath ) CLASS tPrime
 		Next nFile
 
 		nFiles	:= Len( __aPTables )
-		IF ( nFiles > 0 )
-			IF ( nSize > self:nSize )
+		IF nFiles > 0
+			IF nSize > self:nSize
 				self:nSize := nSize
 				For nFile := 1 To nFiles
 					__aPTables[nFile][2] := PadL(__aPTables[nFile][2],nSize)
@@ -172,7 +172,7 @@ Method New( cPath ) CLASS tPrime
 	Else
 
 		nFiles	:= __nPTables
-		IF ( nFiles > 0 )
+		IF nFiles > 0
 			self:cFPrime	:= __aPTables[1][2]
 			self:cLPrime	:= __aPTables[nFiles][3]
 			self:nSize 		:= Len( self:cLPrime )
@@ -182,15 +182,15 @@ Method New( cPath ) CLASS tPrime
 
     self:cPrime	:= ""
 
-	IF ( self:cFPrime == NIL )
+	IF self:cFPrime == NIL
 		self:cFPrime := ""
 	EndIF
 	
-	IF ( self:cLPrime == NIL )
+	IF self:cLPrime == NIL
 		self:cLPrime := ""
 	EndIF
 
-	IF ( self:nSize == NIL )
+	IF self:nSize == NIL
 		self:nSize := Len(self:cLPrime)
 	EndIF
 
@@ -235,7 +235,7 @@ Method IsPrime( cN ) CLASS tPrime
 
 		nTable		:= aScan( __aPTables , { |x| cN >= x[2] .and. cN <= x[3] } )
 		
-		IF ( nTable == 0 )
+		IF nTable == 0
 			BREAK
 		ENDIF
 
@@ -252,7 +252,7 @@ Method IsPrime( cN ) CLASS tPrime
 		EndIF
 
 		nPrime	:= aScan( __aIPLRead , { |x| PadL(x,self:nSize) == cN } )
-		IF ( lPrime := ( nPrime > 0 ) )
+		IF ( lPrime := nPrime > 0 )
 			BREAK
 		EndIF	
 
@@ -261,13 +261,13 @@ Method IsPrime( cN ) CLASS tPrime
 			IF Empty(cLine)
 				Loop
     		EndIF
-    		While ( "  " $ cLine )
+    		While "  " $ cLine
     			cLine	:= StrTran(cLine,"  "," ")
     		End While	
-    		While ( SubStr(cLine,1,1) == " " )
+    		While SubStr(cLine,1,1) == " "
     			cLine := SubStr(cLine,2)
     		End While
-    		While ( SubStr(cLine,-1) == " " )
+    		While SubStr(cLine,-1) == " "
     			cLine := SubStr(cLine,1,Len(cLine)-1)
     		End While
     		#IFDEF __HARBOUR__
@@ -276,10 +276,10 @@ Method IsPrime( cN ) CLASS tPrime
 			    aLine := StrTokArr(cLine," ")
 		    #ENDIF
 			nPrime	:= aScan( aLine , { |x| PadL(x,self:nSize) == cN } )
-			IF ( lPrime := ( nPrime > 0 ) )
+			IF ( lPrime := nPrime > 0 )
 				EXIT
 			EndIF	
-			IF ( aScan( aLine , { |x| PadL(x,self:nSize) > cN } ) > 0 )
+			IF aScan( aLine , { |x| PadL(x,self:nSize) > cN } ) > 0
 				EXIT
 			EndIF
 		End While
@@ -343,7 +343,7 @@ Method NextPrime( cN ) CLASS tPrime
 			nTable	:= aScan( __aPTables , { |x| cN >= x[2] .and. cN <= x[3] } )
 		EndIF	
 
-		IF ( nTable == 0 )
+		IF nTable == 0
 			BREAK
 		ENDIF
 
@@ -360,7 +360,7 @@ Method NextPrime( cN ) CLASS tPrime
 		EndIF
 
 		nPrime	:= aScan( __aNPLRead , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
-		IF ( lPrime := ( nPrime > 0 ) )
+		IF ( lPrime := nPrime > 0 )
 			self:cPrime := cPrime
 			BREAK
 		EndIF	
@@ -370,13 +370,13 @@ Method NextPrime( cN ) CLASS tPrime
 			IF Empty(cLine)
 				Loop
     		EndIF
-    		While ( "  " $ cLine )
+    		While "  " $ cLine
     			cLine	:= StrTran(cLine,"  "," ")
     		End While	
-    		While ( SubStr(cLine,1,1) == " " )
+    		While SubStr(cLine,1,1) == " "
     			cLine := SubStr(cLine,2)
     		End While
-    		While ( SubStr(cLine,-1) == " " )
+    		While SubStr(cLine,-1) == " "
     			cLine := SubStr(cLine,1,Len(cLine)-1)
     		End While
     		#IFDEF __HARBOUR__
@@ -385,7 +385,7 @@ Method NextPrime( cN ) CLASS tPrime
 			    aLine := StrTokArr(cLine," ")
 		    #ENDIF
 			nPrime	:= aScan( aLine , { |x| ( cPrime := PadL(x,self:nSize) ) > cN } )
-			IF ( lPrime := ( nPrime > 0 ) )
+			IF ( lPrime := nPrime > 0 )
 				EXIT
 			EndIF	
 		End While

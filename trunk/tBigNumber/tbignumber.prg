@@ -177,11 +177,11 @@ Method SetDecimals( nSet ) CLASS tBigNumber
 
 	Local nLastSet 			:= __nSetDecimals
 
-	DEFAULT __nSetDecimals	:= IF( ( nSet == NIL ) , 15 , nSet )
+	DEFAULT __nSetDecimals	:= IF( nSet == NIL , 15 , nSet )
 	DEFAULT nSet			:= __nSetDecimals
 	DEFAULT nLastSet		:= nSet
 
-	IF ( nSet > MAX_DECIMAL_PRECISION )
+	IF nSet > MAX_DECIMAL_PRECISION
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
@@ -212,7 +212,7 @@ Method SetValue( uBigN , cRDiv , lILZeroRmv , nAcc ) CLASS tBigNumber
 		Private This
 	#ENDIF	
 
-	IF ( cType == "O" )
+	IF cType == "O"
 
 		#IFDEF __TBN_DYN_OBJ_SET__
 
@@ -245,7 +245,7 @@ Method SetValue( uBigN , cRDiv , lILZeroRmv , nAcc ) CLASS tBigNumber
 			
 		#ENDIF
 	
-	ElseIF ( cType == "A" )
+	ElseIF cType == "A"
 
 		#IFDEF __TBN_DYN_OBJ_SET__
 
@@ -269,15 +269,15 @@ Method SetValue( uBigN , cRDiv , lILZeroRmv , nAcc ) CLASS tBigNumber
 		
 		#ENDIF
 	
-	ElseIF ( cType == "C" )
+	ElseIF cType == "C"
 
-	    While ( " " $ uBigN )
+	    While " " $ uBigN
 	    	uBigN	:= StrTran( uBigN ," " , "" )	
 	    End While
 
-	    self:lNeg := ( SubStr( uBigN , 1 , 1 ) == "-" )
+	    self:lNeg := SubStr( uBigN , 1 , 1 ) == "-"
 
-		IF ( self:lNeg )
+		IF self:lNeg
 			uBigN		:= SubStr( uBigN , 2 )
 			self:cSig	:= "-"
 		Else
@@ -301,7 +301,7 @@ Method SetValue( uBigN , cRDiv , lILZeroRmv , nAcc ) CLASS tBigNumber
 		    self:cDec	:= SubStr( uBigN , ( nFP + 1 ) )
 		ENDCASE
 
-		IF ( ( self:cInt == "0" ) .and. ( self:cDec == "0" ) )
+		IF self:cInt == "0" .and. self:cDec == "0"
 			self:lNeg	:= .F.
 			self:cSig	:= ""
 		EndIF
@@ -316,15 +316,15 @@ Method SetValue( uBigN , cRDiv , lILZeroRmv , nAcc ) CLASS tBigNumber
 	EndIF
 
 	DEFAULT lILZeroRmv	:= .T.
-    IF ( lILZeroRmv )
-		While ( ( self:nInt > 1 ) .and. ( SubStr( self:cInt , 1 , 1 ) == "0" ) )
+    IF lILZeroRmv
+		While self:nInt > 1 .and. SubStr( self:cInt , 1 , 1 ) == "0"
 			self:cInt := SubStr( self:cInt , 2 )
 			--self:nInt
 		End While
 	EndIF	
 
 	DEFAULT nAcc := __nSetDecimals
-	IF ( self:nDec > nAcc )
+	IF self:nDec > nAcc
 		self:nDec	:= nAcc
 		self:cDec	:= SubStr( self:cDec , 1 , self:nDec )
 	EndIF
@@ -352,7 +352,7 @@ Method GetValue( lAbs , lObj ) CLASS tBigNumber
     uBigNR	+= "."
     uBigNR	+= self:cDec
 
-	IF ( lObj )
+	IF lObj
 		uBigNR	:= tBigNumber():New( uBigNR )
 	EndIF
 
@@ -384,7 +384,7 @@ Method ExactValue( lAbs , lObj ) CLASS tBigNumber
 	    uBigNR	+= cDec
 	EndIF
 
-	IF ( lObj )
+	IF lObj
 		uBigNR	:= tBigNumber():New( uBigNR )
 	EndIF
 
@@ -410,7 +410,7 @@ Return( self:GetValue( .T. , @lObj ) )
 Method Int( lObj ) CLASS tBigNumber
 	Local uBigNR
 	DEFAULT lObj := .F.
-	IF ( lObj )
+	IF lObj
 		uBigNR	:= tBigNumber():New(self:cSig+self:cInt)
 	Else
 		uBigNR	:= self:cInt
@@ -433,15 +433,15 @@ Method Dec( lObj , lNotZeros ) CLASS tBigNumber
     Local uBigNR
 
 	DEFAULT lNotZeros := .F.
-	IF ( lNotZeros )
+	IF lNotZeros
 		nDec	:= self:nDec
-		While ( SubStr( cDec , -1 ) == "0" )
+		While SubStr( cDec , -1 ) == "0"
 			cDec	:= SubStr( cDec , 1 , --nDec )
 		End While
 	EndIF
 
 	DEFAULT lObj := .F.
-	IF ( lObj )
+	IF lObj
 		uBigNR	:= tBigNumber():New(self:cSig+"0."+cDec)
 	Else
 		uBigNR	:= cDec
@@ -469,7 +469,7 @@ Method eq( uBigN ) CLASS tBigNumber
 	__eqoN1:SetValue( __eqoN1:Normalize( self  , self  , uBigN ) , NIL , .F. )
 	__eqoN2:SetValue( __eqoN2:Normalize( uBigN , uBigN , self  ) , NIL , .F. )
 
-	leq	:= ( ( __eqoN1:GetValue( .T. ) == __eqoN2:GetValue( .T. ) ) .and. ( __eqoN1:lNeg == __eqoN2:lNeg ) )
+	leq	:= __eqoN1:GetValue( .T. ) == __eqoN2:GetValue( .T. ) .and. __eqoN1:lNeg == __eqoN2:lNeg
 
 Return( leq )
 
@@ -509,16 +509,16 @@ Method gt( uBigN ) CLASS tBigNumber
 	cN1	:= __gtoN1:GetValue( .T. )
 	cN2	:= __gtoN2:GetValue( .T. )
 
-	IF ( __gtoN1:lNeg .or. __gtoN2:lNeg )
-		IF ( __gtoN1:lNeg .and. __gtoN2:lNeg )
-			lgt := ( cN1 < cN2 )
-		ElseIF ( __gtoN1:lNeg .and. .NOT.( __gtoN2:lNeg ) )
+	IF __gtoN1:lNeg .or. __gtoN2:lNeg
+		IF __gtoN1:lNeg .and. __gtoN2:lNeg
+			lgt := cN1 < cN2
+		ElseIF __gtoN1:lNeg .and. .NOT.( __gtoN2:lNeg )
 			lgt := .F.
-		ElseIF ( .NOT.( __gtoN1:lNeg ) .and. __gtoN2:lNeg )
+		ElseIF .NOT.( __gtoN1:lNeg ) .and. __gtoN2:lNeg
 			lgt := .T.
 		EndIF
 	Else
-		lgt := ( cN1 > cN2 )
+		lgt := cN1 > cN2
 	EndIF	
 
 Return( lgt )
@@ -549,16 +549,16 @@ Method lt( uBigN ) CLASS tBigNumber
 	cN1	:= __ltoN1:GetValue( .T. )
 	cN2	:= __ltoN2:GetValue( .T. )
 
-	IF ( __ltoN1:lNeg .or. __ltoN2:lNeg )
-		IF ( __ltoN1:lNeg .and. __ltoN2:lNeg )
-			llt := ( cN1 > cN2 )
-		ElseIF ( __ltoN1:lNeg .and. .NOT.( __ltoN2:lNeg ) )
+	IF __ltoN1:lNeg .or. __ltoN2:lNeg
+		IF __ltoN1:lNeg .and. __ltoN2:lNeg
+			llt := cN1 > cN2
+		ElseIF __ltoN1:lNeg .and. .NOT.( __ltoN2:lNeg )
 			llt := .T.
-		ElseIF ( .NOT.( __ltoN1:lNeg ) .and. __ltoN2:lNeg )
+		ElseIF .NOT.( __ltoN1:lNeg ) .and. __ltoN2:lNeg
 			llt := .F.
 		EndIF
 	Else
-		llt := ( cN1 < cN2 )
+		llt := cN1 < cN2
 	EndIF	
 
 Return( llt )
@@ -571,7 +571,7 @@ Return( llt )
 	Sintaxe		: tBigNumber():gte( uBigN ) -> lgte
 */
 Method gte( uBigN ) CLASS tBigNumber
-Return( ( self:gt( @uBigN ) .or. self:eq( @uBigN ) ) )
+Return( self:gt( @uBigN ) .or. self:eq( @uBigN ) )
 
 /*
 	Method		: lte
@@ -581,7 +581,7 @@ Return( ( self:gt( @uBigN ) .or. self:eq( @uBigN ) ) )
 	Sintaxe		: tBigNumber():lte( uBigN ) -> lte
 */
 Method lte( uBigN ) CLASS tBigNumber
-Return( ( self:lt( @uBigN ) .or. self:eq( @uBigN ) ) )
+Return( self:lt( @uBigN ) .or. self:eq( @uBigN ) )
 
 /*
 	Method		: Max
@@ -599,9 +599,9 @@ Method Max( uBigN ) CLASS tBigNumber
 
 	lgte	:= self:gte( @uBigN )
 
-	IF ( lgte )
-		lGetValue	:= ( ValType( uBigN ) == "C" )
-		IF ( lGetValue )
+	IF lgte
+		lGetValue	:= ValType( uBigN ) == "C"
+		IF lGetValue
 			uBigNR	:= self:GetValue()
 		Else
 			uBigNR	:= self
@@ -628,9 +628,9 @@ Method Min( uBigN ) CLASS tBigNumber
 
 	llte	:= self:lte( @uBigN )
 
-	IF ( llte )
-		lGetValue	:= ( ValType( uBigN ) == "C" )
-		IF ( lGetValue )
+	IF llte
+		lGetValue	:= ValType( uBigN ) == "C"
+		IF lGetValue
 			uBigNR	:= self:GetValue()
 		Else
 			uBigNR	:= self
@@ -687,10 +687,10 @@ Method Add( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF ( ( __adoN1:nSize <= 14 ) .and. ( __adoN2:nSize <= 14 ) )
+		IF __adoN1:nSize <= 14 .and. __adoN2:nSize <= 14
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
-			IF ( ( ( n1 <= 999999999.99999 ) .and. __adoN1:nDec <= 4 ) .and. ( ( n2 <= 999999999.99999 ) .and. __adoN2:nDec <= 4 ) )
+			IF n1 <= 999999999.99999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __adoN2:nDec <= 4
 				cBigNT	:= LTrim(Str(n1+n2))
 				__adoNR:SetValue( cBigNT )
 				BREAK
@@ -706,13 +706,13 @@ Method Add( uBigN ) CLASS tBigNumber
 	    cBigN2	:= __adoN2:Int()
 	    cBigN2	+= __adoN2:Dec()
 	
-	    lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( __adoN2:lNeg ) ) .or. ( .NOT.( __adoN1:lNeg ) .and. __adoN2:lNeg ) )
+	    lNeg	:= ( __adoN1:lNeg .and. .NOT.( __adoN2:lNeg ) ) .or. ( .NOT.( __adoN1:lNeg ) .and. __adoN2:lNeg )
 	
-		IF ( lNeg )
+		IF lNeg
 			lAdd	:= .F.
-			lInv	:= ( cBigN1 < cBigN2 )
-			lNeg	:= ( ( __adoN1:lNeg .and. .NOT.( lInv ) ) .or. ( __adoN2:lNeg .and. lInv ) )
-			IF ( lInv )
+			lInv	:=  cBigN1 < cBigN2
+			lNeg	:= ( __adoN1:lNeg .and. .NOT.( lInv ) ) .or. ( __adoN2:lNeg .and. lInv )
+			IF lInv
 				cBigNT	:= cBigN1
 				cBigN1	:= cBigN2
 				cBigN2	:= cBigNT
@@ -722,7 +722,7 @@ Method Add( uBigN ) CLASS tBigNumber
 	    	lNeg	:= __adoN1:lNeg
 	    EndIF
 	
-		IF ( lAdd )
+		IF lAdd
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
@@ -761,8 +761,8 @@ Method Add( uBigN ) CLASS tBigNumber
 	
 		__adoNR:SetValue( cBigNT )
 	
-		IF ( lNeg )
-			IF ( __adoNR:gt( "0" ) )
+		IF lNeg
+			IF  __adoNR:gt( "0" )
 				__adoNR:cSig	:= "-"
 				__adoNR:lNeg	:= lNeg
 			EndIF
@@ -819,10 +819,10 @@ Method Sub( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF ( ( __sboN1:nSize <= 14 ) .and. ( __sboN2:nSize <= 14 ) )
+		IF __sboN1:nSize <= 14 .and. __sboN2:nSize <= 14
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
-			IF ( ( ( n1 <= 999999999.99999 ) .and. ( __sboN1:nDec <= 4 ) ) .and. ( ( n2 <= 999999999.99999 ) .and. ( __sboN2:nDec <= 4 ) ) )
+			IF n1 <= 999999999.99999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __sboN2:nDec <= 4
 				cBigNT	:= LTrim(Str(n1-n2))
 				__sboNR:SetValue( cBigNT )
 				BREAK
@@ -838,15 +838,15 @@ Method Sub( uBigN ) CLASS tBigNumber
 	    cBigN2	:= __sboN2:Int()
 	    cBigN2	+= __sboN2:Dec()
 	
-	    lNeg	:= ( ( __sboN1:lNeg .and. .NOT.( __sboN2:lNeg ) ) .or. ( .NOT.( __sboN1:lNeg ) .and. __sboN2:lNeg ) )
+	    lNeg	:= ( __sboN1:lNeg .and. .NOT.( __sboN2:lNeg ) ) .or. ( .NOT.( __sboN1:lNeg ) .and. __sboN2:lNeg )
 	
-		IF ( lNeg )
+		IF lNeg
 			lSub	:= .F.
 			lNeg	:= __sboN1:lNeg
 		Else
-			lInv	:= ( cBigN1 < cBigN2 )
-			lNeg	:= ( __sboN1:lNeg .or. lInv )
-			IF ( lInv )
+			lInv	:= cBigN1 < cBigN2
+			lNeg	:= __sboN1:lNeg .or. lInv
+			IF lInv
 				cBigNT	:= cBigN1
 				cBigN1	:= cBigN2
 				cBigN2	:= cBigNT
@@ -854,7 +854,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 			EndIF
 		EndIF
 	
-	    IF ( lSub )
+	    IF lSub
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
@@ -893,9 +893,9 @@ Method Sub( uBigN ) CLASS tBigNumber
 		
 		__sboNR:SetValue( cBigNT )
 	
-		IF ( lNeg )
-			IF ( __sboNR:gt( "0" ) )
-			    __sboNR:cSig := "-"
+		IF lNeg
+			IF __sboNR:gt( "0" )
+			    __sboNR:cSig	:= "-"
 			    __sboNR:lNeg	:= lNeg
 			EndIF
 		EndIF
@@ -951,17 +951,17 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF ( ( __mtoN1:nSize <= 9 ) .and. ( __mtoN2:nSize <= 9 ) )
+		IF __mtoN1:nSize <= 9 .and. __mtoN2:nSize <= 9
 			n1	:= Val(__mtoN1:ExactValue())
 			n2	:= Val(__mtoN2:ExactValue())
-			IF ( ( ( n1 <= 2999999.90 ) .and. ( __mtoN1:nDec <= 2 ) ) .and. ( ( n2 <= 2999999.90 ) .and. __mtoN2:nDec <= 2 ) )
+			IF n1 <= 2999999.90 .and. __mtoN1:nDec <= 2 .and. n2 <= 2999999.90 .and. __mtoN2:nDec <= 2
 				cBigNT	:= LTrim(Str(n1*n2))
 				__mtoNR:SetValue( cBigNT )
 				BREAK
 			EndIF
 		EndIF	
 
-	    nDec	:= ( __mtoN1:nDec * 2 )
+	    nDec	:= __mtoN1:nDec * 2
 	    nSize	:= __mtoN1:nSize
 	
 	    lNeg1 	:= __mtoN1:lNeg
@@ -976,7 +976,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	
 	    DEFAULT __lMult := .F.
 	
-	    IF ( __lMult )
+	    IF __lMult
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "__MultThread" , @cBigN1 , @cBigN2 , @nAcc )
@@ -1019,8 +1019,8 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 		
 		__mtoNR:SetValue( cBigNT )
 	
-		IF ( lNeg )
-			IF ( __mtoNR:gt( "0" ) )
+		IF lNeg
+			IF __mtoNR:gt( "0" )
 			    __mtoNR:cSig := "-"
 			    __mtoNR:lNeg	:= lNeg
 			EndIF
@@ -1069,17 +1069,17 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		DEFAULT __dvoZero  := tBigNumber():New()
-		DEFAULT __dvoNR := tBigNumber():New()
+		DEFAULT __dvoZero	:= tBigNumber():New()
+		DEFAULT __dvoNR 	:= tBigNumber():New()
 	
 		IF __dvoZero:eq( uBigN )
 			__dvoNR:SetValue( __dvoZero )
 			BREAK
 		EndIF
 
-		DEFAULT __dvoRDiv  := tBigNumber():New()
-		DEFAULT __dvoN1 := tBigNumber():New()
-		DEFAULT __dvoN2 := tBigNumber():New()
+		DEFAULT __dvoRDiv	:= tBigNumber():New()
+		DEFAULT __dvoN1 	:= tBigNumber():New()
+		DEFAULT __dvoN2 	:= tBigNumber():New()
 	
 		__dvoN1:SetValue( __dvoN1:Normalize( self  , self  , uBigN ) , NIL , .F. )
 		__dvoN2:SetValue( __dvoN2:Normalize( uBigN , uBigN , self  ) , NIL , .F. )
@@ -1111,24 +1111,24 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	
 		__dvoRDiv:SetValue( __dvoNR:cRDiv , NIL , .F. )
 	
-		IF ( lFloat )
+		IF lFloat
 			
-			IF ( __dvoRDiv:gt( __dvoZero ) )
+			IF __dvoRDiv:gt( __dvoZero )
 	
 				cDec	:= ""
 		
 				__dvoN2:SetValue( cBigN2 )
 		
-				While ( __dvoRDiv:lt( __dvoN2 ) )
+				While __dvoRDiv:lt( __dvoN2 )
 					__dvoRDiv:cInt	+= "0"
 					__dvoRDiv:nInt++
 					__dvoRDiv:nSize++
-					IF ( __dvoRDiv:lt( __dvoN2 ) )
+					IF __dvoRDiv:lt( __dvoN2 )
 						cDec += "0"
 					EndIF
 				End While
 		
-				While ( __dvoRDiv:gte( __dvoN2 ) )
+				While __dvoRDiv:gte( __dvoN2 )
 					
 					__dvoRDiv:SetValue( __dvoRDiv:Normalize( @__dvoRDiv  , @__dvoRDiv  , @__dvoN2 ) , NIL , .F. )
 					__dvoN2:SetValue( __dvoN2:Normalize( @__dvoN2 , @__dvoN2 , @__dvoRDiv  ) , NIL , .F. )
@@ -1157,23 +1157,19 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 		
 					__dvoRDiv:SetValue( __dvoRDiv:cRDiv , NIL , .F. )
 					__dvoRDiv:SetValue( __dvoRDiv:ExactValue( .T. ) )
-		
-					IF (;
-							( __dvoRDiv:eq( __dvoZero ) );
-							.or.;
-							( nDec >= nAcc );
-						)	
+
+					IF __dvoRDiv:eq( __dvoZero ) .or. nDec >= nAcc
 						Exit
 					EndIF
 		
 					__dvoN2:SetValue( cBigN2 )
 		
 					
-					While ( __dvoRDiv:lt( __dvoN2 ) )
+					While __dvoRDiv:lt( __dvoN2 )
 						__dvoRDiv:cInt	+= "0"
 						__dvoRDiv:nInt++
 						__dvoRDiv:nSize++
-						IF ( __dvoRDiv:lt( __dvoN2 ) )
+						IF __dvoRDiv:lt( __dvoN2 )
 							cDec += "0"
 						EndIF
 					End While
@@ -1190,8 +1186,8 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	
 		EndIF
 	
-		IF ( lNeg )
-			IF ( __dvoNR:gt( __dvoZero ) )
+		IF lNeg
+			IF __dvoNR:gt( __dvoZero )
 			    __dvoNR:cSig	:= "-"
 			    __dvoNR:lNeg	:= lNeg
 			EndIF
@@ -1218,9 +1214,9 @@ Method Mod( uBigN ) CLASS tBigNumber
 
 	oBigNR:SetValue( self:Div( @uBigN , .F. ) )
 
-    lGetValue	:= ( ValType( uBigN ) == "C" )
+    lGetValue	:= ValType( uBigN ) == "C"
 	
-	IF ( lGetValue )
+	IF lGetValue
 	    uBigNR	:= oBigNR:cRDiv
 	Else
 	    uBigNR	:= oBigNR:SetValue( oBigNR:cRDiv , NIL , .F. )
@@ -1262,33 +1258,33 @@ Method Pow( uBigN ) CLASS tBigNumber
 	DEFAULT __pwoNR	:= tBigNumber():New()
 	DEFAULT __pwoNT	:= tBigNumber():New()
 
-	lPoWN	:= ( __pwoNP:SetValue( uBigN ):lt( __pwoN0 ) )
+	lPoWN	:= __pwoNP:SetValue( uBigN ):lt( __pwoN0 )
 
 	BEGIN SEQUENCE
 
-		IF ( self:eq( __pwoN0 ) .and. __pwoNP:eq( __pwoN0 ) )
+		IF self:eq( __pwoN0 ) .and. __pwoNP:eq( __pwoN0 )
 			__pwoNR:SetValue( __pwoN1 )
 			BREAK
 		EndIF
 
-		IF ( self:eq( __pwoN0 ) )
+		IF self:eq( __pwoN0 )
 			__pwoNR:SetValue( __pwoN0 )
 			BREAK
 		EndIF
 
-		IF ( __pwoNP:eq( __pwoN0 ) )
+		IF __pwoNP:eq( __pwoN0 )
 			__pwoNR:SetValue( __pwoN1 )
 			BREAK
 		EndIF
 
 		__pwoNR:SetValue( self )
 
-		IF ( __pwoNR:eq( __pwoN1 ) )
+		IF __pwoNR:eq( __pwoN1 )
 			__pwoNR:SetValue( __pwoN1 )
 			BREAK
 		EndIF
 
-		IF ( __pwoN1:eq( __pwoNP:SetValue( __pwoNP:Abs() ) ) )
+		IF __pwoN1:eq( __pwoNP:SetValue( __pwoNP:Abs() ) )
 			BREAK
 		EndIF
 
@@ -1296,19 +1292,19 @@ Method Pow( uBigN ) CLASS tBigNumber
 
 		lPowF := __pwoA:SetValue( __pwoNP:Dec() ):gt( __pwoN0 )
 		
-		IF ( lPowF )
+		IF lPowF
 
-			cPowA	:= ( __pwoNP:Int()+__pwoNP:Dec(NIL,.T.) )
+			cPowA	:= __pwoNP:Int()+__pwoNP:Dec(NIL,.T.)
 			__pwoA:SetValue( cPowA )
 
 			DEFAULT __pwoB	:= tBigNumber():New()
 
 			cM10	:= "1"
-			cM10	+= Replicate( "0" , ( Len( __pwoNP:Dec(NIL,.T.) ) ) )
+			cM10	+= Replicate( "0" , Len( __pwoNP:Dec(NIL,.T.) ) )
 
 			cPowB	:= cM10
 
-			IF ( __pwoB:SetValue( cPowB ):gt( __pwoN1 ) )
+			IF __pwoB:SetValue( cPowB ):gt( __pwoN1 )
 				DEFAULT __pwoGCD	:= tBigNumber():New()
 				__pwoGCD:SetValue( __pwoA:GCD( __pwoB ) )
 				__pwoA:SetValue( __pwoA:Div( __pwoGCD ) )
@@ -1325,7 +1321,7 @@ Method Pow( uBigN ) CLASS tBigNumber
 		BEGIN SEQUENCE
 
 			#IFDEF __POWMT__
-				IF ( __pwoNP:gt( "10" ) )
+				IF __pwoNP:gt( "10" )
 					__pwoNR:SetValue( PowThread( __pwoNR , __pwoNP ) )
 					BREAK
 				EndIF
@@ -1333,20 +1329,20 @@ Method Pow( uBigN ) CLASS tBigNumber
 
 			__pwoNT:SetValue( __pwoN0 )
 			__pwoNP:SetValue( __pwoNP:Sub( __pwoN1 ) )
-			While ( __pwoNT:lt( __pwoNP ) )	
-				__pwoNR:SetValue( __pwoNR:Mult( self )  )
+			While __pwoNT:lt( __pwoNP )
+				__pwoNR:SetValue( __pwoNR:Mult( self ) )
 				__pwoNT:SetValue( __pwoNT:Add( __pwoN1 ) )
 			End While
 
 		END SEQUENCE
 	
-		IF ( lPowF )
+		IF lPowF
 			__pwoNR:SetValue( __pwoNR:nthRoot( __pwoB ) )
 		EndIF
 
 	END SEQUENCE
 
-	IF ( lPoWN )
+	IF lPoWN
 		__pwoNR:SetValue( __pwoN1:Div( __pwoNR ) )	
 	EndIF
 
@@ -1400,7 +1396,7 @@ Return( __pwoNR )
 	
 		BEGIN SEQUENCE
 	
-			IF ( oCN2:lt( oM10 ) )
+			IF oCN2:lt( oM10 )
 				oNR:SetValue( oN1:Pow( oN2 ) )
 				BREAK
 			EndIF
@@ -1420,19 +1416,19 @@ Return( __pwoNR )
 	
 			aNR	:= Array(0)
 
-			While ( oQ10:gt( oNZ ) )
+			While oQ10:gt( oNZ )
 	
 				oQTh:SetValue( oN5:Min( oQ10 ) )
 				oQ10:SetValue( oQ10:Sub( oQTh ) )
 	
 				#IFDEF __PROTHEUS__
-					lExit	:= ( ( lExit ) .or. KillApp() )
-					IF ( lExit )
+					lExit	:= lExit .or. KillApp()
+					IF lExit
 						Exit
 					EndIF
 				#ENDIF	
 	
-				While ( oQTh:gt( oNZ ) )
+				While oQTh:gt( oNZ )
 					
 					oQTh:SetValue( oQTh:Sub( oNO ) )
 	
@@ -1478,8 +1474,8 @@ Return( __pwoNR )
 					While .NOT.( lExit )
 					
 						#IFDEF __PROTHEUS__
-							lExit	:= ( ( lExit ) .or. KillApp() )
-							IF ( lExit )
+							lExit	:= lExit .or. KillApp()
+							IF lExit
 								Exit
 							EndIF
 						#ENDIF	
@@ -1501,9 +1497,9 @@ Return( __pwoNR )
 			
 									ClearGlbValue( aNR[nID][3] )
 			
-									lExit	:= ( ( ++nNR ) == nIDs )
+									lExit	:= ++nNR == nIDs
 			                                                                      	
-									IF ( lExit )
+									IF lExit
 										Exit
 									EndIF
 			
@@ -1511,9 +1507,9 @@ Return( __pwoNR )
 			
 							Else
 			
-								lExit := ( ( ++nNR ) == nIDs )
+								lExit := ++nNR == nIDs
 			
-								IF ( lExit )
+								IF lExit
 									Exit
 								EndIF
 						
@@ -1521,7 +1517,7 @@ Return( __pwoNR )
 			
 						Next nID	
 			
-						IF ( lExit )
+						IF lExit
 							Exit
 						EndIF
 
@@ -1540,12 +1536,12 @@ Return( __pwoNR )
 	
 			aNR		:= NIL
 
-			IF ( l10 )
+			IF l10
 				oNR		:= oNR:Mult( oCN1 )
 				BREAK
 			EndIF
 			
-			While ( oCN2:gt( oNO )  )
+			While oCN2:gt( oNO )
 				oCN2:SetValue( oCN2:Sub( oNO ) )
 				oNR:SetValue( oNR:Mult( oCN1 ) )
 			End While
@@ -1771,8 +1767,8 @@ Method LCM( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		While ( .T. )
-			While ( oN1:Mod( oNI ):eq( o0 ) .or. oN2:Mod( oNI ):eq( o0 ) )
+		While .T.
+			While oN1:Mod( oNI ):eq( o0 ) .or. oN2:Mod( oNI ):eq( o0 )
 				oLCM:SetValue( oLCM:Mult( oNI ) )
 				IF oN1:Mod( oNI ):eq( o0 )
 					oN1:SetValue( oN1:Div( oNI , .F. ) )
@@ -1781,7 +1777,7 @@ Method LCM( uBigN ) CLASS tBigNumber
 					oN2:SetValue( oN2:Div( oNI , .F. ) )
 				EndIF
 			End While
-			IF ( oN1:eq( o1 ) .and. oN2:eq( o1 ) )
+			IF oN1:eq( o1 ) .and. oN2:eq( o1 )
 				BREAK
 			EndIF
 			oNI:SetValue( oNI:Add( o1 ) )		
@@ -1824,7 +1820,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		IF ( oRootB:lNeg )
+		IF oRootB:lNeg
 			BREAK
 		EndIF
 
@@ -1918,7 +1914,7 @@ Method SysSQRT( uSet ) CLASS tBigNumber
 	__uSysSQRT			:= uSet
 	cType				:= ValType( __uSysSQRT )
 
-	oSysSQRT:SetValue( IF( ( cType $ "C|O" ) , __uSysSQRT , IF( ( cType == "N" ) , Str( __uSysSQRT ) , "0" ) ) )
+	oSysSQRT:SetValue( IF( cType $ "C|O" , __uSysSQRT , IF( cType == "N" , Str( __uSysSQRT ) , "0" ) ) )
 
 Return( oSysSQRT )
 
@@ -1950,12 +1946,12 @@ Method Log( uBigNB ) CLASS tBigNumber
 
 	oT:SetValue(uBigNB)
 
-	IF ( o0:lt( oT ) .and. oT:lt( o1 ) )
+	IF o0:lt( oT ) .and. oT:lt( o1 )
 	 	lflag := .NOT.( lflag )
 	 	oT:SetValue( o1:Div( oT ) )
 	EndIF
 
-	While ( oX:gt( oT ) .and. oT:gt( o1 ) )
+	While oX:gt( oT ) .and. oT:gt( o1 )
 		oY:SetValue( oY:Add( oI ) )
 		oX:SetValue( oX:Div( oT ) )
 	End While 
@@ -1965,9 +1961,9 @@ Method Log( uBigNB ) CLASS tBigNumber
 	oT:SetValue( oT:Sqrt() )
 	oI:SetValue( oI:Div( o2 ) )
     
-	While ( oT:gt( o1 ) )
+	While oT:gt( o1 )
 
-		While ( oX:gt( oT ) .and. oT:gt( o1 ) )
+		While oX:gt( oT ) .and. oT:gt( o1 )
 			oY:SetValue( oY:Add( oI ) )
 			oX:SetValue( oX:Div( oT ) )
 		End While 
@@ -1983,7 +1979,7 @@ Method Log( uBigNB ) CLASS tBigNumber
 
 	End While
 
-	IF ( lflag )
+	IF lflag
 		oS:SetValue( oS:Mult( "-1" ) )
 	EndIF	
 
@@ -2223,13 +2219,13 @@ Method D2H( cHexB ) CLASS tBigNumber
 
 	otBigH:SetValue( cHexB )
 	
-	While ( otBigN:gt( oZero ) )
+	While otBigN:gt( oZero )
 		otBigN:SetValue( otBigN:Div( otBigH , .F. ) )
 		nAT				:= ( Val( otBigN:cRDiv ) + 1 )
 		cHexN			:= ( SubStr( cHexC , nAT , 1 ) + cHexN )
 	End While
 
-	IF ( cHexN == "" )
+	IF cHexN == ""
 		cHexN := "0"		
 	EndIF
 
@@ -2262,7 +2258,7 @@ Method H2D( cHexN , cHexB ) CLASS tBigNumber
 	otBigH:SetValue( cHexB )
 	otBigLN:SetValue( LTrim( Str( nLn ) ) )
 
-	While ( nI > 0 )
+	While nI > 0
 		otBigNI:SetValue( LTrim( Str( --nI ) ) )
 	    otBigAT:SetValue( LTrim( Str( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) ) ) 
         otBigPw:SetValue( otBigLN:Sub( otBigNI ) )
@@ -2331,14 +2327,14 @@ Method H2B( cHexN , cHexB ) CLASS tBigNumber
 
 		IF Empty( cHexB )
 			For nAT := 17 TO 32
-				IF ( aH2B[ nAT ][ 1 ] $ cHexN )
+				IF aH2B[ nAT ][ 1 ] $ cHexN
 					cHexB	:= "32"
 					EXIT
 				EndIF
 			Next nAT
 			IF Empty( cHexB )
 				For nAT := 1 TO 16
-					IF ( aH2B[ nAT ][ 1 ] $ cHexN )
+					IF aH2B[ nAT ][ 1 ] $ cHexN
 						cHexB	:= "16"
 						EXIT
 					EndIF	
@@ -2352,10 +2348,10 @@ Method H2B( cHexN , cHexB ) CLASS tBigNumber
 
 		l16	:= ( cHexB == "16" )
 
-		While ( ( ++nI ) <= nLn )
+		While ++nI <= nLn
 			cChr	:= SubStr( cHexN , nI , 1 )
 			nAT		:= aScan( aH2B , { |aE| ( aE[ 1 ] == cChr ) } )
-			IF ( nAT > 0 )
+			IF nAT > 0
 				cBin += IF( l16 , SubStr( aH2B[ nAT ][ 2 ] , 2 ) , aH2B[ nAT ][ 2 ] )
 			EndIF
 		End While
@@ -2420,9 +2416,9 @@ Method B2H( cBin , cHexB ) CLASS tBigNumber
 	BEGIN SEQUENCE
 
 		IF Empty( cHexB )
-			IF ( ( nLn % 5 ) == 0 )
+			IF nLn % 5 == 0
 				cHexB	:= "32"
-			ElseIF ( ( nLn % 4 ) == 0 )
+			ElseIF nLn % 4 == 0
 				cHexB	:= "16"			
 			EndIF	
 		EndIF	
@@ -2433,10 +2429,10 @@ Method B2H( cBin , cHexB ) CLASS tBigNumber
 
 		l16 := ( cHexB == "16" )
 
-		While ( nI <= nLn )
+		While nI <= nLn
 			cChr	:= SubStr( cBin , nI , IF( l16 , 4 , 5 ) )
 			nAT		:= aScan( aH2B , { |aE| ( IF( l16 , SubStr( aE[ 2 ] , 2 ) , aE[ 2 ] ) == cChr ) } )
-			IF ( nAT > 0 )
+			IF nAT > 0
 				cHexN += aH2B[ nAT ][ 1 ]
 			EndIF
 			nI += IF( l16 , 4 , 5 )
@@ -2494,7 +2490,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 	
-		IF ( oB:gt( oM ) )
+		IF oB:gt( oM )
 	
 			nE	:= Val( oM:ExactValue() )
 			nB	:= Int( nE / 2 )
@@ -2506,12 +2502,12 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			lI	:= .F.
 			nS	:= oE:nInt
 			
-			While ( oR:lt( oM ) )
+			While oR:lt( oM )
 				nR	:= __Random( nB , nE )
 				cR	+= LTrim( Str( nR ) )
 				nT	:= nS
-				IF ( lI )
-					While ( nT > 0 )
+				IF lI
+					While nT > 0
 						nR := -( __Random(1,nS) )
 						oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 						IF oR:gte( oE )
@@ -2520,7 +2516,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 						nT += nR
 					End While
 				Else
-					While ( nT > 0 )
+					While nT > 0
 						nR	:= __Random(1,nS)
 						oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 						IF oR:gte( oE )
@@ -2541,8 +2537,8 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 				nR	:= __Random( nB , nE )
 				cR	+= LTrim( Str( nR ) )
 				nT	:= nS
-				IF ( lI )
-					While ( nT > 0 )
+				IF lI
+					While  nT > 0
 						nR := -( __Random(1,nS) )
 						oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 						IF oR:gte( oE )
@@ -2551,7 +2547,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 						nT += nR
 					End While
 				Else
-					While ( nT > 0 )
+					While nT > 0
 						nR	:= __Random(1,nS)
 						oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 						IF oR:gte( oE )
@@ -2562,10 +2558,10 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 				EndIF
 				lI := .NOT.(lI)
 				nT := 0
-				IF ( aScan( aE , { |n| ++nT , n == __Random(1,nExit) } ) > 0 )
+				IF aScan( aE , { |n| ++nT , n == __Random(1,nExit) } ) > 0
 					Exit
 				EndIF
-				IF ( nT <= RANDOM_MAX_EXIT )
+				IF nT <= RANDOM_MAX_EXIT
 					aAdd( aE , __Random(1,nExit) )
 				EndIF
 			End While
@@ -2595,8 +2591,8 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			nR	:= __Random( nB , nE )
 			cR	+= LTrim( Str( nR ) )
 			nT	:= nS
-			IF ( lI )
-				While ( nT > 0 )
+			IF lI
+				While nT > 0
 					nR := -( __Random(1,nS) )
 					oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 					IF oR:gte( oE )
@@ -2605,7 +2601,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 					nT += nR
 				End While
 			Else
-				While ( nT > 0 )
+				While nT > 0
 					nR	:= __Random(1,nS)
 					oR:SetValue( oR:Add( SubStr( cR , 1 , nR ) ) )
 					IF oR:gte( oE )
@@ -2616,17 +2612,17 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			EndIF
 			lI := .NOT.(lI)
 			nT := 0
-			IF ( aScan( aE , { |n| ++nT , n == __Random(1,nExit) } ) > 0 )
+			IF aScan( aE , { |n| ++nT , n == __Random(1,nExit) } ) > 0
 				Exit
 			EndIF
-			IF ( nT <= RANDOM_MAX_EXIT )
+			IF nT <= RANDOM_MAX_EXIT
 				aAdd( aE , __Random(1,nExit) )
 			EndIF
 		End While
 	
 	END SEQUENCE
 	
-	IF ( oR:lt( oB ) .or. oR:gt( oE ) )
+	IF oR:lt( oB ) .or. oR:gt( oE )
 
 		nT	:= Min( oE:nInt , oM:nInt )
 		cR	:= Replicate("9",nT)
@@ -2665,11 +2661,11 @@ Static Function __Random(nB,nE)
 
 	Local nR
 
-	IF ( nB == 0 )
+	IF nB == 0
 		nB := 1
 	EndIF
 
-	IF ( nB == nE )
+	IF nB == nE
 		++nE		
 	EndIF
 
@@ -2705,20 +2701,20 @@ Method millerRabin( uI ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF ( oN:lte( o1 ) )
+		IF oN:lte( o1 )
 			lPrime	:= .F.
 			BREAK
 		EndIF
 	
 		DEFAULT uI		:= "2"
 	
-		While ( oD:Mod( o2 ):eq( o0 ) )
+		While oD:Mod( o2 ):eq( o0 )
 			oD:SetValue( oD:Div( o2 , .F. ) )
 			oS:SetValue( oS:Add( o1 ) )
 		End While
 	
 		oI:SetValue( uI )
-		While ( oI:gt( o0 ) )
+		While oI:gt( o0 )
 			oA:SetValue( oA:Randomize( o1 , oN ) )
 			lPrime := mrPass( oA , oS , oD , oN )
 			IF .NOT.( lPrime )
@@ -2757,13 +2753,13 @@ Static Function mrPass(uA,uS,uD,uN)
 
 	BEGIN SEQUENCE
 
-		IF ( oP:eq( o1 ) )
+		IF oP:eq( o1 )
 			BREAK
 		EndIF
 
-		While ( oW:gt( o0 ) )
+		While oW:gt( o0 )
 			lmrP	:= 	oP:eq( oM )
-			IF ( lmrP )
+			IF lmrP
 				BREAK
 			EndIF
 			oP:SetValue( oP:Mult( oP ):Mod( oN )  )
@@ -2808,15 +2804,15 @@ Method FI() CLASS tBigNumber
 	Local oN	:= tBigNumber():New( oT )
 
 	While oI:Mult( oI ):lte( self )
-		IF ( oN:Mod( oI ):eq( o0 ) )
+		IF oN:Mod( oI ):eq( o0 )
 			oT:SetValue( oT:Sub( oT:Div( oI , .F. ) ) )
 		EndIF
-		While ( oN:Mod( oI ):eq( o0 ) )
+		While oN:Mod( oI ):eq( o0 )
 			oN:SetValue( oN:Div( oI , .F. ) )
 		End While
 		oI:SetValue( oI:Add( o1 ) )
 	End While
-	IF ( oN:gt( o1 ) )
+	IF oN:gt( o1 )
 		oT:SetValue( oT:Sub( oT:Div( oN , .F. ) ) )		
 	EndIF
 
@@ -2850,21 +2846,21 @@ Method FPrimes() CLASS tBigNumber
 	While otP:NextPrime(cP)
 		cP := LTrim( otP:cPrime )
 		oP:SetValue( cP )
-		IF ( oP:gte( oN ) .or. otP:IsPrime( oN:Int() ) )
+		IF oP:gte( oN ) .or. otP:IsPrime( oN:Int() )
 			cP := oN:Int(.F.)
 			aAdd( aFPrimes , { cP , 1 } )
 			EXIT
 		EndIF
-		While ( oN:Mod( oP ):eq( o0 ) )
+		While oN:Mod( oP ):eq( o0 )
 			nP := aScan( aFPrimes , { |e| e[1] == cP } )
-			IF ( nP == 0 )
+			IF nP == 0
 				aAdd( aFPrimes , { cP , 1 } )
 			Else
 				aFPrimes[nP][2]++ 
 			EndIF
 			oN:SetValue( oN:Div( oP , .F. ) )
 		End While
-		IF ( oN:lte( o1 ) )
+		IF oN:lte( o1 )
 			EXIT
 		EndIF
 	End While
@@ -2872,7 +2868,7 @@ Method FPrimes() CLASS tBigNumber
 Return( aFPrimes )
 
 /*
-	Funcao		: Mult
+	Funcao		: __Mult
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Multiplicacao
@@ -2898,10 +2894,10 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 	oPe	:= tBigNumber():New("1")
 	oPd := tBigNumber():New(cN2)
 	
-	While ( .T. )
+	While .T.
 		++nI
 		aAdd( aE , { oPe:ExactValue() , oPd:ExactValue() , .F. } )
-		IF ( oPe:gte( oN1 ) )
+		IF oPe:gte( oN1 )
 			Exit
 		EndIF
 		oPe:SetValue( oPe:Add( oPe ) )
@@ -2909,11 +2905,11 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 	End While
 
 	ocT	:= tBigNumber():New("0")
-	While ( nI > 0 )
+	While nI > 0
 		ocT:SetValue( ocT:Add( aE[ nI ][ 1 ] ) )
-		IF ( ocT:lte( oN1 )  )
+		IF ocT:lte( oN1 )
 			aE[ nI ][ 3 ] := .T. 
-			IF ( ocT:eq( oN1 )  )
+			IF ocT:eq( oN1 )
 				Exit
 			EndIF	
 		Else
@@ -2924,7 +2920,7 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 
 	nI 	:= 0
 	oNR	:= tBigNumber():New()
-	While ( ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0 )
+	While ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0
 		oNR:SetValue( oNR:Add( aE[ nI ][ 2 ] ) )
 	End While
 
@@ -2956,21 +2952,21 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 	oPe	:= tBigNumber():New("1")
 	oPd	:= tBigNumber():New(oN2)
 
-	While ( .T. )
+	While .T.
 		++nI
 		aAdd( aE , { oPe:ExactValue() , oPd:ExactValue() , .F. } )
 		oPe:SetValue( oPe:Add( oPe ) )
 		oPd:SetValue( oPd:Add( oPd ) )
-		IF ( oPd:gt( oN1 ) )
+		IF oPd:gt( oN1 )
 			Exit
 		EndIF
 	End While
 
-	While ( nI > 0 )
+	While nI > 0
 		oRDiv:SetValue( oRDiv:Add( aE[ nI ][ 2 ] ) )
-		IF ( oRDiv:lte( oN1 ) )
+		IF oRDiv:lte( oN1 )
 			aE[ nI ][ 3 ] := .T.
-			IF ( oRDiv:eq( oN1 ) )
+			IF oRDiv:eq( oN1 )
 				Exit
 			EndIF	
 		Else
@@ -2983,13 +2979,13 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 
 	nI 	:= 0
 	oNR	:= tBigNumber():New()
-	While ( ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0 )
+	While ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0
 		oNR:SetValue( oNR:Add( aE[ nI ][ 1 ] ) )
 	End While
 
 	oNR:cRDiv	:= oRDiv:ExactValue(.T.)
 	DEFAULT lFloat := .T.
-	IF ( .NOT.( lFloat ) .and. ( SubStr( oNR:cRDiv , -1 ) == "0" ) )
+	IF .NOT.( lFloat ) .and. SubStr( oNR:cRDiv , -1 ) == "0"
 		oNR:cRDiv	:= SubStr( oNR:cRDiv , 1 , Len( oNR:cRDiv) -1 )
 		IF Empty( oNR:cRDiv )
 			oNR:cRDiv := "0"
@@ -3036,12 +3032,12 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 		othRootT:SetValue(oRootB:Div(oRootE))
 	EndIF	
 
-	While ( oAccNo:gt(oAccTo) )
+	While oAccNo:gt(oAccTo)
 		oT1:SetValue(oRootB:Div(othRootT:Pow(oESub1)))
 		oT2:SetValue(oESub1:Mult(othRootT))
 		oT3:SetValue(oT1:Add(oT2))
 		othRoot:SetValue(o1divE:Mult(oT3))
-		IF ( othRootT:eq(oZero) )
+		IF othRootT:eq(oZero)
 			Exit
 		EndIF
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
@@ -3093,13 +3089,13 @@ return(x)
 
 		__nSetDecimals := nAcc
 
-		While ( n > 0  )
+		While n > 0
 			(a)->(dbGoTo(n))
 			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				(c)->FN += ((a)->FN+(b)->FN)
-				IF ( (c)->FN >= 10 )
+				IF (c)->FN >= 10
 					(c)->FN	-= 10
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
@@ -3119,15 +3115,15 @@ return(x)
 
 		#IFDEF __MT__
 		
-			IF ( Select(a) > 0 )
+			IF Select(a) > 0
 				(a)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(b) > 0 )
+			IF Select(b) > 0
 				(b)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(c) > 0 )
+			IF Select(c) > 0
 				(c)->( dbCloseArea() )
 			EndIF	
 			
@@ -3170,13 +3166,13 @@ return(x)
 
 		__nSetDecimals := nAcc
 	
-		While ( n > 0  )
+		While n > 0
 			(a)->(dbGoTo(n))
 			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				(c)->FN += ( (a)->FN - (b)->FN )
-				IF ( (c)->FN < 0 )
+				(c)->FN += (a)->FN - (b)->FN
+				IF (c)->FN < 0
 					(c)->FN += 10
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
@@ -3196,15 +3192,15 @@ return(x)
 
 		#IFDEF __MT__
 		
-			IF ( Select(a) > 0 )
+			IF Select(a) > 0
 				(a)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(b) > 0 )
+			IF Select(b) > 0
 				(b)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(c) > 0 )
+			IF Select(c) > 0
 				(c)->( dbCloseArea() )
 			EndIF	
 			
@@ -3256,24 +3252,24 @@ return(x)
 
 		__nSetDecimals := nAcc
 	
-		While ( i <= n )
+		While i <= n
 			s := 1
 			j := i
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				While ( s <= i )
+				While s <= i
 					(a)->(dbGoTo(s++))
 					(b)->(dbGoTo(j--))
 					(c)->FN += ( (a)->FN*(b)->FN )
 				End While
-				IF ( (c)->FN >= 10 )
-					x		:= ( k+1 )
+				IF (c)->FN >= 10
+					x		:= k+1
 					w		:= Int( (c)->FN / 10 )
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN	:= w
 						(c)->(dbUnLock())
-						w := ( (c)->FN * 10 )
+						w := (c)->FN * 10
 						(c)->(dbGoTo(k))
 						(c)->FN	-= w
 					EndIF	
@@ -3284,24 +3280,24 @@ return(x)
 			i++
 		End While
 	
-		While ( l <= n )
+		While l <= n
 			s := n
 			j := l
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				While ( s >= l )
+				While s >= l
 					(a)->(dbGoTo(s--))
 					(b)->(dbGoTo(j++))
 					(c)->FN	+= ( (a)->FN*(b)->FN )
 				End While
-				IF ( (c)->FN >= 10 )
-					x		:= ( k+1 )
+				IF (c)->FN >= 10
+					x		:= k+1
 					w		:= Int( (c)->FN / 10 )
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN := w
 						(c)->(dbUnLock())
-						w := ( (c)->FN * 10 )
+						w := (c)->FN * 10
 						(c)->(dbGoTo(k))
 						(c)->FN -= w
 					EndIF	
@@ -3309,7 +3305,7 @@ return(x)
 				(c)->(dbUnLock())
 			EndIF
 			k++
-			IF ( k >= y )
+			IF k >= y
 				Exit
 			EndIF
 			l++
@@ -3321,15 +3317,15 @@ return(x)
 
 		#IFDEF __MT__
 		
-			IF ( Select(a) > 0 )
+			IF Select(a) > 0
 				(a)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(b) > 0 )
+			IF Select(b) > 0
 				(b)->( dbCloseArea() )
 			EndIF	
 			
-			IF ( Select(c) > 0 )
+			IF Select(c) > 0
 				(c)->( dbCloseArea() )
 			EndIF	
 			
@@ -3366,7 +3362,7 @@ return(x)
 			FIELD FN
 		#ENDIF	
 	
-		While ( ( ++y ) <= n )
+		While ++y <= n
 			(a)->( dbAppend( .T. ) )
 			(a)->FN	:= Val( SubStr( c , y , 1 ) )
 			(a)->( dbUnLock() )
@@ -3390,22 +3386,22 @@ return(x)
 			FIELD FN
 		#ENDIF	
 	
-		While ( y >= 1 )
+		While y >= 1
 			(a)->(dbGoTo(y))
-			While ( ( y >= 1 ) .and. ( (a)->FN == 0 ) )
+			While y >= 1 .and. (a)->FN == 0
 				(a)->(dbGoTo(--y))
 			End While
-			While ( y >= 1 )
+			While y >= 1
 				(a)->(dbGoTo(y--))
 				s	+= Str( (a)->FN , 1 )
 			End While
 		End While
 	
-		IF ( s == "" )
+		IF s == ""
 			s := "0"	
 		EndIF
 	
-		IF ( Len( s ) < n )
+		IF Len( s ) < n
 			s := PadL( s , n , "0"  )
 		EndIF
 	
@@ -3429,7 +3425,7 @@ return(x)
 		cLDriver		:= __LocalDriver
 		__LocalDriver	:= cRDD
 	#ENDIF
-		IF ( Select(cAlias) == 0 )
+		IF Select(cAlias) == 0
 	#IFNDEF __HARBOUR__
 			cFile := CriaTrab(aStru,.T.,".dbf")
 			dbUseArea( .T. , cRDD , cFile , cAlias , .F. , .F. )
@@ -3504,7 +3500,7 @@ return(x)
 	
 		Local a	:= aNumber( cN1 , n )
 		Local b := aNumber( cN2 , n )
-		Local y := ( n + n )
+		Local y := n + n
 		Local c := aFill( Array( y ) , 0 )
 		Local k := 1
 		
@@ -3512,9 +3508,9 @@ return(x)
 	    
 		__nSetDecimals := nAcc
 	
-		While ( n > 0  )
-			c[k] += ( a[n] + b[n] )
-			IF ( c[k] >= 10 )
+		While n > 0
+			c[k] += a[n] + b[n]
+			IF c[k] >= 10
 				c[k+1]	+= 1
 				c[k]	-= 10
 			EndIF
@@ -3539,7 +3535,7 @@ return(x)
 	
 		Local a	:= aNumber( cN1 , n )
 		Local b := aNumber( cN2 , n )
-		Local y := ( n + n )
+		Local y := n + n
 		Local c := aFill( Array( y ) , 0 )
 		Local k := 1
 	
@@ -3547,9 +3543,9 @@ return(x)
 	
 		__nSetDecimals := nAcc
 	
-		While ( n > 0  )
-			c[k] += ( a[n] - b[n] )
-			IF ( c[k] < 0 )
+		While n > 0
+			c[k] += a[n] - b[n]
+			IF c[k] < 0
 				c[k+1]	-= 1
 				c[k]	+= 10
 			EndIF
@@ -3575,7 +3571,7 @@ return(x)
 	
 		Local a		:= aNumber( Invert( cN1 , n ) , n )
 		Local b		:= aNumber( Invert( cN2 , n ) , n )
-		Local y		:= ( n + n )
+		Local y		:= n + n
 		Local c		:= afill( Array( y ) , 0 )
 	
 		Local i 	:= 1
@@ -3590,34 +3586,34 @@ return(x)
 	
 		__nSetDecimals := nAcc
 	
-		While ( i <= n )
+		While i <= n
 			s := 1
 			j := i
-			While ( s <= i )
-				c[k]	+= ( a[s++] * b[j--] )
+			While s <= i
+				c[k]	+= a[s++] * b[j--]
 			End While
-			IF ( c[k] >= 10 )
-				x		:= ( k+1 )
+			IF c[k] >= 10
+				x		:= k+1
 				c[x]	:= Int( c[k] / 10 )
-				c[k]	-= ( c[x] * 10 )
+				c[k]	-= c[x] * 10
 			EndIF
 			k++
 			i++
 		End While
 	
-		While ( l <= n )
+		While l <= n
 			s := n
 			j := l
-			While ( s >= l )
-				c[k]	+= ( a[s--] * b[j++] )
+			While s >= l
+				c[k]	+= a[s--] * b[j++]
 			End While
-			IF ( c[k] >= 10 )
-				x		:= ( k+1 )
+			IF c[k] >= 10
+				x		:= k+1
 				c[x]	:= Int( c[k] / 10 )
-				c[k]	-= ( c[x] * 10 )
+				c[k]	-= c[x] * 10
 			EndIF
 			k++
-			IF ( k >= y )
+			IF k >= y
 				Exit
 			EndIF
 			l++
@@ -3642,7 +3638,7 @@ return(x)
 	
 		Local y	:= 0
 	
-		While ( ( ++y ) <= n )
+		While ++y <= n
 			a[ y ] := Val( SubStr( c , y , 1 ) )
 		End While
 	
@@ -3660,21 +3656,21 @@ return(x)
 		Local s	:= ""
 		Local y	:= n
 	
-		While ( y >= 1 )
-			While ( ( y >= 1 ) .and. ( a[y] == 0 ) )
+		While y >= 1
+			While y >= 1 .and. a[y] == 0
 				y--
 			End While
-			While ( y >= 1 )
+			While y >= 1
 				s	+= Str( a[y] , 1 )
 				y--
 			End While
 		End While
 	
-		IF ( s == "" )
+		IF s == ""
 			s := "0"	
 		EndIF
 	
-		IF ( Len( s ) < n )
+		IF Len( s ) < n
 			s := PadL( s , n , "0"  )
 		EndIF
 	
@@ -3694,7 +3690,7 @@ Static Function Invert( c , n )
 	Local s	:= ""
 	Local y	:= n	
 
-	While ( y > 0 )
+	While y > 0
 		s += SubStr( c , y-- , 1 )
 	End While
 

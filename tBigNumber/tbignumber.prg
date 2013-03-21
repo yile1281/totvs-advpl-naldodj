@@ -2205,7 +2205,7 @@ Method SQRT() CLASS tBigNumber
 
 		IF oSQRT:lte( self:SysSQRT() )
 			nSetDec := Set( _SET_DECIMALS , __nSetDecimals )
-			oSQRT:SetValue( Str( SQRT( Val( oSQRT:GetValue() ) ) ) )
+			oSQRT:SetValue( Str( __sqrt( Val( oSQRT:GetValue() ) , 2 ) ) )
 			Set( _SET_DECIMALS, nSetDec )
 			BREAK
 		EndIF
@@ -3399,12 +3399,20 @@ Return( othRoot )
 Static Function __sqrt(p,n)
 	Local x
 	Local i
-	local t
-	p := tBigNumber():New(p)
+	Local t
+	DEFAULT n	:= 1
+	p 			:= tBigNumber():New(p)
 	IF p:lte( "9999999999999999" )
-		x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
+		#IFDEF __HARBOUR__
+			#IFDEF __HB_Q_SQRT__
+				x := tBigNumber():New(Str(HB_Q_SQRT(Val(p:GetValue()),n)))
+			#ELSE
+				x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))				
+			#ENDIF
+		#ELSE
+			x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
+		#ENDIF	
 	Else
-		DEFAULT n := 1
 		t := tBigNumber():New("2")
 		x := p:Div(t)
 		for i := 1 To n
@@ -4519,4 +4527,10 @@ Return( __eTthD )
 		Return( __Mult( @cBigN1 , @cBigN2 , @nAcc ) )
 	#ENDIF
 
+#ENDIF
+
+#IFDEF __HARBOUR__
+	#IFDEF __HB_Q_SQRT__
+		#include "hb_q_rsqrt.c"
+	#ENDIF	
 #ENDIF

@@ -5,7 +5,9 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET	 32
+#DEFINE ACC_SET			 50
+#DEFINE ROOT_ACC_SET	 15
+
 #DEFINE __SLEEP 0
 
 #DEFINE N_TEST 50
@@ -13,9 +15,9 @@
 #IFDEF __HARBOUR__
 Function Main()
 	#IFDEF __HARBOUR__
-	    #IFDEF __ALT_D__
-		   AltD( 1 )   // Enables the debugger. Press F5 to go. Compile with -b
-		   AltD()      // Invokes the debugger
+	    #IFDEF __ALT_D__	// Compile with -b
+		   AltD( 1 )		// Enables the debugger. Press F5 to go.
+		   AltD()			// Invokes the debugger
 		#ENDIF
 	#ENDIF
 Return(tBigNTst())
@@ -67,6 +69,8 @@ User Function tBigNTst()
 	ASSIGN fhLog := fOpen(cLog , FO_READWRITE + FO_SHARED)
 
 	otBigN:SetDecimals(ACC_SET)
+	otBigN:nthRootAcc(ROOT_ACC_SET)
+	otBigN:SysSQRT(0)
 
 	Set(_SET_DECIMALS , ACC_SET)
 

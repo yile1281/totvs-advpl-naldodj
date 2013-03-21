@@ -12,6 +12,8 @@ THREAD Static __nSetDecimals
 #DEFINE RANDOM_MAX_EXIT		5
 #DEFINE EXIT_MAX_RANDOM		50
 
+#DEFINE MAX_SYS_SQRT		"9999999999999999"
+
 /*
 
 	Alternative Compile Options: /D
@@ -2239,13 +2241,17 @@ Method SysSQRT( uSet ) CLASS tBigNumber
 
 	THREAD Static __uSysSQRT
 
-	DEFAULT __uSysSQRT	:= "9999999999999999"
+	DEFAULT __uSysSQRT	:= oSysSQRT
 	DEFAULT uSet 		:= __uSysSQRT
 
 	__uSysSQRT			:= uSet
 	cType				:= ValType( __uSysSQRT )
 
 	oSysSQRT:SetValue( IF( cType $ "C|O" , __uSysSQRT , IF( cType == "N" , Str( __uSysSQRT ) , "0" ) ) )
+
+	IF oSysSQRT:gt(MAX_SYS_SQRT)
+		oSysSQRT:SetValue(MAX_SYS_SQRT)
+	EndIF
 
 Return( oSysSQRT )
 
@@ -3406,7 +3412,7 @@ Static Function __sqrt(p,n)
 	Local t
 	DEFAULT n	:= 1
 	p 			:= tBigNumber():New(p)
-	IF p:lte( "9999999999999999" )
+	IF p:lte( MAX_SYS_SQRT )
 		#IFDEF __HARBOUR__
 			#IFDEF __HB_Q_SQRT__
 				x := tBigNumber():New(Str(HB_Q_SQRT(Val(p:GetValue()),n)))

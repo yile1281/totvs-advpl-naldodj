@@ -1925,10 +1925,10 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 								othRootD:SetValue( othRootD:Mult( nthRoot( @oRootT , @oRootE , @oFExit , @nAcc ):Pow( aDPF[nPF][2] ) ) )
 							EndIF
 						Next nPF
+						IF othRootD:gt( oRoot0 )
+							othRoot:SetValue( othRoot:Div( othRootD ) )	
+						EndIF
 					EndIF	
-				EndIF
-				IF othRootD:gt( oRoot0 )
-					othRoot:SetValue( othRoot:Div( othRootD ) )	
 				EndIF
 			#ENDIF //__ROOTMT__
 			BREAK

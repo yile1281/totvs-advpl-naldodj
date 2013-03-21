@@ -1887,7 +1887,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 		oFExit:SetValue( cFExit , NIL , NIL , @__nthRootAcc )
 
 		IF oRootB:Dec(.T.):gt(oRoot0)
-			oRootD:SetValue( "1" + Replicate( "0" , Len( oRootB:Dec(NIL,.T.) ) ) )
+			oRootD	:= tBigNumber():New( "1" + Replicate( "0" , Len( oRootB:Dec(NIL,.T.) ) ) )
 			oRootB:SetValue(oRootB:Int()+oRootB:Dec())
 			aIPF	:= oRootB:PFactors()
 			aDPF	:= oRootD:PFactors()
@@ -2171,7 +2171,7 @@ Return( othRoot )
 
 			PTInternal( 1 , "[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]" )
 
-			cNR				:= nthRoot( @oRootB , @oRootE , @oFExit , @nAcc ):GetValue()
+			cNR				:= nthRoot( @oRootB , @oRootE , @oFExit , @nSetDecimals ):GetValue()
 
 			PTInternal( 1 , "[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT][" + cNR + "]" )
 

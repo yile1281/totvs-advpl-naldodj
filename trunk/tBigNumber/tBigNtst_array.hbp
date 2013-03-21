@@ -5,6 +5,7 @@
 -mt
 
 /D__POWMT__
+/D__ROOTMT__
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3

@@ -5,7 +5,7 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET	 25
+#DEFINE ACC_SET	 32
 #DEFINE __SLEEP 0
 
 #DEFINE N_TEST 50
@@ -19,7 +19,7 @@ User Function tBigNTst()
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local oPrime	AS OBJECT CLASS "TPRIME" 	 VALUE tPrime():New() 
-	Local aFPrimes	AS ARRAY
+	Local aPFactors	AS ARRAY
 	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
 															 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
 															 "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
@@ -96,18 +96,20 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-
 	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 	
 	__ConOut(fhLog,"")
 
 	For n := 1 To 1000
 		ASSIGN cN			:= LTrim(Str(n))
-		ASSIGN aFPrimes	:= otBigN:SetValue(cN):FPrimes()
-		For x := 1 To Len( aFPrimes )
-			For w := 1 To aFPrimes[x][2]
-				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aFPrimes[x][1])
-			Next w	
+		ASSIGN aPFactors	:= otBigN:SetValue(cN):PFactors()
+		For x := 1 To Len( aPFactors )
+			ASSIGN cW	:= aPFactors[x][2]
+			otBigW:SetValue(cW)
+			While otBigW:gt("0")
+				otBigW:SetValue(otBigW:Sub("1"))
+				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFactors[x][1])
+			End While
 		Next x	
 		__ConOut(fhLog,"---------------------------------------------------------")
 	Next n
@@ -564,12 +566,13 @@ User Function tBigNTst()
 *	otBigN:SysSQRT(999999999999999)
 	otBigN:SysSQRT(0)
 
+	otBigN:SetValue("999999999999297"):SQRT()
+
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste SQRT 0 -------------- ")
 	
 	__ConOut(fhLog,"")
-
 	For x := 1 TO N_TEST
 		ASSIGN n  	:= x
 		ASSIGN cN 	:= LTrim(Str(n))

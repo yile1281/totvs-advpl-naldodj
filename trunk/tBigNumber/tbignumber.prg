@@ -117,7 +117,7 @@ CLASS tBigNumber
 	
 	Method FI()
 	
-	Method FPrimes()
+	Method PFactors()
                     
 End Class
 
@@ -1473,13 +1473,11 @@ Return( __pwoNR )
 
 					While .NOT.( lExit )
 					
-						#IFDEF __PROTHEUS__
-							lExit	:= lExit .or. KillApp()
-							IF lExit
-								Exit
-							EndIF
-						#ENDIF	
-					    
+						lExit	:= lExit .or. KillApp()
+						IF lExit
+							Exit
+						EndIF
+
 						nNR		:= 0
 		
 						For nID := 1 To nIDs
@@ -1797,14 +1795,28 @@ Return( oLCM )
 */
 Method nthRoot( uBigN ) CLASS tBigNumber
 
+	Local aIPF
+	Local aDPF
+
 	Local cFExit
-		
+
+#IFNDEF __ROOTMT__
+	Local nPF
+#ENDIF
+
+	Local nPFs
 	Local nAcc		:= __nSetDecimals
 
 	Local oRoot0
 	Local oRoot1
 	Local oRootB
+	Local oRootD
 	Local othRoot
+
+#IFNDEF __ROOTMT__
+	Local oRootT
+	Local othRootD
+#ENDIF
 
 	Local oRootE
 	Local oFExit
@@ -1850,11 +1862,296 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 
 		oFExit:SetValue( cFExit , NIL , NIL , @__nthRootAcc )
 
+		IF oRootB:Dec(.T.):gt(oRoot0)
+			oRootD:SetValue( "1" + Replicate( "0" , Len( oRootB:Dec(NIL,.T.) ) ) )
+			oRootB:SetValue(oRootB:Int()+oRootB:Dec())
+			aIPF	:= oRootB:PFactors()
+			aDPF	:= oRootD:PFactors()
+		Else
+			aIPF	:= oRootB:PFactors()
+			aDPF	:= Array(0)
+		EndIF
+
+		nPFs 	:= Len( aIPF )
+
+		IF nPFs > 0
+			#IFDEF __ROOTMT__
+				othRoot:SetValue( RootThread( @aIPF , @aDPF , @oRootE , @oFExit , @__nthRootAcc ) )
+			#ELSE
+				othRoot:SetValue(oRoot1)
+				othRootD	:= tBigNumber():New()
+				oRootT		:= tBigNumber():New()
+				For nPF := 1 To nPFs
+					IF oRootE:eq( aIPF[nPF][2] )
+						othRoot:SetValue( othRoot:Mult( aIPF[nPF][1] ) )
+					Else
+						oRootT:SetValue( aIPF[nPF][1] )
+						othRoot:SetValue( othRoot:Mult( nthRoot( @oRootT , @oRootE , @oFExit , @nAcc ):Pow( aIPF[nPF][2] ) ) )
+					EndIF	
+				Next nPF
+				IF .NOT.( Empty( aDPF ) )
+					nPFs		:= Len( aDPF )
+					IF nPFs > 0
+						othRootD:SetValue(oRoot1)
+						For nPF := 1 To nPFs
+							IF oRootE:eq( aDPF[nPF][2] )
+								othRootD:SetValue( othRootD:Mult( aDPF[nPF][1] ) )
+							Else
+								oRootT:SetValue( aDPF[nPF][1] )
+								othRootD:SetValue( othRootD:Mult( nthRoot( @oRootT , @oRootE , @oFExit , @nAcc ):Pow( aDPF[nPF][2] ) ) )
+							EndIF
+						Next nPF
+					EndIF	
+				EndIF
+				IF othRootD:gt( oRoot0 )
+					othRoot:SetValue( othRoot:Div( othRootD ) )	
+				EndIF
+			#ENDIF //__ROOTMT__
+			BREAK
+		EndIF
+
 		othRoot:SetValue( nthRoot( @oRootB , @oRootE , @oFExit , @nAcc ) )
 
 	END SEQUENCE
 
 Return( othRoot )
+
+#IFDEF __ROOTMT__
+
+	/*/
+		Funcao:		RootThread
+		Autor:		Marinaldo de Jesus
+		Data:		20/03/2013
+		Descricao:	Utilizada no Metodo nthRoot para o Calculo da Raiz via Job
+		Sintaxe:	RootThread( aIPF , aDPF , oRootE , oAccTo , nAcc )
+	/*/
+	Static Function RootThread( aIPF , aDPF , oRootE , oAccTo , nAcc )
+
+	Local aNR
+
+	Local nID
+	Local nIDs
+
+	Local nIPF
+	Local nIPFs		:= Len( aIPF )
+
+	Local nDPF
+	Local nDPFs		:= Len( aDPF )
+	
+	Local othRoot
+	
+	Local othTRoot
+	Local othIRoot
+	Local othDRoot
+
+	#IFDEF __HARBOUR__
+
+		Local aThreads
+		Local aResults
+
+	#ELSE //__PROTHEUS__
+
+		Local cGlbV
+		Local cFExit	:= oAccTo:GetValue()
+		Local cRootE	:= oRootE:GetValue()	
+		Local cEnvSrv	:= GetEnvServer()	
+		Local cThread	:= AllTrim( Str( ThreadID() ) )
+		
+		Local nNR
+		Local lExit		:= .F.
+
+	#ENDIF	//__HARBOUR__
+
+		nIDs		:= ( nIPFs + nDPFs )
+		aNR			:= Array( nIDs , 6 )
+		nID			:= 0
+
+		For nIPF := 1 To nIPFs
+            ++nID
+        	aNR[nID][1]	:= aIPF[nIPF][1]
+        	aNR[nID][2]	:= "I"
+	        #IFDEF __HARBOUR__
+				aNR[nID][3]	:= nID
+			#ELSE //__PROTHEUS__
+		        aNR[nID][3]	:= ( "__ROOT__I__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+	        #ENDIF //__HARBOUR__
+			IF oRootE:eq( aIPF[nIPF][2] )
+				aNR[nID][4] := .T.
+				aNR[nID][5] := aIPF[nIPF][1]
+				aNR[nID][6] := "1"
+			Else
+				aNR[nID][4] := .F.
+				aNR[nID][6] := aIPF[nIPF][2]
+			EndIF
+		Next nIPF
+
+		For nDPF := 1 To nDPFs
+            ++nID
+        	aNR[nID][1]	:= aDPF[nDPF][1]
+        	aNR[nID][2]	:= "D"
+	        #IFDEF __HARBOUR__
+				aNR[nID][3]	:= nID
+			#ELSE //__PROTHEUS__
+		        aNR[nID][3]	:= ( "__ROOT__D__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+	        #ENDIF //__HARBOUR__
+			IF oRootE:eq( aDPF[nDPF][2] )
+				aNR[nID][4] := .T.
+				aNR[nID][5] := aDPF[nDPF][1]
+				aNR[nID][6] := "1"
+			Else
+				aNR[nID][4] := .F.
+				aNR[nID][6] := aDPF[nDPF][2]
+			EndIF	
+		Next nDPF
+
+		#IFDEF __HARBOUR__
+			aThreads	:= Array(nIDs)
+			aResults	:= Array(nIDs)
+		#ENDIF
+
+		For nID := 1 To nIDs
+			IF aNR[nID][4]
+				LOOP
+			EndIF
+			#IFDEF __HARBOUR__
+				aThreads[nID] := hb_threadStart( "RootJob" , aNR[nID][1] , oRootE , oAccTo , nAcc )
+				hb_threadJoin( aThreads[nID] , @aResults[nID] )
+			#ELSE	//__PROTHEUS__
+				StartJob( "U_RootJob" , cEnvSrv , .F. , aNR[nID][1] , cRootE , cFExit , nAcc , aNR[nID][3] )
+			#ENDIF
+		Next nID
+
+		#IFDEF __HARBOUR__
+
+			hb_threadWaitForAll( aThreads )
+      				
+      		For nID := 1 To nIDs
+				IF aNR[nID][4]
+					LOOP
+				EndIF
+				aNR[nID][4]	:= .T.
+				aNR[nID][5]	:= aResults[nID]
+			Next nID
+
+		#ELSE	//__PROTHEUS__
+
+			While .NOT.( lExit )
+
+				lExit	:= lExit .or. KillApp()
+				IF lExit
+					Exit
+				EndIF
+
+				nNR		:= 0
+
+				For nID := 1 To nIDs
+
+					IF .NOT.( aNR[nID][4] )
+
+						cGlbV	:= GetGlbValue( aNR[nID][3] )
+
+						IF .NOT.( cGlbV == "" )
+
+							aNR[nID][4]	:= .T.
+							aNR[nID][5]	:= cGlbV
+
+							cGlbV	:= NIL
+	
+							ClearGlbValue( aNR[nID][3] )
+	
+							lExit	:= ++nNR == nIDs
+	                                                                      	
+							IF lExit
+								Exit
+							EndIF
+
+						EndIF
+
+					Else
+
+						lExit := ++nNR == nIDs
+	
+						IF lExit
+							Exit
+						EndIF
+				
+					EndIF
+	
+				Next nID	
+	
+				IF lExit
+					Exit
+				EndIF
+
+			End While
+
+		#ENDIF
+
+		othTRoot	:= tBigNumber():New()
+		othIRoot	:= tBigNumber():New("1")
+		othDRoot	:= tBigNumber():New("1")
+
+		For nID := 1 To nIDs
+			othTRoot:SetValue(aNR[nID][5])
+			IF aNR[nID][2] == "I"
+				othIRoot:SetValue( othIRoot:Mult( othTRoot:Pow( aNR[nID][6] ) ) )
+			Else
+				othDRoot:SetValue( othDRoot:Mult( othTRoot:Pow( aNR[nID][6] ) ) )
+			EndIF	
+		Next nID	
+
+		othRoot		:= tBigNumber():New( othIRoot:Div( othDRoot ) )
+
+	Return( othRoot )
+
+	#IFDEF __HARBOUR__
+
+		/*/
+			Funcao:		RootJob
+			Autor:		Marinaldo de Jesus
+			Data:		20/03/2013
+			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
+			Sintaxe:	hb_threadStart( "RootJob" , @oRootB , @oRootE , @oFExit , @nAcc )
+		/*/
+		Function RootJob( cRootB , oRootE , oFExit , nAcc )
+
+			Local oNR		:= tBigNumber():New()
+			Local oRootB	:= tBigNumber():New(cRootB)
+
+			oNR:SetValue( nthRoot( @oRootB , @oRootE , @oFExit , @nAcc ) )
+
+		Return( oNR )
+
+	#ELSE //__PROTHEUS__
+
+		/*/
+			Funcao:		U_RootJob
+			Autor:		Marinaldo de Jesus
+			Data:		20/03/2013
+			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
+			Sintaxe:	StartJob( "U_RootJob" , cEnvironment , lWaitRun , cRootB , cRootE , cFExit , nAcc , cID )
+		/*/
+		User Function RootJob( cRootB , cRootE , cFExit , nAcc , cID )
+
+			Local cNR
+		
+			Local oRootB	:= tBigNumber():New( cRootB )
+			Local oRootE	:= tbigNumber():New( cRootE )
+			Local oFExit	:= tbigNumber():New( cFExit )
+
+			PTInternal( 1 , "[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]" )
+
+			cNR				:= nthRoot( @oRootB , @oRootE , @oFExit , @nAcc ):GetValue()
+
+			PTInternal( 1 , "[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT][" + cNR + "]" )
+
+			PutGlbValue( cID , cNR )
+
+		Return( .T. )	
+
+	#ENDIF //__HARBOUR__
+
+#ENDIF	//__ROOTMT__
 
 /*
 	Method:		SQRT
@@ -2819,15 +3116,15 @@ Method FI() CLASS tBigNumber
 Return( oT )
 
 /*
-	Method		: FPrimes
+	Method		: PFactors
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 19/03/2013
 	Descricao	: Fatores Primos
-	Sintaxe		: tBigNumber():FPrimes -> aFPrimes
+	Sintaxe		: tBigNumber():PFactors -> aPFactors
 */
-Method FPrimes() CLASS tBigNumber
+Method PFactors() CLASS tBigNumber
 	
-	Local aFPrimes	:= Array(0)
+	Local aPFactors	:= Array(0)
 	
 	Local cP		:= ""
 
@@ -2835,10 +3132,14 @@ Method FPrimes() CLASS tBigNumber
 	Local o1		:= tBigNumber():New( "1" )
 	Local oN		:= tBigNumber():New( self )
 	Local oP		:= tBigNumber():New()
+	Local oT		:= tBigNumber():New()
 
 	Local otP		:= tPrime():New()
 	
 	Local nP
+	Local nC		:= 0
+	
+	Local lPrime	:= .T.
 
 	otP:IsPReset()
 	otP:NextPReset()
@@ -2846,26 +3147,29 @@ Method FPrimes() CLASS tBigNumber
 	While otP:NextPrime(cP)
 		cP := LTrim( otP:cPrime )
 		oP:SetValue( cP )
-		IF oP:gte( oN ) .or. otP:IsPrime( oN:Int() )
+		IF oP:gte( oN ) .or. IF( lPrime , lPrime := otP:IsPrime( oN:Int() ) , lPrime .or. ( ++nC > 1 .and. oN:gte( otP:cLPrime ) ) )
 			cP := oN:Int(.F.)
-			aAdd( aFPrimes , { cP , 1 } )
+			aAdd( aPFactors , { cP , "1" } )
 			EXIT
 		EndIF
 		While oN:Mod( oP ):eq( o0 )
-			nP := aScan( aFPrimes , { |e| e[1] == cP } )
+			nP := aScan( aPFactors , { |e| e[1] == cP } )
 			IF nP == 0
-				aAdd( aFPrimes , { cP , 1 } )
+				aAdd( aPFactors , { cP , "1" } )
 			Else
-				aFPrimes[nP][2]++ 
+				oT:SetValue(aPFactors[nP][2])
+				aPFactors[nP][2]	:= oT:SetValue( oT:Add( o1 ) ):ExactValue()
 			EndIF
 			oN:SetValue( oN:Div( oP , .F. ) )
+			nC 		:= 0
+			lPrime	:= .T.
 		End While
 		IF oN:lte( o1 )
 			EXIT
 		EndIF
 	End While
 
-Return( aFPrimes )
+Return( aPFactors )
 
 /*
 	Funcao		: __Mult

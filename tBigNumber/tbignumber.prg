@@ -3,9 +3,7 @@
 THREAD Static __aFiles
 
 #IFDEF __PROTHEUS__
-	#IFDEF __MT__
-		Static __cEnvSrv
-	#ENDIF
+	Static __cEnvSrv
 #ENDIF
 
 THREAD Static __nthRootAcc
@@ -156,9 +154,7 @@ Method New( uBigN ) CLASS tBigNumber
 	DEFAULT uBigN	:= "0"
 
 	#IFDEF __PROTHEUS__
-		#IFDEF __MT__
-			DEFAULT __cEnvSrv := GetEnvServer()
-		#ENDIF
+		DEFAULT __cEnvSrv := GetEnvServer()
 	#ENDIF
 
 	self:SetDecimals()
@@ -189,7 +185,7 @@ Method SetDecimals( nSet ) CLASS tBigNumber
 
 	Local nLastSet 			:= __nSetDecimals
 
-	DEFAULT __nSetDecimals	:= IF( nSet == NIL , 15 , nSet )
+	DEFAULT __nSetDecimals	:= IF( nSet == NIL , 32 , nSet )
 	DEFAULT nSet			:= __nSetDecimals
 	DEFAULT nLastSet		:= nSet
 
@@ -197,7 +193,7 @@ Method SetDecimals( nSet ) CLASS tBigNumber
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
-	nSet			:= Max( 15 , nSet )
+	nSet			:= Max( 16 , nSet )
 	__nSetDecimals	:= nSet
 
 Return( nLastSet )
@@ -213,7 +209,7 @@ Method nthRootAcc( nSet ) CLASS tBigNumber
 
 	Local nLastSet 			:= __nthRootAcc
 
-	DEFAULT __nthRootAcc	:= IF( nSet == NIL , 3 , nSet )
+	DEFAULT __nthRootAcc	:= IF( nSet == NIL , 6 , nSet )
 	DEFAULT nSet			:= __nthRootAcc
 	DEFAULT nLastSet		:= nSet
 
@@ -2213,7 +2209,7 @@ Method SQRT() CLASS tBigNumber
 
 		IF oSQRT:lte( self:SysSQRT() )
 			nSetDec := Set( _SET_DECIMALS , __nSetDecimals )
-			oSQRT:SetValue( Str( __sqrt( Val( oSQRT:GetValue() ) , 2 ) ) )
+			oSQRT:SetValue( Str( __sqrt( Val( oSQRT:GetValue() ) ) ) )
 			Set( _SET_DECIMALS, nSetDec )
 			BREAK
 		EndIF
@@ -3382,7 +3378,7 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 	oESub1:SetValue( oRootE:Sub(o1) )
 
 	IF oRootE:eq("2")
-		othRootT:SetValue(__sqrt(oRootB,2))
+		othRootT:SetValue(__sqrt(oRootB))
 	Else
 		othRootT:SetValue(oRootB:Div(oRootE))
 	EndIF	

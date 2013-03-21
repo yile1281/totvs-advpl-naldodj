@@ -32,9 +32,10 @@
 
 	HB_FUNC ( HB_Q_SQRT )
 	{
-		float t = (float) hb_parnl(1);
+		float t = hb_parnd(1);
 		int   i = hb_parni(2);
-		hb_retnl( (long) Q_rsqrt(t,i) );
+		
+		hb_retnd( Q_rsqrt(t,i) );
 	}
 
 #pragma ENDDUMP	

@@ -5,8 +5,8 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			 50
-#DEFINE ROOT_ACC_SET	 15
+#DEFINE ACC_SET			 25
+#DEFINE ROOT_ACC_SET	 10
 
 #DEFINE __SLEEP 0
 

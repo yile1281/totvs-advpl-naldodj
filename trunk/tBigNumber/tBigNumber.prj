@@ -32,11 +32,8 @@ Group tBigNumber
       End
       Folder Definições
          VSSPath=Definições
-         FilesCount=4
+         FilesCount=3
          File \svn\totvs-advpl-naldodj\tBigNumber\tBigNumber.ch
-             Type=T
-         End
-         File \svn\totvs-advpl-naldodj\tBigNumber\tryexception.ch
              Type=T
          End
          File \svn\totvs-advpl-naldodj\tBigNumber\paramtypex.ch
@@ -48,11 +45,18 @@ Group tBigNumber
       End
    End
    Project NPerfeitos
-      FoldersCount=1
+      FoldersCount=2
       Folder Fontes
          VSSPath=Nova Pasta1
          FilesCount=1
          File \svn\totvs-advpl-naldodj\tBigNumber\nPerfeitos\totvs_protheus\u_NPerfeitos.prg
+             Type=T
+         End
+      End
+      Folder Definições
+         VSSPath=Nova Pasta2
+         FilesCount=1
+         File \svn\totvs-advpl-naldodj\tBigNumber\nPerfeitos\totvs_protheus\tryexception.ch
              Type=T
          End
       End

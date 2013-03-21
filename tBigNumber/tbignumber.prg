@@ -19,9 +19,19 @@ THREAD Static __nSetDecimals
 	Alternative Compile Options: /D
 
 	#IFDEF __PROTHEUS__
-		/DTBN_DBFILE /D__MT__ /D__TBN_DYN_OBJ_SET__ /D__POWMT__
+		/DTBN_DBFILE 
+		/D__MT__ 
+		/D__TBN_DYN_OBJ_SET__ 
+		/D__POWMT__
+		/D__ROOTMT__
 	#ELSE //__HARBOUR__
-		/DTBN_DBFILE /DTBN_MEMIO /D__MT__ /D__TBN_DYN_OBJ_SET__ /D__POWMT__
+		/DTBN_DBFILE 
+		/DTBN_MEMIO 
+		/D__MT__ 
+		/D__TBN_DYN_OBJ_SET__ 
+		/D__POWMT__ 
+		/D__ROOTMT__
+		/D__HB_Q_SQRT__
 	#ENDIF
 
 */

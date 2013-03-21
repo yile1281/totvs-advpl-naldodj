@@ -3410,14 +3410,14 @@ Static Function __sqrt(p,n)
 	Local x
 	Local i
 	Local t
-	DEFAULT n	:= 1
+	DEFAULT n	:= 5
 	p 			:= tBigNumber():New(p)
 	IF p:lte( MAX_SYS_SQRT )
 		#IFDEF __HARBOUR__
 			#IFDEF __HB_Q_SQRT__
 				x := tBigNumber():New(Str(HB_Q_SQRT(Val(p:GetValue()),n)))
 			#ELSE
-				x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))				
+				x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
 			#ENDIF
 		#ELSE
 			x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))

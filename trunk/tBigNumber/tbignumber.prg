@@ -1404,7 +1404,6 @@ Return( __pwoNR )
 		Local aResults
 	#ELSE //__PROTHEUS__
 		Local cGlbV
-		Local cEnvSrv	:= GetEnvServer()	
 		Local cThread	:= AllTrim( Str( ThreadID() ) )
 	#ENDIF	
 	
@@ -1470,7 +1469,7 @@ Return( __pwoNR )
 		        		aNR[nID][2]	:= oM10:GetValue()
 			        	aNR[nID][3]	:= ( "__POW__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
 			        	PutGlbValue( aNR[nID][3] , "" )
-			        	StartJob( "U_POWJOB" , cEnvSrv , .F. , aNR[nID][1] , aNR[nID][2] , aNR[nID][3] , __nSetDecimals , __nthRootAcc )
+			        	StartJob( "U_POWJOB" , __cEnvSrv , .F. , aNR[nID][1] , aNR[nID][2] , aNR[nID][3] , __nSetDecimals , __nthRootAcc )
 			        #ENDIF //__HARBOUR__
 
 				End While
@@ -1978,7 +1977,6 @@ Return( othRoot )
 		Local cGlbV
 		Local cFExit	:= oAccTo:GetValue()
 		Local cRootE	:= oRootE:GetValue()	
-		Local cEnvSrv	:= GetEnvServer()	
 		Local cThread	:= AllTrim( Str( ThreadID() ) )
 		
 		Local nNR
@@ -2041,7 +2039,7 @@ Return( othRoot )
 				aThreads[nID] := hb_threadStart( "RootJob" , aNR[nID][1] , oRootE , oAccTo , __nSetDecimals , __nthRootAcc )
 				hb_threadJoin( aThreads[nID] , @aResults[nID] )
 			#ELSE	//__PROTHEUS__
-				StartJob( "U_RootJob" , cEnvSrv , .F. , aNR[nID][1] , cRootE , cFExit , __nSetDecimals , __nthRootAcc , aNR[nID][3] )
+				StartJob( "U_RootJob" , __cEnvSrv , .F. , aNR[nID][1] , cRootE , cFExit , __nSetDecimals , __nthRootAcc , aNR[nID][3] )
 			#ENDIF
 		Next nID
 

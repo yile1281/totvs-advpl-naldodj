@@ -82,6 +82,7 @@ CLASS tBigNumber
 	Method LCM( uBigN )
 	
 	Method nthRoot( uBigN )
+	Method nthRootAcc( nSet )
 
 	Method SQRT()
 	Method SysSQRT( uSet )
@@ -151,6 +152,7 @@ Method New( uBigN ) CLASS tBigNumber
 	#ENDIF
 
 	self:SetDecimals()
+	self:nthRootAcc()
 
 	self:SetValue( @uBigN )
 
@@ -186,8 +188,31 @@ Method SetDecimals( nSet ) CLASS tBigNumber
 	EndIF
 
 	nSet			:= Max( 15 , nSet )
-	__nthRootAcc	:= Min( 30 , nSet )
 	__nSetDecimals	:= nSet
+
+Return( nLastSet )
+
+/*
+	Method:		nthRootAcc
+	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data:		04/02/2013
+	Descricao:	Setar a Precisao para nthRoot
+	Sintaxe:	tBigNumber():nthRootAcc( nSet ) -> nLastSet
+*/
+Method nthRootAcc( nSet ) CLASS tBigNumber
+
+	Local nLastSet 			:= __nthRootAcc
+
+	DEFAULT __nthRootAcc	:= IF( nSet == NIL , 3 , nSet )
+	DEFAULT nSet			:= __nthRootAcc
+	DEFAULT nLastSet		:= nSet
+
+	IF nSet > MAX_DECIMAL_PRECISION
+	    nSet := MAX_DECIMAL_PRECISION
+	EndIF
+
+	nSet			:= Max( 3 , nSet )
+	__nthRootAcc	:= nSet
 
 Return( nLastSet )
 
@@ -1066,7 +1091,6 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	THREAD Static __dvoZero
 	THREAD Static __dvoRDiv
 	
-
 	BEGIN SEQUENCE
 
 		DEFAULT __dvoZero	:= tBigNumber():New()
@@ -1561,8 +1585,8 @@ Return( __pwoNR )
 		
 			Local oNR	:= tBigNumber():New()
 
-			__nthRootAcc	:= nSetDecimals
-			__nSetDecimals	:= nthRootAcc
+			__nthRootAcc	:= nthRootAcc
+			__nSetDecimals	:= nSetDecimals
 
 			oNR:SetValue( oN1:Pow( oN2 ) )
 
@@ -1584,8 +1608,8 @@ Return( __pwoNR )
 			Local oN1	:= tBigNumber():New( cN1 )
 			Local oN2	:= tbigNumber():New( cN2 )
 		
-			__nthRootAcc	:= nSetDecimals
-			__nSetDecimals	:= nthRootAcc
+			__nthRootAcc	:= nthRootAcc
+			__nSetDecimals	:= nSetDecimals
 		
 			PTInternal( 1 , "[tBigNumber][POW][U_POWJOB]["+cID+"][CALC][" + cN1 + " ^ " + cN2 + "]" )
 		
@@ -1876,7 +1900,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 
 		IF nPFs > 0
 			#IFDEF __ROOTMT__
-				othRoot:SetValue( RootThread( @aIPF , @aDPF , @oRootE , @oFExit , @__nthRootAcc ) )
+				othRoot:SetValue( RootThread( @aIPF , @aDPF , @oRootE , @oFExit ) )
 			#ELSE
 				othRoot:SetValue(oRoot1)
 				othRootD	:= tBigNumber():New()
@@ -1923,9 +1947,9 @@ Return( othRoot )
 		Autor:		Marinaldo de Jesus
 		Data:		20/03/2013
 		Descricao:	Utilizada no Metodo nthRoot para o Calculo da Raiz via Job
-		Sintaxe:	RootThread( aIPF , aDPF , oRootE , oAccTo , nAcc )
+		Sintaxe:	RootThread( aIPF , aDPF , oRootE , oAccTo )
 	/*/
-	Static Function RootThread( aIPF , aDPF , oRootE , oAccTo , nAcc )
+	Static Function RootThread( aIPF , aDPF , oRootE , oAccTo )
 
 	Local aNR
 
@@ -2014,10 +2038,10 @@ Return( othRoot )
 				LOOP
 			EndIF
 			#IFDEF __HARBOUR__
-				aThreads[nID] := hb_threadStart( "RootJob" , aNR[nID][1] , oRootE , oAccTo , nAcc )
+				aThreads[nID] := hb_threadStart( "RootJob" , aNR[nID][1] , oRootE , oAccTo , __nSetDecimals , __nthRootAcc )
 				hb_threadJoin( aThreads[nID] , @aResults[nID] )
 			#ELSE	//__PROTHEUS__
-				StartJob( "U_RootJob" , cEnvSrv , .F. , aNR[nID][1] , cRootE , cFExit , nAcc , aNR[nID][3] )
+				StartJob( "U_RootJob" , cEnvSrv , .F. , aNR[nID][1] , cRootE , cFExit , __nSetDecimals , __nthRootAcc , aNR[nID][3] )
 			#ENDIF
 		Next nID
 
@@ -2111,14 +2135,17 @@ Return( othRoot )
 			Autor:		Marinaldo de Jesus
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
-			Sintaxe:	hb_threadStart( "RootJob" , @oRootB , @oRootE , @oFExit , @nAcc )
+			Sintaxe:	hb_threadStart( "RootJob" , cRootB , oRootE , oFExit , nSetDecimals , nthRootAcc )
 		/*/
-		Function RootJob( cRootB , oRootE , oFExit , nAcc )
+		Function RootJob( cRootB , oRootE , oFExit , nSetDecimals , nthRootAcc )
 
 			Local oNR		:= tBigNumber():New()
 			Local oRootB	:= tBigNumber():New(cRootB)
 
-			oNR:SetValue( nthRoot( @oRootB , @oRootE , @oFExit , @nAcc ) )
+			__nthRootAcc	:= nthRootAcc
+			__nSetDecimals	:= nSetDecimals
+			
+			oNR:SetValue( nthRoot( @oRootB , @oRootE , @oFExit , @nSetDecimals ) )
 
 		Return( oNR )
 
@@ -2129,15 +2156,18 @@ Return( othRoot )
 			Autor:		Marinaldo de Jesus
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
-			Sintaxe:	StartJob( "U_RootJob" , cEnvironment , lWaitRun , cRootB , cRootE , cFExit , nAcc , cID )
+			Sintaxe:	StartJob( "U_RootJob" , cEnvironment , lWaitRun , cRootB , cRootE , cFExit , nSetDecimals , nthRootAcc , cID )
 		/*/
-		User Function RootJob( cRootB , cRootE , cFExit , nAcc , cID )
+		User Function RootJob( cRootB , cRootE , cFExit , nSetDecimals , nthRootAcc , cID )
 
 			Local cNR
 		
 			Local oRootB	:= tBigNumber():New( cRootB )
 			Local oRootE	:= tbigNumber():New( cRootE )
 			Local oFExit	:= tbigNumber():New( cFExit )
+
+			__nthRootAcc	:= nthRootAcc
+			__nSetDecimals	:= nSetDecimals
 
 			PTInternal( 1 , "[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]" )
 
@@ -3181,19 +3211,22 @@ Return( aPFactors )
 */
 Static Function __Mult( cN1 , cN2 , nAcc )
 
-	Local aE 	:= Array(0)
-
-	Local nI	:= 0
+	Local aE 		:= Array(0)
+                	
+	Local nI		:= 0
 	
 	Local oPe
 	Local oPd
 	Local ocT
 	
-	Local oN1	:= tBigNumber():New(@cN1)
+	Local oN1		:= tBigNumber():New(@cN1)
 
 	Local oNR
+	
+	Local nBakAcc	:= __nSetDecimals 
 
-	__nSetDecimals := nAcc
+	DEFAULT nAcc	:= __nSetDecimals
+	__nSetDecimals	:= nAcc
 
 	oPe	:= tBigNumber():New("1")
 	oPd := tBigNumber():New(cN2)
@@ -3228,6 +3261,8 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 		oNR:SetValue( oNR:Add( aE[ nI ][ 2 ] ) )
 	End While
 
+	__nSetDecimals := nBakAcc
+
 Return( oNR )
 
 /*
@@ -3239,19 +3274,22 @@ Return( oNR )
 */
 Static Function Div( cN1 , cN2 , nAcc , lFloat )
 
-	Local aE 	:= Array(0)
-
-	Local nI	:= 0
+	Local aE 		:= Array(0)
+                	
+	Local nI		:= 0
 
 	Local oPe
 	Local oPd
-	Local oN1	:= tBigNumber():New(cN1)
-	Local oN2	:= tBigNumber():New(cN2)
-	Local oRDiv	:= tBigNumber():New()
+	Local oN1		:= tBigNumber():New(cN1)
+	Local oN2		:= tBigNumber():New(cN2)
+	Local oRDiv		:= tBigNumber():New()
 
 	Local oNR
+    
+	Local nBakAcc	:= __nSetDecimals
 
-	__nSetDecimals := nAcc
+	DEFAULT nAcc	:= __nSetDecimals
+	__nSetDecimals	:= nAcc
 
 	oPe	:= tBigNumber():New("1")
 	oPd	:= tBigNumber():New(oN2)
@@ -3296,6 +3334,8 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 		EndIF
 	EndIF
 
+	__nSetDecimals := nBakAcc
+
 Return( oNR )
 
 /*
@@ -3323,8 +3363,11 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 
 	Local othRoot	:= tBigNumber():New()
 	Local othRootT	:= tBigNumber():New()
+	      	
+	Local nBakAcc	:= __nSetDecimals
 
-	__nSetDecimals := nAcc
+	DEFAULT nAcc	:= __nSetDecimals
+	__nSetDecimals	:= nAcc
 
 	oAccNo:SetValue( oAccTo:Add(o1) )
 	o1divE:SetValue( o1:Div(oRootE) )
@@ -3348,6 +3391,8 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,@__nthRootAcc)
 		othRootT:SetValue(othRoot)
 	End While
+
+	__nSetDecimals := nBakAcc
 
 Return( othRoot )  
 
@@ -3379,11 +3424,13 @@ return(x)
 	*/
 	Static Function Add( cN1 , cN2 , n , nAcc )
 	
-		Local a	:= aNumber( cN1 , n , "ADD_A" )
-		Local b := aNumber( cN2 , n , "ADD_B" )
-		Local y := ( n + n )
-		Local c := aNumber( Replicate( "0" , y ) , y , "ADD_C" )
-		Local k := 1
+		Local a			:= aNumber( cN1 , n , "ADD_A" )
+		Local b 		:= aNumber( cN2 , n , "ADD_B" )
+		Local y 		:= ( n + n )
+		Local c 		:= aNumber( Replicate( "0" , y ) , y , "ADD_C" )
+		Local k 		:= 1
+
+		Local nBakAcc	:= __nSetDecimals
 		
 		THREAD Static __addoNR
 		
@@ -3391,7 +3438,8 @@ return(x)
 			FIELD FN
 		#ENDIF	
 
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 
 		While n > 0
 			(a)->(dbGoTo(n))
@@ -3445,6 +3493,8 @@ return(x)
 					
 		#ENDIF
 
+		__nSetDecimals := nBakAcc
+
 	Return( __addoNR )
 	
 	/*
@@ -3456,11 +3506,13 @@ return(x)
 	*/
 	Static Function Sub( cN1 , cN2 , n , nAcc )
 	
-		Local a	:= aNumber( cN1 , n , "SUB_A" )
-		Local b := aNumber( cN2 , n , "SUB_B" )
-		Local y := ( n + n )
-		Local c := aNumber( Replicate( "0" , y ) , y , "SUB_C" )
-		Local k := 1
+		Local a			:= aNumber( cN1 , n , "SUB_A" )
+		Local b 		:= aNumber( cN2 , n , "SUB_B" )
+		Local y 		:= ( n + n )
+		Local c 		:= aNumber( Replicate( "0" , y ) , y , "SUB_C" )
+		Local k 		:= 1
+
+		Local nBakAcc	:= __nSetDecimals
 	
 		THREAD Static __suboNR
 	
@@ -3468,7 +3520,8 @@ return(x)
 			FIELD FN
 		#ENDIF	
 
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			(a)->(dbGoTo(n))
@@ -3522,6 +3575,8 @@ return(x)
 		
 		#ENDIF
 
+		__nSetDecimals := nBakAcc
+
 	Return( __suboNR )
 	
 	/*
@@ -3534,19 +3589,21 @@ return(x)
 	*/
 	Static Function Mult( cN1 , cN2 , n , nAcc )
 		
-		Local a		:= aNumber( Invert( cN1 , n ) , n , "MULT_A" )
-		Local b		:= aNumber( Invert( cN2 , n ) , n , "MULT_B" )
-		Local y		:= ( n + n )
-		Local c		:= aNumber( Replicate( "0" , y ) , y , "MULT_C" )
+		Local a			:= aNumber( Invert( cN1 , n ) , n , "MULT_A" )
+		Local b			:= aNumber( Invert( cN2 , n ) , n , "MULT_B" )
+		Local y			:= ( n + n )
+		Local c			:= aNumber( Replicate( "0" , y ) , y , "MULT_C" )
 	
-		Local i 	:= 1
-		Local k 	:= 1
-		Local l 	:= 2
+		Local i 		:= 1
+		Local k 		:= 1
+		Local l 		:= 2
 		
 		Local s
 		Local x
 		Local j
 		Local w
+
+		Local nBakAcc	:= __nSetDecimals
 	
 		THREAD Static __multoNR
 	
@@ -3554,7 +3611,8 @@ return(x)
 			FIELD FN
 		#ENDIF	
 
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 	
 		While i <= n
 			s := 1
@@ -3646,6 +3704,8 @@ return(x)
 			aSize( __aFiles , 0 )
 			
 		#ENDIF
+
+		__nSetDecimals := nBakAcc
 
 	Return( __multoNR )
 
@@ -3802,15 +3862,18 @@ return(x)
 	*/
 	Static Function Add( cN1 , cN2 , n , nAcc )
 	
-		Local a	:= aNumber( cN1 , n )
-		Local b := aNumber( cN2 , n )
-		Local y := n + n
-		Local c := aFill( Array( y ) , 0 )
-		Local k := 1
+		Local a			:= aNumber( cN1 , n )
+		Local b 		:= aNumber( cN2 , n )
+		Local y 		:= n + n
+		Local c 		:= aFill( Array( y ) , 0 )
+		Local k 		:= 1
+		
+		Local nBakAcc	:= __nSetDecimals
 		
 		THREAD Static __addoNR
 	    
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			c[k] += a[n] + b[n]
@@ -3825,6 +3888,8 @@ return(x)
 		DEFAULT __addoNR := tBigNumber():New()
 	
 		__addoNR:SetValue( GetcN( @c , @y ) , NIL , .F. )
+
+		__nSetDecimals	:= nBakAcc
 	
 	Return( __addoNR )
 	
@@ -3837,15 +3902,18 @@ return(x)
 	*/
 	Static Function Sub( cN1 , cN2 , n , nAcc )
 	
-		Local a	:= aNumber( cN1 , n )
-		Local b := aNumber( cN2 , n )
-		Local y := n + n
-		Local c := aFill( Array( y ) , 0 )
-		Local k := 1
+		Local a			:= aNumber( cN1 , n )
+		Local b 		:= aNumber( cN2 , n )
+		Local y 		:= n + n
+		Local c 		:= aFill( Array( y ) , 0 )
+		Local k 		:= 1
+		
+		Local nBakAcc	:= __nSetDecimals
 	
 		THREAD Static __suboNR
 	
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			c[k] += a[n] - b[n]
@@ -3860,7 +3928,9 @@ return(x)
 		DEFAULT __suboNR := tBigNumber():New()
 	
 		__suboNR:SetValue( GetcN( @c , @y ) , NIL , .F. )
-	
+
+		__nSetDecimals	:= nBakAcc
+
 	Return( __suboNR )
 	
 	/*
@@ -3873,22 +3943,26 @@ return(x)
 	*/
 	Static Function Mult( cN1 , cN2 , n , nAcc )
 	
-		Local a		:= aNumber( Invert( cN1 , n ) , n )
-		Local b		:= aNumber( Invert( cN2 , n ) , n )
-		Local y		:= n + n
-		Local c		:= afill( Array( y ) , 0 )
+		Local a			:= aNumber( Invert( cN1 , n ) , n )
+		Local b			:= aNumber( Invert( cN2 , n ) , n )
+		Local y			:= n + n
+		Local c			:= afill( Array( y ) , 0 )
 	
-		Local i 	:= 1
-		Local k 	:= 1
-		Local l 	:= 2
+		Local i 		:= 1
+		Local k 		:= 1
+		Local l 		:= 2
 		
 		Local s
 		Local x
 		Local j
+
+		Local nBakAcc	:= __nSetDecimals
+
 	
 		THREAD Static __multoNR
 	
-		__nSetDecimals := nAcc
+		DEFAULT nAcc	:= __nSetDecimals
+		__nSetDecimals	:= nAcc
 	
 		While i <= n
 			s := 1
@@ -3926,6 +4000,8 @@ return(x)
 		DEFAULT __multoNR := tBigNumber():New()
 	
 		__multoNR:SetValue( GetcN( @c , @k ) , NIL , .F. )
+
+		nBakAcc	:= __nSetDecimals
 	
 	Return( __multoNR )
 	

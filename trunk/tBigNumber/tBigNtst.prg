@@ -12,6 +12,14 @@
 
 #IFDEF __HARBOUR__
 Function Main()
+	#IFDEF __HARBOUR__
+	    #IFDEF __ALT_D__
+		   AltD( 1 )   // Enables the debugger. Press F5 to go. Compile with -b
+		   AltD()      // Invokes the debugger
+		#ENDIF
+	#ENDIF
+Return(tBigNTst())
+Static Function tBigNTst()
 #ELSE
 User Function tBigNTst()
 #ENDIF	
@@ -89,7 +97,7 @@ User Function tBigNTst()
 	#else
 		__ConOut(fhLog,"MULTITHREAD : " , "False")
 	#endif
-
+	
 	__ConOut(fhLog,"---------------------------------------------------------")
 	__ConOut(fhLog,"")
 	__ConOut(fhLog,"---------------------------------------------------------")

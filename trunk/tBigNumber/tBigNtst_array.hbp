@@ -5,7 +5,7 @@
 -mt
 
 /D__POWMT__
-/D__ROOTMT__
+#/D__ROOTMT__
 /D__HB_Q_SQRT__
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR

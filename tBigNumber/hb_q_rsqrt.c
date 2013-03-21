@@ -21,7 +21,7 @@
 		i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
 		y  = * ( float * ) &i;
 
-		for ( x = 1 ; x < nIt ; ++x )
+		for ( x = 1 ; x <= nIt ; ++x )
 		{		
 			/* This line can be repeated arbitrarily many times to increase accuracy */
 			y  = y * ( threehalfs - ( x2 * y * y ) );

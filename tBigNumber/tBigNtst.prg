@@ -28,7 +28,7 @@ User Function tBigNTst()
 
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-	Local oPrime	AS OBJECT CLASS "TPRIME" 	 VALUE tPrime():New() 
+	Local oPrime	AS OBJECT CLASS "TPRIME"
 	Local aPFactors	AS ARRAY
 	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
 															 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
@@ -57,6 +57,9 @@ User Function tBigNTst()
 
 	Local fhLog		AS NUMBER
 	Local nSetDec	AS NUMBER	
+	
+	Local lMR		AS LOGICAL
+	Local lPn	AS LOGICAL
 
 #IFDEF __HARBOUR__
 	MEMVAR __CRLF
@@ -107,6 +110,12 @@ User Function tBigNTst()
 	__ConOut(fhLog,"---------------------------------------------------------")
 
 	__ConOut(fhLog,"")
+
+	__ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
+
+	ASSIGN oPrime := tPrime():New() 
+
+	__ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
 
 	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 	
@@ -910,8 +919,11 @@ User Function tBigNTst()
 		Else
 			ASSIGN n += 2
 		EndIF
-		ASSIGN cN := LTrim(Str(n))
-		__ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(otBigN:SetValue(cN):millerRabin("2")))
+		ASSIGN cN 	:= LTrim(Str(n))
+		ASSIGN lMR	:= otBigN:SetValue(cN):millerRabin("2")
+		ASSIGN lPn	:= oPrime:IsPrime(cN,.T.)
+		__ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
+		__ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
 		__ConOut(fhLog,"---------------------------------------------------------")
 	End While
 

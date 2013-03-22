@@ -3384,7 +3384,7 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 	IF .NOT.( lFloat ) .and. SubStr( oNR:cRDiv , -1 ) == "0"
 		oNR:cRDiv	:= SubStr( oNR:cRDiv , 1 , Len( oNR:cRDiv) -1 )
 		IF Empty( oNR:cRDiv )
-				oNR:cRDiv := "0"
+			oNR:cRDiv := "0"
 		EndIF
 	EndIF
 

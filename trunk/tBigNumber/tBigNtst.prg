@@ -913,7 +913,7 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	n := 0
-	While ( n <= 1000 )
+	While ( n <= 300 )
 		IF ( n < 3 )
 			ASSIGN n += 1
 		Else

@@ -195,7 +195,6 @@ Method SetDecimals( nSet ) CLASS tBigNumber
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
-	nSet			:= Max( 16 , nSet )
 	__nSetDecimals	:= nSet
 
 Return( nLastSet )
@@ -219,8 +218,7 @@ Method nthRootAcc( nSet ) CLASS tBigNumber
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
-	nSet			:= Max( 3 , nSet )
-	__nthRootAcc	:= nSet
+	__nthRootAcc	:= Min( self:SetDecimals() - 1 , nSet )
 
 Return( nLastSet )
 

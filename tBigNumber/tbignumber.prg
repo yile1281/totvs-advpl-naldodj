@@ -2286,7 +2286,7 @@ Method SQRT() CLASS tBigNumber
 
 		IF oSQRT:lte( self:SysSQRT() )
 			nSetDec := Set( _SET_DECIMALS , __nSetDecimals )
-			oSQRT:SetValue( Str( __sqrt( Val( oSQRT:GetValue() ) ) ) )
+			oSQRT:SetValue( __sqrt( Str( Val( oSQRT:GetValue() ) ) ) )
 			Set( _SET_DECIMALS, nSetDec )
 			BREAK
 		EndIF
@@ -2353,6 +2353,8 @@ Method Log( uBigNB ) CLASS tBigNumber
 	Local oBigNR
 
 	Local lflag		:= .F.
+	
+	Local uSysSQRT	:= self:SysSQRT(MAX_SYS_SQRT)
 
 	DEFAULT uBigNB	:= "10"
 
@@ -2396,6 +2398,8 @@ Method Log( uBigNB ) CLASS tBigNumber
 	EndIF	
 
 	oBigNR	:= tBigNumber():New( oS )
+
+	self:SysSQRT(uSysSQRT)
 
 Return( oBigNR )
 

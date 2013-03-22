@@ -3307,11 +3307,12 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 		--nI
 	End While
 
-	nI 	:= 0
 	oNR	:= tBigNumber():New()
-	While ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0
-		oNR:SetValue( oNR:Add( aE[ nI ][ 2 ] ) )
-	End While
+	For nI := 1 To Len( aE ) 
+		IF aE[nI][3]
+			oNR:SetValue( oNR:Add( aE[nI][2] ) )
+		EndIF
+	Next nI
 
 	__nSetDecimals := nBakAcc
 
@@ -3371,18 +3372,19 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 
 	oRDiv:SetValue( oN1:Sub( oRDiv ) )
 
-	nI 	:= 0
 	oNR	:= tBigNumber():New()
-	While ( nI := aScan( aE , { |e| e[ 3 ] } , ++nI ) ) > 0
-		oNR:SetValue( oNR:Add( aE[ nI ][ 1 ] ) )
-	End While
+	For nI := 1 To Len( aE )
+		IF aE[nI][3]
+			oNR:SetValue( oNR:Add( aE[nI][1] ) )
+		EndIF
+	Next nI
 
 	oNR:cRDiv	:= oRDiv:ExactValue(.T.)
 	DEFAULT lFloat := .T.
 	IF .NOT.( lFloat ) .and. SubStr( oNR:cRDiv , -1 ) == "0"
 		oNR:cRDiv	:= SubStr( oNR:cRDiv , 1 , Len( oNR:cRDiv) -1 )
 		IF Empty( oNR:cRDiv )
-			oNR:cRDiv := "0"
+				oNR:cRDiv := "0"
 		EndIF
 	EndIF
 
@@ -3452,7 +3454,7 @@ Static Function __sqrt(p,n)
 	Local x
 	Local i
 	Local t
-	DEFAULT n	:= 5
+	DEFAULT n	:= 1
 	p 			:= tBigNumber():New(p)
 	IF p:lte( MAX_SYS_SQRT )
 		#IFDEF __HARBOUR__

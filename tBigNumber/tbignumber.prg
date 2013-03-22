@@ -1273,6 +1273,13 @@ Method Pow( uBigN ) CLASS tBigNumber
 	Local lPoWN
 	Local lPowF
 
+#IFDEF __HARBOUR__
+	#IFDEF __POWMT__
+	Local aThreads
+	Local aResults
+	#ENDIF
+#ENDIF		
+
 	THREAD Static __pwoA
 	THREAD Static __pwoB
 	
@@ -1339,8 +1346,31 @@ Method Pow( uBigN ) CLASS tBigNumber
 			IF __pwoB:SetValue( cPowB ):gt( __pwoN1 )
 				DEFAULT __pwoGCD	:= tBigNumber():New()
 				__pwoGCD:SetValue( __pwoA:GCD( __pwoB ) )
-				__pwoA:SetValue( __pwoA:Div( __pwoGCD ) )
-				__pwoB:SetValue( __pwoB:Div( __pwoGCD ) )
+				#IFDEF __HARBOUR__
+					#IFDEF __POWMT__
+
+						aThreads 	:= Array(2)
+						aResults	:= Array(2)
+						
+						aThreads[1]	:= hb_threadStart( "ThPowDiv" , __pwoA , __pwoGCD )
+						aThreads[2]	:= hb_threadStart( "ThPowDiv" , __pwoB , __pwoGCD )
+						
+						hb_threadJoin( aThreads[1] , @aResults[1] )
+						hb_threadJoin( aThreads[2] , @aResults[2] )
+						
+						hb_threadWaitForAll( aThreads )
+						
+						__pwoA:SetValue( aResults[1] )
+						__pwoB:SetValue( aResults[2] )
+						
+					#ELSE
+						__pwoA:SetValue( __pwoA:Div( __pwoGCD ) )
+						__pwoB:SetValue( __pwoB:Div( __pwoGCD ) )
+					#ENDIF
+				#ELSE
+					__pwoA:SetValue( __pwoA:Div( __pwoGCD ) )
+					__pwoB:SetValue( __pwoB:Div( __pwoGCD ) )
+				#ENDIF
 			EndIF
 
 			__pwoA:SetValue( __pwoA:Normalize( __pwoA , __pwoA , __pwoB ) , NIL , .F. )
@@ -1598,6 +1628,9 @@ Return( __pwoNR )
 			oNR:SetValue( oN1:Pow( oN2 ) )
 
 		Return( oNR )
+
+		Function ThPowDiv( oX , oY )
+		Return(oX:Div(oY))
 	
 	#ELSE //__PROTHEUS__
 

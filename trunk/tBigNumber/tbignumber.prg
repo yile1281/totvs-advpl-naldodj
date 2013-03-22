@@ -1847,6 +1847,11 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 #IFNDEF __ROOTMT__
 	Local oRootT
 	Local othRootD
+#ELSE
+	#IFDEF __HARBOUR__
+	Local aThreads
+	Local aResults
+	#ENDIF
 #ENDIF
 
 	Local oRootE
@@ -1894,13 +1899,47 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 		oFExit:SetValue( cFExit , NIL , NIL , @__nthRootAcc )
 
 		IF oRootB:Dec(.T.):gt(oRoot0)
+			
 			oRootD	:= tBigNumber():New( "1" + Replicate( "0" , Len( oRootB:Dec(NIL,.T.) ) ) )
 			oRootB:SetValue(oRootB:Int()+oRootB:Dec())
-			aIPF	:= oRootB:PFactors()
-			aDPF	:= oRootD:PFactors()
+			
+			#IFDEF __HARBOUR__
+			
+				#IFDEF __ROOTMT__
+					
+					aThreads 	:= Array(2)
+					aResults	:= Array(2)
+					
+					aThreads[1]	:= hb_threadStart( "ThPFactors" , oRootB )
+					aThreads[2]	:= hb_threadStart( "ThPFactors" , oRootD )
+					
+					hb_threadJoin( aThreads[1] , @aResults[1] )
+					hb_threadJoin( aThreads[2] , @aResults[2] )
+					
+					hb_threadWaitForAll( aThreads )
+					
+					aIPF	:= aResults[1]
+					aDPF	:= aResults[2]
+				
+				#ELSE
+				
+					aIPF	:= oRootB:PFactors()
+					aDPF	:= oRootD:PFactors()
+				
+				#ENDIF //__ROOTMT__
+			
+			#ELSE //__PROTHEUS__
+			
+				aIPF	:= oRootB:PFactors()
+				aDPF	:= oRootD:PFactors()
+			
+			#ENDIF	//__HARBOUR__
+		
 		Else
+		
 			aIPF	:= oRootB:PFactors()
 			aDPF	:= Array(0)
+		
 		EndIF
 
 		nPFs 	:= Len( aIPF )
@@ -2154,6 +2193,9 @@ Return( othRoot )
 			oNR:SetValue( nthRoot( @oRootB , @oRootE , @oFExit , @nSetDecimals ) )
 
 		Return( oNR )
+
+		Function ThPFactors(oN)
+		Return(oN:PFactors())
 
 	#ELSE //__PROTHEUS__
 

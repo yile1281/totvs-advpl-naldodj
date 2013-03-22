@@ -34,10 +34,10 @@ CLASS tPrime
 
 	Method ClassName()
 
-	Method IsPrime(cN)
+	Method IsPrime(cN,lForce)
 	Method IsPReset()
 
-	Method NextPrime(cN)
+	Method NextPrime(cN,lForce)
 	Method NextPReset()
 
 	Method ResetAll()
@@ -211,9 +211,9 @@ Return( "TPRIME" )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 16/03/2013
 	Descricao	: Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
-	Sintaxe		: tPrime():IsPrime( cN ) -> lPrime
+	Sintaxe		: tPrime():IsPrime( cN , lForce ) -> lPrime
 */
-Method IsPrime( cN ) CLASS tPrime
+Method IsPrime( cN , lForce ) CLASS tPrime
 
 	Local aLine
 
@@ -241,6 +241,11 @@ Method IsPrime( cN ) CLASS tPrime
 
 		DEFAULT __oIPfRead	:= tfRead():New()
 		DEFAULT __aIPLRead	:= Array(0)
+
+		DEFAULT lForce		:= .F.
+		IF ( lForce )
+			Self:IsPReset()
+		EndIF
 
 		IF .NOT.( __nIPfRead == nTable )
 			Self:IsPReset()
@@ -313,9 +318,9 @@ Return( .T. )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 16/03/2013
 	Descricao	: Obtem o Proximo Numero da Tabela de Numeros Primos
-	Sintaxe		: tPrime():NextPrime( cN ) -> lPrime
+	Sintaxe		: tPrime():NextPrime( cN , lForce ) -> lPrime
 */
-Method NextPrime( cN ) CLASS tPrime
+Method NextPrime( cN , lForce ) CLASS tPrime
 
 	Local aLine
 
@@ -349,6 +354,11 @@ Method NextPrime( cN ) CLASS tPrime
 
 		DEFAULT __oNPfRead	:= tfRead():New()
 		DEFAULT __aNPLRead	:= Array(0)
+
+		DEFAULT lForce		:= .F.
+		IF ( lForce )
+			Self:NextPReset()
+		EndIF
 
 		IF .NOT.( __nNPfRead == nTable )
 			Self:NextPReset()

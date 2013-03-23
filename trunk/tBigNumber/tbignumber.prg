@@ -122,6 +122,9 @@ CLASS tBigNumber
 	Method H2B( cHexN , cHexB )		//TODO: Tratar Ponto Flutuante
 	Method B2H( cBin  , cHexB )		//TODO: Tratar Ponto Flutuante
 
+	Method D2B( cHexB )				//TODO: Tratar Ponto Flutuante
+	Method B2D( cHexN , cHexB )		//TODO: Tratar Ponto Flutuante
+
 	Method Randomize( uB , uE , nExit )
 
 	Method millerRabin( uI )
@@ -2849,6 +2852,26 @@ Method B2H( cBin , cHexB ) CLASS tBigNumber
 Return( cHexN )
 
 /*
+	Method		: D2B
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 23/03/2013
+	Descricao	: Converte Dec para Bin
+	Sintaxe		: tBigNumber():D2B( cHexB ) -> cBin
+*/
+Method D2B( cHexB ) CLASS tBigNumber
+Return( self:H2B( self:self:D2H( @cHexB ) , @cHexB ) )
+
+/*
+	Method		: B2D
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 23/03/2013
+	Descricao	: Converte Bin para Dec
+	Sintaxe		: tBigNumber():B2D( cBin , cHexB ) -> oBigNR
+*/
+Method B2D( cBin , cHexB ) CLASS tBigNumber
+Return( self:H2D( self:B2H( @cBin , @cHexB ) , @cHexB ) )
+
+/*
 	Method		: Randomize
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 03/03/2013
@@ -3509,9 +3532,9 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Add( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 	*/
-	Static Function Add( cN1 , cN2 , n , nAcc )
+	Static Function Add( cN1 , cN2 , n , nAcc , nBase )
 	
 		Local a			:= aNumber( cN1 , n , "ADD_A" )
 		Local b 		:= aNumber( cN2 , n , "ADD_B" )
@@ -3528,6 +3551,7 @@ return(x)
 		#ENDIF	
 
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 
 		While n > 0
@@ -3536,8 +3560,8 @@ return(x)
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				(c)->FN += ((a)->FN+(b)->FN)
-				IF (c)->FN >= 10
-					(c)->FN	-= 10
+				IF (c)->FN >= nBase
+					(c)->FN	-= nBase
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
 					IF (c)->(rLock())
@@ -3591,9 +3615,9 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Sub( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 	*/
-	Static Function Sub( cN1 , cN2 , n , nAcc )
+	Static Function Sub( cN1 , cN2 , n , nAcc , nBase )
 	
 		Local a			:= aNumber( cN1 , n , "SUB_A" )
 		Local b 		:= aNumber( cN2 , n , "SUB_B" )
@@ -3610,6 +3634,7 @@ return(x)
 		#ENDIF	
 
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 	
 		While n > 0
@@ -3619,7 +3644,7 @@ return(x)
 			IF (c)->(rLock())
 				(c)->FN += (a)->FN - (b)->FN
 				IF (c)->FN < 0
-					(c)->FN += 10
+					(c)->FN += nBase
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
 					IF (c)->(rLock())
@@ -3673,10 +3698,10 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
-		Sintaxe		: Mult( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Mult( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
-	Static Function Mult( cN1 , cN2 , n , nAcc )
+	Static Function Mult( cN1 , cN2 , n , nAcc , nBase )
 		
 		Local a			:= aNumber( Invert( cN1 , n ) , n , "MULT_A" )
 		Local b			:= aNumber( Invert( cN2 , n ) , n , "MULT_B" )
@@ -3701,6 +3726,7 @@ return(x)
 		#ENDIF	
 
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 	
 		While i <= n
@@ -3713,14 +3739,14 @@ return(x)
 					(b)->(dbGoTo(j--))
 					(c)->FN += ( (a)->FN*(b)->FN )
 				End While
-				IF (c)->FN >= 10
+				IF (c)->FN >= nBase
 					x		:= k+1
-					w		:= Int( (c)->FN / 10 )
+					w		:= Int( (c)->FN / nBase )
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN	:= w
 						(c)->(dbUnLock())
-						w := (c)->FN * 10
+						w := (c)->FN * nBase
 						(c)->(dbGoTo(k))
 						(c)->FN	-= w
 					EndIF	
@@ -3741,14 +3767,14 @@ return(x)
 					(b)->(dbGoTo(j++))
 					(c)->FN	+= ( (a)->FN*(b)->FN )
 				End While
-				IF (c)->FN >= 10
+				IF (c)->FN >= nBase
 					x		:= k+1
-					w		:= Int( (c)->FN / 10 )
+					w		:= Int( (c)->FN / nBase )
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN := w
 						(c)->(dbUnLock())
-						w := (c)->FN * 10
+						w := (c)->FN * nBase
 						(c)->(dbGoTo(k))
 						(c)->FN -= w
 					EndIF	
@@ -3947,9 +3973,9 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Add( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 	*/
-	Static Function Add( cN1 , cN2 , n , nAcc )
+	Static Function Add( cN1 , cN2 , n , nAcc , nBase )
 	
 		Local a			:= aNumber( cN1 , n )
 		Local b 		:= aNumber( cN2 , n )
@@ -3962,13 +3988,14 @@ return(x)
 		THREAD Static __addoNR
 	    
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			c[k] += a[n] + b[n]
-			IF c[k] >= 10
+			IF c[k] >= nBase
 				c[k+1]	+= 1
-				c[k]	-= 10
+				c[k]	-= nBase
 			EndIF
 			++k
 			--n
@@ -3987,9 +4014,9 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Sub( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 	*/
-	Static Function Sub( cN1 , cN2 , n , nAcc )
+	Static Function Sub( cN1 , cN2 , n , nAcc , nBase )
 	
 		Local a			:= aNumber( cN1 , n )
 		Local b 		:= aNumber( cN2 , n )
@@ -4002,13 +4029,14 @@ return(x)
 		THREAD Static __suboNR
 	
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			c[k] += a[n] - b[n]
 			IF c[k] < 0
 				c[k+1]	-= 1
-				c[k]	+= 10
+				c[k]	+= nBase
 			EndIF
 			++k
 			--n
@@ -4027,10 +4055,10 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
-		Sintaxe		: Mult( cN1 , cN2 , n ) -> oNR
+		Sintaxe		: Mult( cN1 , cN2 , n , nAcc , nBase ) -> oNR
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
-	Static Function Mult( cN1 , cN2 , n , nAcc )
+	Static Function Mult( cN1 , cN2 , n , nAcc , nBase )
 	
 		Local a			:= aNumber( Invert( cN1 , n ) , n )
 		Local b			:= aNumber( Invert( cN2 , n ) , n )
@@ -4050,6 +4078,7 @@ return(x)
 		THREAD Static __multoNR
 	
 		DEFAULT nAcc	:= __nSetDecimals
+		DEFAULT nBase	:= 10
 		__nSetDecimals	:= nAcc
 	
 		While i <= n
@@ -4058,10 +4087,10 @@ return(x)
 			While s <= i
 				c[k]	+= a[s++] * b[j--]
 			End While
-			IF c[k] >= 10
+			IF c[k] >= nBase
 				x		:= k+1
-				c[x]	:= Int( c[k] / 10 )
-				c[k]	-= c[x] * 10
+				c[x]	:= Int( c[k] / nBase )
+				c[k]	-= c[x] * nBase
 			EndIF
 			k++
 			i++
@@ -4073,10 +4102,10 @@ return(x)
 			While s >= l
 				c[k]	+= a[s--] * b[j++]
 			End While
-			IF c[k] >= 10
+			IF c[k] >= nBase
 				x		:= k+1
-				c[x]	:= Int( c[k] / 10 )
-				c[k]	-= c[x] * 10
+				c[x]	:= Int( c[k] / nBase )
+				c[k]	-= c[x] * nBase
 			EndIF
 			k++
 			IF k >= y

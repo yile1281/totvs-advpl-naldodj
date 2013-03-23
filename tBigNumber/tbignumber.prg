@@ -1443,7 +1443,6 @@ Return( __pwoNR )
 		Local cThread	:= AllTrim( Str( ThreadID() ) )
 	#ENDIF	
 	
-		Local l10		:= .F.
 		Local lM10		:= .F.
 		Local lExit		:= .F.
 		
@@ -1460,12 +1459,10 @@ Return( __pwoNR )
 				BREAK
 			EndIF
 	        
-			l10		:= oCN2:eq( oM10 )
-			lM10	:= l10
+			lM10		:= oCN2:eq( oM10 )
 			
 			IF .NOT.( lM10 )
 				lM10	:= oCN2:Mod( oM10 ):eq( oNZ )
-				l10		:= lM10
 			EndIF	
 	
 			oQ10:SetValue( oCN2:Div( oM10 ):Int( .T. ) )
@@ -1582,9 +1579,8 @@ Return( __pwoNR )
 
 				#ENDIF	//__HARBOUR__
 	
-				For nID := IF( lM10 , 2 , 1 ) To nIDS
+				For nID := 1 To nIDs
 					oNR:SetValue( oNR:Mult( aNR[nID][5] ) )
-					lM10	:= .F.
 				Next nID
 				
 				aSize( aNR , 0 )
@@ -1593,11 +1589,11 @@ Return( __pwoNR )
 	
 			aNR		:= NIL
 
-			IF l10
-				oNR		:= oNR:Mult( oCN1 )
+			IF lM10
+				oNR:SetValue( oNR:Div( oCN1 ) )
 				BREAK
 			EndIF
-			
+
 			While oCN2:gt( oNO )
 				oCN2:SetValue( oCN2:Sub( oNO ) )
 				oNR:SetValue( oNR:Mult( oCN1 ) )

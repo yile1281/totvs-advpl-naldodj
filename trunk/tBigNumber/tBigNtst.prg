@@ -104,7 +104,7 @@ User Function tBigNTst()
 	#else
 		__ConOut(fhLog,"MULTITHREAD : " , "False")
 	#endif
-	
+
 	__ConOut(fhLog,"---------------------------------------------------------")
 	__ConOut(fhLog,"")
 	__ConOut(fhLog,"---------------------------------------------------------")

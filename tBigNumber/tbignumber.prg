@@ -1768,37 +1768,33 @@ Return( oPITthD )
 	Method:		GCD
 	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data:		23/02/2013
-	Descricao:	Retorna o MDC
+	Descricao:	Retorna o GCD/MDC
 	Sintaxe:	tBigNumber():GCD( uBigN ) -> oGCD
 */
 Method GCD( uBigN ) CLASS tBigNumber
 
  	Local o0	:= tBigNumber():New()
- 	
- 	Local oN1	:= tBigNumber():New(self)
- 	Local oN2	:= tBigNumber():New(uBigN)
- 	
+ 	Local oNX	:= tBigNumber():New(uBigN)
  	Local oNT	:= tBigNumber():New()
+ 	Local oGCD	:= tBigNumber():New(self)
+
+ 	oNT:SetValue( oGCD:Max( oNX ) )
+ 	oNX:SetValue( oGCD:Min( oNX ) )
+ 	oGCD:SetValue( oNT )
+
+	oGCD:SetValue( oGCD:Mod( oNX ) )
 	
-	Local oGCD	
+	oNT:SetValue( oGCD )
+	oGCD:SetValue( oNX )
+	
+	oNX:SetValue( oNT )
 
- 	oNT:SetValue( oN1:Max( oN2 ) )
- 	oN2:SetValue( oN1:Min( oN2 ) )
- 	oN1:SetValue( oNT )
-
-	oN1:SetValue( oN1:Mod( oN2 ) )
-	oNT:SetValue( oN1 )
-	oN1:SetValue( oN2 )
-	oN2:SetValue( oNT )
-
-	While oN2:ne( o0 )
-		oN1:SetValue( oN1:Mod( oN2 ) )
-		oNT:SetValue( oN1 )
-		oN1:SetValue( oN2 )
-		oN2:SetValue( oNT )
+	While oNX:ne( o0 )
+		oGCD:SetValue( oGCD:Mod( oNX ) )
+		oNT:SetValue( oGCD )
+		oGCD:SetValue( oNX )
+		oNX:SetValue( oNT )
 	End While
-
-	oGCD	:= tBigNumber():New( oN1 )
 
 Return( oGCD )
 
@@ -1806,7 +1802,7 @@ Return( oGCD )
 	Method:		LCM
 	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data:		23/02/2013
-	Descricao:	Retorna o MMC
+	Descricao:	Retorna o LCM/MMC
 	Sintaxe:	tBigNumber():LCM( uBigN ) -> oLCM
 */
 Method LCM( uBigN ) CLASS tBigNumber
@@ -3288,7 +3284,7 @@ Return( aPFactors )
 	Funcao		: __Mult
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
-	Descricao	: Multiplicacao
+	Descricao	: Multiplicacao Egipcia ( http://cognosco.blogs.sapo.pt/arquivo/1015743.html )
 	Sintaxe		: __Mult( cN1 , cN2 , nAcc ) -> oNR
 	Obs.		: Interessante + lenta... Utiliza Soma e Subtracao para obter o resultado
 */
@@ -3348,15 +3344,15 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 	__nSetDecimals := nBakAcc
 
 Return( oNR )
-
+	
 /*
 	Funcao		: Div
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
-	Descricao	: Divisao
-	Sintaxe		: Div( cN1 , cN2 , nAcc , lFloat ) -> cNR
+	Descricao	: Divisao Egipcia ( http://cognosco.blogs.sapo.pt/13236.html )
+	Sintaxe		: Div( cN , cD , nAcc , lFloat ) -> cNR
 */
-Static Function Div( cN1 , cN2 , nAcc , lFloat )
+Static Function Div( cN , cD , nAcc , lFloat )
 
 	Local aE 		:= Array(0)
                 	
@@ -3364,8 +3360,8 @@ Static Function Div( cN1 , cN2 , nAcc , lFloat )
 
 	Local oPe
 	Local oPd
-	Local oN1		:= tBigNumber():New(cN1)
-	Local oN2		:= tBigNumber():New(cN2)
+	Local oN1		:= tBigNumber():New(cN)
+	Local oN2		:= tBigNumber():New(cD)
 	Local oRDiv		:= tBigNumber():New()
 
 	Local oNR
@@ -4050,7 +4046,6 @@ return(x)
 		Local j
 
 		Local nBakAcc	:= __nSetDecimals
-
 	
 		THREAD Static __multoNR
 	
@@ -4160,7 +4155,7 @@ return(x)
 */
 Static Function Invert( c , n )
 
-	Local s	:= ""
+	Local s := ""
 	Local y	:= n	
 
 	While y > 0

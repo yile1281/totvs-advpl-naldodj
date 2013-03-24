@@ -53,22 +53,22 @@ CLASS tBigNumber
 	DATA nDec
 	DATA nInt
 	DATA nSize
-	DATA cBase
+	DATA nBase
 
-	Method New( uBigN , cBase ) CONSTRUCTOR
+	Method New( uBigN , nBase ) CONSTRUCTOR
 
 	Method ClassName()
 
 	Method SetDecimals( nSet )
 
-	Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc )
+	Method SetValue( uBigN , nBase , cRDiv , lLRmvZ , nAcc )
 	Method GetValue( lAbs , lObj )
 	Method ExactValue( lAbs , lObj )
 
 	Method Abs( lObj )
 	
 	Method Int( lObj )
-	Method Dec( lObj , lNotZeros )
+	Method Dec( lObj , lNotZ )
 
 	Method eq( uBigN )
 	Method ne( uBigN )
@@ -141,11 +141,11 @@ End Class
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Instancia um novo Objeto tBigNumber
-	Sintaxe		: tBigNumber():New( uBigN , cBase ) -> self
+	Sintaxe		: tBigNumber():New( uBigN , nBase ) -> self
 */
 #IFDEF __PROTHEUS__
-	User Function tBigNumber( uBigN , cBase )
-	Return( tBigNumber():New( @uBigN , @cBase ) )
+	User Function tBigNumber( uBigN , nBase )
+	Return( tBigNumber():New( @uBigN , @nBase ) )
 #ENDIF
 
 /*
@@ -153,14 +153,14 @@ End Class
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: CONSTRUCTOR
-	Sintaxe		: tBigNumber():New( uBigN , cBase ) -> self
+	Sintaxe		: tBigNumber():New( uBigN , nBase ) -> self
 */
-Method New( uBigN , cBase ) CLASS tBigNumber
+Method New( uBigN , nBase ) CLASS tBigNumber
 
 	DEFAULT uBigN	:= "0"
-	DEFAULT cBase	:= "10"
+	DEFAULT nBase	:= 10
 
-	self:cBase		:= cBase
+	self:nBase		:= nBase
 
 	#IFDEF __PROTHEUS__
 		DEFAULT __cEnvSrv := GetEnvServer()
@@ -234,9 +234,9 @@ Return( nLastSet )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: SetValue
-	Sintaxe		: tBigNumber():SetValue( uBigN , cBase , cRDiv , lLRmvZ ) -> self
+	Sintaxe		: tBigNumber():SetValue( uBigN , nBase , cRDiv , lLRmvZ ) -> self
 */
-Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
+Method SetValue( uBigN , nBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 
 	Local cType	:= ValType( uBigN )
 
@@ -280,7 +280,7 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 			self:nDec		:= uBigN:nDec
 			self:nInt		:= uBigN:nInt
 			self:nSize		:= uBigN:nSize
-			self:cBase		:= uBigN:cBase
+			self:nBase		:= uBigN:nBase
 			
 		#ENDIF
 	
@@ -305,7 +305,7 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 			self:nDec		:= uBigN[6][2]
 			self:nInt		:= uBigN[7][2]
 			self:nSize		:= uBigN[8][2]
-			self:cBase		:= uBigN[9][2]
+			self:nBase		:= uBigN[9][2]
 		
 		#ENDIF
 	
@@ -326,10 +326,10 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 
 		nFP := AT( "." , uBigN )
 
-		DEFAULT cBase := self:cBase
+		DEFAULT nBase := self:nBase
 
 		self:cInt := "0"
-		IF self:cBase == "10"
+		IF self:nBase == 10
 			self:cDec := "0"
 		Else
 			self:cDec := ""
@@ -338,7 +338,7 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 		DO CASE
 		CASE ( nFP == 0 )
 			self:cInt := SubStr( uBigN , 1 )
-			IF self:cBase == "10"
+			IF self:nBase == 10
 				self:cDec := "0"
 			Else
 				self:cDec := ""
@@ -351,7 +351,7 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 		    self:cDec	:= SubStr( uBigN , ( nFP + 1 ) )
 		ENDCASE
 		
-		IF self:cBase <> "10"
+		IF self:nBase <> 10
 			IF self:cDec == "0"
 				self:cDec := ""
 			EndIF
@@ -371,7 +371,7 @@ Method SetValue( uBigN , cBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 
 	EndIF
 
-	DEFAULT lLRmvZ	:= IF( self:cBase == "10" , .T. , .F. )
+	DEFAULT lLRmvZ	:= IF( self:nBase == 10 , .T. , .F. )
     IF lLRmvZ
 		While self:nInt > 1 .and. SubStr( self:cInt , 1 , 1 ) == "0"
 			self:cInt := SubStr( self:cInt , 2 )
@@ -433,7 +433,7 @@ Method ExactValue( lAbs , lObj ) CLASS tBigNumber
     uBigNR	:= IF( lAbs , "" , self:cSig )
 
     uBigNR	+= self:Int()
-    cDec	:= self:Dec(NIL,self:cBase=="10")
+    cDec	:= self:Dec(NIL,self:nBase==10)
 
 	IF .NOT.( Empty( cDec ) )
 	    uBigNR	+= "."
@@ -478,9 +478,9 @@ Return( uBigNR )
 	Autor		:	Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		:	04/02/2013
 	Descricao	:	Retorna a Parte Decimal de um Numero
-	Sintaxe		:	tBigNumber():Dec( lObj , lNotZeros ) -> uBigNR
+	Sintaxe		:	tBigNumber():Dec( lObj , lNotZ ) -> uBigNR
 */
-Method Dec( lObj , lNotZeros ) CLASS tBigNumber
+Method Dec( lObj , lNotZ ) CLASS tBigNumber
 
     Local cDec	:= self:cDec
     
@@ -488,8 +488,8 @@ Method Dec( lObj , lNotZeros ) CLASS tBigNumber
     
     Local uBigNR
 
-	DEFAULT lNotZeros := .F.
-	IF lNotZeros
+	DEFAULT lNotZ := .F.
+	IF lNotZ
 		nDec	:= self:nDec
 		While SubStr( cDec , -1 ) == "0"
 			cDec	:= SubStr( cDec , 1 , --nDec )
@@ -743,7 +743,7 @@ Method Add( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __adoN1:nSize <= 14 .and. __adoN2:nSize <= 14
+		IF __adoN1:nBase == 10 .and. __adoN1:nSize <= 14 .and. __adoN2:nSize <= 14
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __adoN2:nDec <= 4
@@ -875,7 +875,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __sboN1:nSize <= 14 .and. __sboN2:nSize <= 14
+		IF __sboN1:nBase == 10 .and. __sboN1:nSize <= 14 .and. __sboN2:nSize <= 14
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __sboN2:nDec <= 4
@@ -1007,7 +1007,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __mtoN1:nSize <= 9 .and. __mtoN2:nSize <= 9
+		IF __mtoN1:nBase == 10 .and. __mtoN1:nSize <= 9 .and. __mtoN2:nSize <= 9
 			n1	:= Val(__mtoN1:ExactValue())
 			n2	:= Val(__mtoN2:ExactValue())
 			IF n1 <= 2999999.90 .and. __mtoN1:nDec <= 2 .and. n2 <= 2999999.90 .and. __mtoN2:nDec <= 2
@@ -2641,12 +2641,12 @@ Method D2H( cHexB ) CLASS tBigNumber
 	Local otH	:= tBigNumber():New()
 	Local otN	:= tBigNumber():New( self:Int() )
 
-	Local cHexN		:= ""
-	Local cHexC		:= "0123456789ABCDEFGHIJKLMNOPQRSTUV"
+	Local cHexN	:= ""
+	Local cHexC	:= "0123456789ABCDEFGHIJKLMNOPQRSTUV"
 
 	Local cInt
 	Local cDec
-	Local cSig		:= self:cSig
+	Local cSig	:= self:cSig
 
 	Local oHexN
 
@@ -2683,7 +2683,7 @@ Method D2H( cHexB ) CLASS tBigNumber
 
 	cDec	:= cHexN
 
-	oHexN	:= tBigNumber():New(cSig+cInt+"."+cDec,cHexB)
+	oHexN	:= tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
 
 Return( oHexN )
 
@@ -2704,16 +2704,16 @@ Method H2D() CLASS tBigNumber
 	Local otNI	:= tBigNumber():New()
 	Local otAT	:= tBigNumber():New()
 
-	Local cHexB		:= self:cBase
-	Local cHexC		:= "0123456789ABCDEFGHIJKLMNOPQRSTUV"
-	Local cHexN		:= self:Int()
+	Local cHexB	:= LTrim(Str(self:nBase))
+	Local cHexC	:= "0123456789ABCDEFGHIJKLMNOPQRSTUV"
+	Local cHexN	:= self:Int()
 	
 	Local cInt
 	Local cDec
-	Local cSig		:= self:cSig
+	Local cSig	:= self:cSig
 
-	Local nLn		:= Len( cHexN )
-	Local nI		:= nLn
+	Local nLn	:= Len( cHexN )
+	Local nI	:= nLn
 
 	otH:SetValue( cHexB )
 	otLN:SetValue( LTrim( Str( nLn ) ) )
@@ -2803,10 +2803,10 @@ Method H2B() CLASS tBigNumber
 	Local cDec
 
 	Local cSig	:= self:cSig
-	Local cHexB := self:cBase
+	Local cHexB := LTrim(Str(self:nBase))
 	Local cHexN	:= self:Int()
 
-	Local oBin	:= tBigNumber():New(NIL,"2")
+	Local oBin	:= tBigNumber():New(NIL,2)
 
 	Local nI	:= 0
 	Local nLn	:= Len( cHexN )
@@ -2923,7 +2923,7 @@ Method B2H( cHexB ) CLASS tBigNumber
 		EndIF
 
 		IF .NOT.( cHexB $ "[16][32]" )
-			oHexN := tBigNumber():New(NIL,"16")
+			oHexN := tBigNumber():New(NIL,16)
 			BREAK
 		EndIF
 
@@ -2956,7 +2956,7 @@ Method B2H( cHexB ) CLASS tBigNumber
 
 		cDec	:= cHexN
 
-		oHexN	:= tBigNumber():New(cSig+cInt+"."+cDec,cHexB)
+		oHexN	:= tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
 
 	END SEQUENCE
 
@@ -4648,7 +4648,7 @@ Return( __eTthD )
 				_AddThread[6][2] := oRet:nDec
 				_AddThread[7][2] := oRet:nInt
 				_AddThread[8][2] := oRet:nSize
-				_AddThread[9][2] := oRet:cBase
+				_AddThread[9][2] := oRet:nBase
 			#ELSE
 				_AddThread := ClassDataArr( oRet )
 			#ENDIF	
@@ -4672,7 +4672,7 @@ Return( __eTthD )
 				_SubThread[6][2] := oRet:nDec
 				_SubThread[7][2] := oRet:nInt
 				_SubThread[8][2] := oRet:nSize
-				_SubThread[9][2] := oRet:cBase
+				_SubThread[9][2] := oRet:nBase
 			#ELSE
 				_SubThread := ClassDataArr( oRet )
 			#ENDIF	
@@ -4696,7 +4696,7 @@ Return( __eTthD )
 				_DivThread[6][2] := oRet:nDec
 				_DivThread[7][2] := oRet:nInt
 				_DivThread[8][2] := oRet:nSize
-				_DivThread[9][2] := oRet:cBase
+				_DivThread[9][2] := oRet:nBase
 			#ELSE
 				_DivThread := ClassDataArr( oRet )
 			#ENDIF	
@@ -4720,7 +4720,7 @@ Return( __eTthD )
 				_MultThread[6][2] := oRet:nDec
 				_MultThread[7][2] := oRet:nInt
 				_MultThread[8][2] := oRet:nSize
-				_MultThread[9][2] := oRet:cBase
+				_MultThread[9][2] := oRet:nBase
 			#ELSE
 				_MultThread := ClassDataArr( oRet )
 			#ENDIF	
@@ -4744,7 +4744,7 @@ Return( __eTthD )
 				___MultThread[6][2] := oRet:nDec
 				___MultThread[7][2] := oRet:nInt
 				___MultThread[8][2] := oRet:nSize
-				___MultThread[9][2] := oRet:cBase
+				___MultThread[9][2] := oRet:nBase
 			#ELSE
 				___MultThread := ClassDataArr( oRet )
 			#ENDIF	

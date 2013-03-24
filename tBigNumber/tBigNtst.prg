@@ -28,19 +28,19 @@ User Function tBigNTst()
 
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-	Local otBH16	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"16")
-	Local otBH32	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"32")
-	Local otBBin	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"2")
+	Local otBBin	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
+	Local otBH16	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,16)
+	Local otBH32	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,32)
 	Local oPrime	AS OBJECT CLASS "TPRIME"
-	Local aPFactors	AS ARRAY
-	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
-															 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
-															 "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
-															 "32458051",  "32458057",  "32458073",  "32458079",  "32458091",  "32458093",  "32458109",  "32458123",;
-															 "49981171",  "49981199",  "49981219",  "49981237",  "49981247",  "49981249",  "49981259",  "49981271",;
-															 "67874921",  "67874959",  "67874969",  "67874987",  "67875007",  "67875019",  "67875029",  "67875061",;
-															"982451501", "982451549", "982451567", "982451579", "982451581", "982451609", "982451629", "982451653";
-													   } 
+	Local aPFact	AS ARRAY
+	Local aPrimes	AS ARRAY  VALUE {;                                                                                               
+										 "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
+										 "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
+										 "32458051",  "32458057",  "32458073",  "32458079",  "32458091",  "32458093",  "32458109",  "32458123",;
+										 "49981171",  "49981199",  "49981219",  "49981237",  "49981247",  "49981249",  "49981259",  "49981271",;
+										 "67874921",  "67874959",  "67874969",  "67874987",  "67875007",  "67875019",  "67875029",  "67875061",;
+										"982451501", "982451549", "982451567", "982451579", "982451581", "982451609", "982451629", "982451653";
+									} 
 
 #IFDEF __HARBOUR__
 	Local cLog		AS CHARACTER VALUE "tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
@@ -126,13 +126,13 @@ User Function tBigNTst()
 
 	For n := 1 To 1000
 		ASSIGN cN			:= LTrim(Str(n))
-		ASSIGN aPFactors	:= otBigN:SetValue(cN):PFactors()
-		For x := 1 To Len( aPFactors )
-			ASSIGN cW	:= aPFactors[x][2]
+		ASSIGN aPFact	:= otBigN:SetValue(cN):PFactors()
+		For x := 1 To Len( aPFact )
+			ASSIGN cW	:= aPFact[x][2]
 			otBigW:SetValue(cW)
 			While otBigW:gt("0")
 				otBigW:SetValue(otBigW:Sub("1"))
-				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFactors[x][1])
+				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFact[x][1])
 			End While
 		Next x	
 		__ConOut(fhLog,"---------------------------------------------------------")

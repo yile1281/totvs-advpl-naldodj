@@ -28,6 +28,9 @@ User Function tBigNTst()
 
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+	Local otBH16	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"16")
+	Local otBH32	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"32")
+	Local otBBin	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,"2")
 	Local oPrime	AS OBJECT CLASS "TPRIME"
 	Local aPFactors	AS ARRAY
 	Local aPrimes	AS ARRAY 					 VALUE {;                                                                                               
@@ -217,15 +220,15 @@ User Function tBigNTst()
 	For x := 0 TO 99999 STEP 99
 		ASSIGN n	:= x
 		ASSIGN cN	:= LTrim(Str(n))
-		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("16")
+		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("16"):Int()
 		__ConOut(fhLog,cN+':tBigNumber():D2H(16)',"RESULT: "+cHex)
-		ASSIGN cN	:= otBigN:H2D(cHex,'16'):Int()
-		__ConOut(fhLog,'tBigNumber():H2D('+cHex+',16)',"RESULT: "+cN)
-		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))		
-		ASSIGN cN	:= otBigN:H2B(cHex,'16')
-		__ConOut(fhLog,'tBigNumber():H2B('+cHex+',16)',"RESULT: "+cN)
-		ASSIGN cHex	:= otBigN:B2H(cN,'16')
-		__ConOut(fhLog,'tBigNumber():B2H('+cN+',16)',"RESULT: "+cHex)
+		ASSIGN cN	:= otBH16:SetValue(cHex):H2D():Int()
+		__ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
+		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))
+		ASSIGN cN	:= otBH16:H2B():Int()
+		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
+		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('16'):Int()
+		__ConOut(fhLog,cN+':tBigNumber():B2H(16)',"RESULT: "+cHex)
 		__ConOut(fhLog,"---------------------------------------------------------")
 	Next x
 
@@ -246,15 +249,15 @@ User Function tBigNTst()
 	For x := 0 TO 99999 STEP 99
 		ASSIGN n	:= x
 		ASSIGN cN	:= LTrim(Str(n))
-		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("32")
+		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("32"):Int()
 		__ConOut(fhLog,cN+':tBigNumber():D2H(32)',"RESULT: "+cHex)
-		ASSIGN cN	:= otBigN:H2D(cHex,"32"):Int()
-		__ConOut(fhLog,'tBigNumber():H2D('+cHex+',32)',"RESULT: "+cN)
-		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))		
-		ASSIGN cN	:= otBigN:H2B(cHex,'32')
-		__ConOut(fhLog,'tBigNumber():H2B('+cHex+',32)',"RESULT: "+cN)
-		ASSIGN cHex	:= otBigN:B2H(cN,'32')
-		__ConOut(fhLog,'tBigNumber():B2H('+cN+',32)',"RESULT: "+cHex)
+		ASSIGN cN	:= otBH32:SetValue(cHex):H2D("32"):Int()
+		__ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
+		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))
+		ASSIGN cN	:= otBH32:H2B('32'):Int()
+		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
+		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('32'):Int()
+		__ConOut(fhLog,cN+':tBigNumber():B2H(32)',"RESULT: "+cHex)
 		__ConOut(fhLog,"---------------------------------------------------------")
 	Next x
 

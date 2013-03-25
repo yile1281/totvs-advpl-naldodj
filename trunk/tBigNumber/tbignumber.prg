@@ -3819,7 +3819,7 @@ return(x)
 		
 		Local a			:= aNumber( Invert( cN1 , n ) , n , "MULT_A" )
 		Local b			:= aNumber( Invert( cN2 , n ) , n , "MULT_B" )
-		Local y			:= ( n + n )
+		Local y			:= n + n
 		Local c			:= aNumber( Replicate( "0" , y ) , y , "MULT_C" )
 	
 		Local i 		:= 1

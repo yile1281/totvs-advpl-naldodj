@@ -10,7 +10,7 @@
 
 #DEFINE __SLEEP 0
 
-#DEFINE N_TEST 50
+#DEFINE N_TEST 10
 
 #IFDEF __HARBOUR__
 Function Main()
@@ -25,6 +25,16 @@ Static Function tBigNTst()
 #ELSE
 User Function tBigNTst()
 #ENDIF	
+
+#IFDEF __HARBOUR__
+	Local tsBegin	:= HB_DATETIME()
+	Local nsElapsed
+#ENDIF
+
+	Local dStartDate AS DATE 	  VALUE Date()
+	Local dEntDate	
+	Local cStartTime AS CHARACTER VALUE Time()
+	Local cEndTime	 AS CHARACTER
 
 	Local otBigN	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
 	Local otBigW	AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -62,7 +72,7 @@ User Function tBigNTst()
 	Local nSetDec	AS NUMBER	
 	
 	Local lMR		AS LOGICAL
-	Local lPn	AS LOGICAL
+	Local lPn		AS LOGICAL
 
 #IFDEF __HARBOUR__
 	MEMVAR __CRLF
@@ -84,13 +94,19 @@ User Function tBigNTst()
 	CLS
 #ENDIF	
 
+
 	ASSIGN nSetDec := Set(_SET_DECIMALS , ACC_SET)
 
 	__ConOut(fhLog,"---------------------------------------------------------")
 
 	__ConOut(fhLog,"START ")
-	__ConOut(fhLog,"DATE        : " , Date())
-	__ConOut(fhLog,"TIME        : " , Time())
+	__ConOut(fhLog,"DATE        : " , dStartDate)
+	__ConOut(fhLog,"TIME        : " , cStartTime)
+
+	#IFDEF __HARBOUR__
+		__ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))
+	#ENDIF
+
 
 	#IFDEF TBN_DBFILE
 		#IFNDEF TBN_MEMIO
@@ -945,8 +961,25 @@ User Function tBigNTst()
 	__ConOut(fhLog,"---------------------------------------------------------")
 
 	__ConOut(fhLog,"END ")
-	__ConOut(fhLog,"DATE " , Date())
-	__ConOut(fhLog,"TIME " , Time())
+
+	dEntDate := Date()
+	__ConOut(fhLog,"DATE    :" , dEntDate )
+	
+	ASSIGN cENDTime	:= Time()
+	__ConOut(fhLog,"TIME    :" , cENDTime )
+
+#IFDEF __PROTHEUS__
+	While dStartDate < dEntDate
+		cENDTime := IncTime( cENDTime , 24 )
+		++dStartDate
+	End While
+	__ConOut(fhLog,"ELAPSED :" , ElapTime(cStartTime,cENDTime) )
+#ELSE	
+	#IFDEF __HARBOUR__
+		nsElapsed	:= (HB_DATETIME()-tsBegin)
+		__ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
+	#ENDIF
+#ENDIF
 
 	__ConOut(fhLog,"---------------------------------------------------------")
 

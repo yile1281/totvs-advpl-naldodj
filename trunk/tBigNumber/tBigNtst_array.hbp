@@ -1,12 +1,12 @@
 #
 # $Id: tbignumber.hbp 17099 2013-02-05 12:15:39Z marinaldo.jesus $
 #
+#/D__HB_Q_SQRT__
 
 -mt
 
 /D__POWMT__
 /D__ROOTMT__
-#/D__HB_Q_SQRT__
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3

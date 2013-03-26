@@ -3326,6 +3326,7 @@ Return( lmrP )
 	Descricao	: Euler's totient function
 	Sintaxe		: tBigNumber():FI() -> oT
 	Ref.:		: ( Euler's totient function ) http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=primeNumbers
+	Consultar	: http://www.javascripter.net/math/calculators/eulertotientfunction.htm para otimizar.
 	
 	int fi(int n) 
      { 

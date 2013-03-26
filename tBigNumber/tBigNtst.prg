@@ -32,7 +32,7 @@ User Function tBigNTst()
 #ENDIF
 
 	Local dStartDate AS DATE 	  VALUE Date()
-	Local dEntDate	
+	Local dEndDate	
 	Local cStartTime AS CHARACTER VALUE Time()
 	Local cEndTime	 AS CHARACTER
 
@@ -962,18 +962,18 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"END ")
 
-	dEntDate := Date()
-	__ConOut(fhLog,"DATE    :" , dEntDate )
+	dEndDate := Date()
+	__ConOut(fhLog,"DATE    :" , dEndDate )
 	
-	ASSIGN cENDTime	:= Time()
-	__ConOut(fhLog,"TIME    :" , cENDTime )
+	ASSIGN cEndTime	:= Time()
+	__ConOut(fhLog,"TIME    :" , cEndTime )
 
 #IFDEF __PROTHEUS__
-	While dStartDate < dEntDate
-		cENDTime := IncTime( cENDTime , 24 )
+	While dStartDate < dEndDate
+		cEndTime := IncTime( cEndTime , 24 )
 		++dStartDate
 	End While
-	__ConOut(fhLog,"ELAPSED :" , ElapTime(cStartTime,cENDTime) )
+	__ConOut(fhLog,"ELAPSED :" , ElapTime(cStartTime,cEndTime) )
 #ELSE	
 	#IFDEF __HARBOUR__
 		nsElapsed	:= (HB_DATETIME()-tsBegin)

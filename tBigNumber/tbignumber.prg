@@ -783,7 +783,7 @@ Method Add( uBigN ) CLASS tBigNumber
 	
 		IF lAdd
 			#IFDEF __MT__
-				#IFNDEF __PROTHEUS__
+				#IFNDEF __PROTHEUS__ //TODO: Implementar Adicao em MT quando nSize > 4
 					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
@@ -914,7 +914,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 		EndIF
 	
 	    IF lSub
-			#IFDEF __MT__
+			#IFDEF __MT__ //TODO: Implementar Adicao em MT quando nSize > 4
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
 					hb_threadJoin( oThread , @xResult )
@@ -1036,7 +1036,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	    DEFAULT __lMult := .F.
 	
 	    IF __lMult
-			#IFDEF __MT__
+			#IFDEF __MT__  //TODO: 	Implementar a Multiplicação em MT
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "__MultThread" , @cBigN1 , @cBigN2 , @nAcc )
 					hb_threadJoin( oThread , @xResult )
@@ -1049,7 +1049,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 				__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 , @nAcc ) , NIL , NIL , .F. )    		
 	    	#ENDIF
 	    Else
-			#IFDEF __MT__
+			#IFDEF __MT__ //TODO: 	Implementar a Multiplicação em MT
 				#IFNDEF __PROTHEUS__
 					oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
 					hb_threadJoin( oThread , @xResult )
@@ -1154,7 +1154,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		#IFDEF __MT__
+		#IFDEF __MT__ //TODO : Implementar a Divisao em MT
 			#IFNDEF __PROTHEUS__
 				oThread := hb_threadStart( "DivThread" , @cBigN1 , @cBigN2 , @nAcc , @lFloat )
 				hb_threadJoin( oThread , @xResult )

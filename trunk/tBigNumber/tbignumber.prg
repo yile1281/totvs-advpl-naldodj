@@ -45,18 +45,20 @@ THREAD Static __nSetDecimals
 */
 CLASS tBigNumber
 
+	/* Keep in alphabetical order */
 	DATA cDec
 	DATA cInt
 	DATA cRDiv
 	DATA cSig
 	DATA lNeg
+	DATA nBase
 	DATA nDec
 	DATA nInt
 	DATA nSize
-	DATA nBase
 
 	Method New( uBigN , nBase ) CONSTRUCTOR
 
+	Method Clone()
 	Method ClassName()
 
 	Method SetDecimals( nSet )
@@ -174,6 +176,16 @@ Method New( uBigN , nBase ) CLASS tBigNumber
 Return( self )
 
 /*
+	Method		: Clone
+	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Data		: 27/03/2013
+	Descricao	: Clone
+	Sintaxe		: tBigNumber():Clone() -> oClone
+*/
+Method Clone() CLASS tBigNumber
+Return( tBigNumber():New(self) )
+
+/*
 	Method		: ClassName
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
@@ -277,10 +289,10 @@ Method SetValue( uBigN , nBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 			self:cRDiv		:= uBigN:cRDiv
 			self:cSig		:= uBigN:cSig
 			self:lNeg		:= uBigN:lNeg
+			self:nBase		:= uBigN:nBase
 			self:nDec		:= uBigN:nDec
 			self:nInt		:= uBigN:nInt
 			self:nSize		:= uBigN:nSize
-			self:nBase		:= uBigN:nBase
 			
 		#ENDIF
 	
@@ -302,10 +314,10 @@ Method SetValue( uBigN , nBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 			self:cRDiv		:= uBigN[3][2]
 			self:cSig		:= uBigN[4][2]
 			self:lNeg		:= uBigN[5][2]
-			self:nDec		:= uBigN[6][2]
-			self:nInt		:= uBigN[7][2]
-			self:nSize		:= uBigN[8][2]
-			self:nBase		:= uBigN[9][2]
+			self:nBase		:= uBigN[6][2]
+			self:nDec		:= uBigN[7][2]
+			self:nInt		:= uBigN[8][2]
+			self:nSize		:= uBigN[9][2]
 		
 		#ENDIF
 	
@@ -723,7 +735,6 @@ Method Add( uBigN ) CLASS tBigNumber
 	Local n1
 	Local n2
 
-	Local nAcc		:= __nSetDecimals
 	Local nDec		
 	Local nSize 	
 	
@@ -784,28 +795,28 @@ Method Add( uBigN ) CLASS tBigNumber
 		IF lAdd
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__ //TODO: Implementar Adicao em MT quando nSize > 4
-					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
 				#ELSE
-					xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
 				#ENDIF
 				__adoNR:SetValue( xResult , NIL , NIL , .F. )
 			#ELSE
-				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , NIL , .F. )			
+				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )			
 			#ENDIF
 		Else
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
 				#ELSE
-					xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
 				#ENDIF
 				__adoNR:SetValue( xResult , NIL , NIL , .F. )
 			#ELSE
-				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , NIL , .F. )
+				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 			#ENDIF
 		EndIF
 	
@@ -854,7 +865,6 @@ Method Sub( uBigN ) CLASS tBigNumber
 	Local n1
 	Local n2
 
-	Local nAcc	:= __nSetDecimals
 	Local nDec		
 	Local nSize 	
 
@@ -916,28 +926,28 @@ Method Sub( uBigN ) CLASS tBigNumber
 	    IF lSub
 			#IFDEF __MT__ //TODO: Implementar Adicao em MT quando nSize > 4
 				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
 			    #ELSE
-			    	xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+			    	xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
 			    #ENDIF
 			    __sboNR:SetValue( xResult , NIL , NIL , .F. )
 	    	#ELSE
-				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , NIL , .F. )    		
+				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )    		
 	    	#ENDIF
 	    Else
 			#IFDEF __MT__
 				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
 			    #ELSE
-			    	xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+			    	xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
 			    #ENDIF
 			    __sboNR:SetValue( xResult , NIL , NIL , .F. )
 	    	#ELSE
-				__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , NIL , .F. )    		
+				__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )    		
 	    	#ENDIF
 	    EndIF
 	
@@ -986,11 +996,11 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	Local n1
 	Local n2
 
-	Local nAcc	:= __nSetDecimals
 	Local nDec	
 	Local nSize 
 
 #IFDEF __MT__
+	Local nAcc		:= __nSetDecimals
 	Local xResult
 	#IFNDEF __PROTHEUS__
 	Local oThread
@@ -1046,20 +1056,20 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 				#ENDIF
 				__mtoNR:SetValue( xResult , NIL , NIL , .F. )
 	    	#ELSE
-				__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 , @nAcc ) , NIL , NIL , .F. )    		
+				__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 ) , NIL , NIL , .F. )    		
 	    	#ENDIF
 	    Else
 			#IFDEF __MT__ //TODO: 	Implementar a Multiplicação em MT
 				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+					oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize )
 					hb_threadJoin( oThread , @xResult )
 					hb_threadWaitForAll( { oThread } )
 		    	#ELSE
-			    	xResult := StartJob( "U_MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize , @nAcc )
+			    	xResult := StartJob( "U_MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
 		    	#ENDIF
 		    	__mtoNR:SetValue( xResult , NIL , NIL , .F. )
 	    	#ELSE
-				__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize , @nAcc ) , NIL , NIL , .F. )
+				__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 	    	#ENDIF
 	    EndIF	
 	
@@ -3399,8 +3409,7 @@ Method PFactors() CLASS tBigNumber
 		cP := LTrim( otP:cPrime )
 		oP:SetValue( cP )
 		IF oP:gte( oN ) .or. IF( lPrime , lPrime := otP:IsPrime( oN:cInt ) , lPrime .or. ( ++nC > 1 .and. oN:gte( otP:cLPrime ) ) )
-			cP := oN:cInt
-			aAdd( aPFactors , { cP , "1" } )
+			aAdd( aPFactors , { oN:cInt , "1" } )
 			EXIT
 		EndIF
 		While oN:Mod( oP ):eq( o0 )
@@ -3454,7 +3463,7 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 	
 	While .T.
 		++nI
-		aAdd( aE , { oPe:ExactValue() , oPd:ExactValue() , .F. } )
+		aAdd( aE , { oPe:Clone() , oPd:Clone() , .F. } )
 		IF oPe:gte( oN1 )
 			Exit
 		EndIF
@@ -3464,14 +3473,14 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 
 	ocT	:= tBigNumber():New("0")
 	While nI > 0
-		ocT:SetValue( ocT:Add( aE[ nI ][ 1 ] ) )
+		ocT:SetValue( ocT:Add( aE[nI][1] ) )
 		IF ocT:lte( oN1 )
-			aE[ nI ][ 3 ] := .T. 
+			aE[nI][3] := .T. 
 			IF ocT:eq( oN1 )
 				Exit
 			EndIF	
 		Else
-			ocT:SetValue( ocT:Sub( aE[ nI ][ 1 ] ) )
+			ocT:SetValue( ocT:Sub( aE[nI][1] ) )
 		EndIF
 		--nI
 	End While
@@ -3502,8 +3511,9 @@ Static Function Div( cN , cD , nAcc , lFloat )
 
 	Local oPe
 	Local oPd
-	Local oN1		:= tBigNumber():New(cN)
-	Local oN2		:= tBigNumber():New(cD)
+
+	Local oN		:= tBigNumber():New(cN)
+	Local oD		:= tBigNumber():New(cD)
 	Local oRDiv		:= tBigNumber():New()
 
 	Local oNR
@@ -3514,32 +3524,32 @@ Static Function Div( cN , cD , nAcc , lFloat )
 	__nSetDecimals	:= nAcc
 
 	oPe	:= tBigNumber():New("1")
-	oPd	:= tBigNumber():New(oN2)
+	oPd	:= tBigNumber():New(oD)
 
 	While .T.
 		++nI
-		aAdd( aE , { oPe:ExactValue() , oPd:ExactValue() , .F. } )
+		aAdd( aE , { oPe:Clone() , oPd:Clone() , .F. } )
 		oPe:SetValue( oPe:Add( oPe ) )
 		oPd:SetValue( oPd:Add( oPd ) )
-		IF oPd:gt( oN1 )
+		IF oPd:gt( oN )
 			Exit
 		EndIF
 	End While
 
 	While nI > 0
-		oRDiv:SetValue( oRDiv:Add( aE[ nI ][ 2 ] ) )
-		IF oRDiv:lte( oN1 )
-			aE[ nI ][ 3 ] := .T.
-			IF oRDiv:eq( oN1 )
+		oRDiv:SetValue( oRDiv:Add( aE[nI][2] ) )
+		IF oRDiv:lte( oN )
+			aE[nI][3] := .T.
+			IF oRDiv:eq( oN )
 				Exit
 			EndIF	
 		Else
-			oRDiv:SetValue( oRDiv:Sub( aE[ nI ][ 2 ] ) )
+			oRDiv:SetValue( oRDiv:Sub( aE[nI][2] ) )
 		EndIF
 		--nI
 	End While
 
-	oRDiv:SetValue( oN1:Sub( oRDiv ) )
+	oRDiv:SetValue( oN:Sub( oRDiv ) )
 
 	oNR	:= tBigNumber():New()
 	For nI := 1 To Len( aE )
@@ -3650,27 +3660,20 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Add( cN1 , cN2 , n , nBase ) -> cNR
 	*/
-	Static Function Add( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Add( cN1 , cN2 , n , nBase )
 	
 		Local a			:= aNumber( cN1 , n , "ADD_A" )
 		Local b 		:= aNumber( cN2 , n , "ADD_B" )
 		Local y 		:= n + 1
 		Local c 		:= aNumber( Replicate( "0" , y ) , y , "ADD_C" )
 		Local k 		:= 1
-
-		Local nBakAcc	:= __nSetDecimals
-		
-		THREAD Static __addoNR
 		
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
-
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
 
 		While n > 0
 			(a)->(dbGoTo(n))
@@ -3691,10 +3694,6 @@ return(x)
 			++k
 			--n
 		End While
-	
-		DEFAULT __addoNR := tBigNumber():New()
-	
-		__addoNR:SetValue( GetcN( @c , @y ) , NIL , NIL , .F. )
 
 		#IFDEF __MT__
 		
@@ -3724,36 +3723,28 @@ return(x)
 					
 		#ENDIF
 
-		__nSetDecimals := nBakAcc
-
-	Return( __addoNR )
+	Return( GetcN( @c , @y ) )
 	
 	/*
 		Funcao		: Sub
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Sub( cN1 , cN2 , n , nBase ) -> cNR
 	*/
-	Static Function Sub( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Sub( cN1 , cN2 , n , nBase )
 	
 		Local a			:= aNumber( cN1 , n , "SUB_A" )
 		Local b 		:= aNumber( cN2 , n , "SUB_B" )
 		Local y 		:= n
 		Local c 		:= aNumber( Replicate( "0" , y ) , y , "SUB_C" )
 		Local k 		:= 1
-
-		Local nBakAcc	:= __nSetDecimals
-	
-		THREAD Static __suboNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
 
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			(a)->(dbGoTo(n))
@@ -3774,10 +3765,6 @@ return(x)
 			++k
 			--n
 		End While
-	
-		DEFAULT __suboNR := tBigNumber():New()
-	
-		__suboNR:SetValue( GetcN( @c , @y ) , NIL , NIL , .F. )
 
 		#IFDEF __MT__
 		
@@ -3807,19 +3794,17 @@ return(x)
 		
 		#ENDIF
 
-		__nSetDecimals := nBakAcc
-
-	Return( __suboNR )
+	Return( GetcN( @c , @y ) )
 	
 	/*
 		Funcao		: Mult
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
-		Sintaxe		: Mult( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Mult( cN1 , cN2 , n , nBase ) -> cNR
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
-	Static Function Mult( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Mult( cN1 , cN2 , n , nBase )
 		
 		Local a			:= aNumber( Invert( cN1 , n ) , n , "MULT_A" )
 		Local b			:= aNumber( Invert( cN2 , n ) , n , "MULT_B" )
@@ -3834,18 +3819,12 @@ return(x)
 		Local x
 		Local j
 		Local w
-
-		Local nBakAcc	:= __nSetDecimals
-	
-		THREAD Static __multoNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
 
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
 	
 		While i <= n
 			s := 1
@@ -3906,10 +3885,6 @@ return(x)
 			l++
 		End While
 		
-		DEFAULT __multoNR := tBigNumber():New()
-	
-		__multoNR:SetValue( GetcN( @c , @k ) , NIL , NIL , .F. )
-
 		#IFDEF __MT__
 		
 			IF Select(a) > 0
@@ -3938,9 +3913,7 @@ return(x)
 			
 		#ENDIF
 
-		__nSetDecimals := nBakAcc
-
-	Return( __multoNR )
+	Return( GetcN( @c , @k ) )
 
 	/*
 		Funcao		: aNumber
@@ -4091,9 +4064,9 @@ return(x)
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Add( cN1 , cN2 , n , nBase ) -> cNR
 	*/
-	Static Function Add( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Add( cN1 , cN2 , n , nBase )
 	
 		Local a			:= aNumber( cN1 , n )
 		Local b 		:= aNumber( cN2 , n )
@@ -4101,14 +4074,8 @@ return(x)
 		Local c 		:= aFill( Array( y ) , 0 )
 		Local k 		:= 1
 		
-		Local nBakAcc	:= __nSetDecimals
-		
-		THREAD Static __addoNR
-	    
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
-	
+
 		While n > 0
 			c[k] += a[n] + b[n]
 			IF c[k] >= nBase
@@ -4118,37 +4085,25 @@ return(x)
 			++k
 			--n
 		End While
-	
-		DEFAULT __addoNR := tBigNumber():New()
-	
-		__addoNR:SetValue( GetcN( @c , @y ) , NIL , NIL , .F. )
 
-		__nSetDecimals	:= nBakAcc
-	
-	Return( __addoNR )
+	Return( GetcN( @c , @y ) )
 	
 	/*
 		Funcao		: Sub
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Sub( cN1 , cN2 , n , nBase ) -> cNR
 	*/
-	Static Function Sub( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Sub( cN1 , cN2 , n , nBase )
 	
 		Local a			:= aNumber( cN1 , n )
 		Local b 		:= aNumber( cN2 , n )
 		Local y 		:= n
 		Local c 		:= aFill( Array( y ) , 0 )
 		Local k 		:= 1
-		
-		Local nBakAcc	:= __nSetDecimals
 	
-		THREAD Static __suboNR
-	
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
 	
 		While n > 0
 			c[k] += a[n] - b[n]
@@ -4159,24 +4114,18 @@ return(x)
 			++k
 			--n
 		End While
-	
-		DEFAULT __suboNR := tBigNumber():New()
-	
-		__suboNR:SetValue( GetcN( @c , @y ) , NIL , NIL , .F. )
 
-		__nSetDecimals	:= nBakAcc
-
-	Return( __suboNR )
+	Return( GetcN( @c , @y ) )
 	
 	/*
 		Funcao		: Mult
 		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
-		Sintaxe		: Mult( cN1 , cN2 , n , nAcc , nBase ) -> oNR
+		Sintaxe		: Mult( cN1 , cN2 , n , nBase ) -> cNR
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
-	Static Function Mult( cN1 , cN2 , n , nAcc , nBase )
+	Static Function Mult( cN1 , cN2 , n , nBase )
 	
 		Local a			:= aNumber( Invert( cN1 , n ) , n )
 		Local b			:= aNumber( Invert( cN2 , n ) , n )
@@ -4190,14 +4139,8 @@ return(x)
 		Local s
 		Local x
 		Local j
-
-		Local nBakAcc	:= __nSetDecimals
 	
-		THREAD Static __multoNR
-	
-		DEFAULT nAcc	:= __nSetDecimals
 		DEFAULT nBase	:= 10
-		__nSetDecimals	:= nAcc
 	
 		While i <= n
 			s := 1
@@ -4231,14 +4174,8 @@ return(x)
 			EndIF
 			l++
 		End While
-		
-		DEFAULT __multoNR := tBigNumber():New()
-	
-		__multoNR:SetValue( GetcN( @c , @k ) , NIL , NIL , .F. )
 
-		nBakAcc	:= __nSetDecimals
-	
-	Return( __multoNR )
+	Return( GetcN( @c , @k ) )
 	
 	/*
 		Funcao		: aNumber
@@ -4639,51 +4576,19 @@ Return( __eTthD )
 #IFDEF __MT__
 
 	#IFDEF __PROTHEUS__
-		User Function AddThread( cBigN1 , cBigN2 , nSize , nAcc )
-			Local oRet := Add( @cBigN1 , @cBigN2 , @nSize , @nAcc )
-			Static _AddThread
-			#IFNDEF __TBN_DYN_OBJ_SET__
-				DEFAULT _AddThread  := Array(9,2)
-				_AddThread[1][2] := oRet:cDec
-				_AddThread[2][2] := oRet:cInt
-				_AddThread[3][2] := oRet:cRDiv
-				_AddThread[4][2] := oRet:cSig
-				_AddThread[5][2] := oRet:lNeg
-				_AddThread[6][2] := oRet:nDec
-				_AddThread[7][2] := oRet:nInt
-				_AddThread[8][2] := oRet:nSize
-				_AddThread[9][2] := oRet:nBase
-			#ELSE
-				_AddThread := ClassDataArr( oRet )
-			#ENDIF	
-		Return( _AddThread )
+		User Function AddThread( cBigN1 , cBigN2 , nSize )
+		Return( Add( @cBigN1 , @cBigN2 , @nSize ) )
 	#ELSE
-		Function AddThread( cBigN1 , cBigN2 , nSize , nAcc )
-		Return( Add( @cBigN1 , @cBigN2 , @nSize , @nAcc ) )
+		Function AddThread( cBigN1 , cBigN2 , nSize )
+		Return( Add( @cBigN1 , @cBigN2 , @nSize ) )
 	#ENDIF
 	
 	#IFDEF __PROTHEUS__
-		User Function SubThread( cBigN1 , cBigN2 , nSize , nAcc )
-			Local oRet := Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc )
-			Static _SubThread
-			#IFNDEF __TBN_DYN_OBJ_SET__
-				DEFAULT _SubThread  := Array(9,2)
-				_SubThread[1][2] := oRet:cDec
-				_SubThread[2][2] := oRet:cInt
-				_SubThread[3][2] := oRet:cRDiv
-				_SubThread[4][2] := oRet:cSig
-				_SubThread[5][2] := oRet:lNeg
-				_SubThread[6][2] := oRet:nDec
-				_SubThread[7][2] := oRet:nInt
-				_SubThread[8][2] := oRet:nSize
-				_SubThread[9][2] := oRet:nBase
-			#ELSE
-				_SubThread := ClassDataArr( oRet )
-			#ENDIF	
-		Return( _SubThread )
+		User Function SubThread( cBigN1 , cBigN2 , nSize )
+		Return( Sub( @cBigN1 , @cBigN2 , @nSize ) )
 	#ELSE
-		Function SubThread( cBigN1 , cBigN2 , nSize , nAcc )
-		Return( Sub( @cBigN1 , @cBigN2 , @nSize , @nAcc ) )
+		Function SubThread( cBigN1 , cBigN2 , nSize )
+		Return( Sub( @cBigN1 , @cBigN2 , @nSize ) )
 	#ENDIF
 	
 	#IFDEF __PROTHEUS__
@@ -4697,10 +4602,10 @@ Return( __eTthD )
 				_DivThread[3][2] := oRet:cRDiv
 				_DivThread[4][2] := oRet:cSig
 				_DivThread[5][2] := oRet:lNeg
-				_DivThread[6][2] := oRet:nDec
-				_DivThread[7][2] := oRet:nInt
-				_DivThread[8][2] := oRet:nSize
-				_DivThread[9][2] := oRet:nBase
+				_DivThread[6][2] := oRet:nBase
+				_DivThread[7][2] := oRet:nDec
+				_DivThread[8][2] := oRet:nInt
+				_DivThread[9][2] := oRet:nSize
 			#ELSE
 				_DivThread := ClassDataArr( oRet )
 			#ENDIF	
@@ -4711,27 +4616,11 @@ Return( __eTthD )
 	#ENDIF
 
 	#IFDEF __PROTHEUS__
-		User Function MultThread( cBigN1 , cBigN2 , nSize , nAcc ) 	
-			Local oRet := Mult( @cBigN1 , @cBigN2 , @nSize , @nAcc )
-			Static _MultThread
-			#IFNDEF __TBN_DYN_OBJ_SET__
-				DEFAULT _MultThread  := Array(9,2)
-				_MultThread[1][2] := oRet:cDec
-				_MultThread[2][2] := oRet:cInt
-				_MultThread[3][2] := oRet:cRDiv
-				_MultThread[4][2] := oRet:cSig
-				_MultThread[5][2] := oRet:lNeg
-				_MultThread[6][2] := oRet:nDec
-				_MultThread[7][2] := oRet:nInt
-				_MultThread[8][2] := oRet:nSize
-				_MultThread[9][2] := oRet:nBase
-			#ELSE
-				_MultThread := ClassDataArr( oRet )
-			#ENDIF	
-		Return( _MultThread )
+		User Function MultThread( cBigN1 , cBigN2 , nSize ) 	
+		Return( Mult( @cBigN1 , @cBigN2 , @nSize ) )
 	#ELSE
-		Function MultThread( cBigN1 , cBigN2 , nSize , nAcc )
-		Return( Mult( @cBigN1 , @cBigN2 , @nSize , @nAcc ) )
+		Function MultThread( cBigN1 , cBigN2 , nSize )
+		Return( Mult( @cBigN1 , @cBigN2 , @nSize ) )
 	#ENDIF
 	
 	#IFDEF __PROTHEUS__
@@ -4745,10 +4634,10 @@ Return( __eTthD )
 				___MultThread[3][2] := oRet:cRDiv
 				___MultThread[4][2] := oRet:cSig
 				___MultThread[5][2] := oRet:lNeg
-				___MultThread[6][2] := oRet:nDec
-				___MultThread[7][2] := oRet:nInt
-				___MultThread[8][2] := oRet:nSize
-				___MultThread[9][2] := oRet:nBase
+				___MultThread[6][2] := oRet:nBase
+				___MultThread[7][2] := oRet:nDec
+				___MultThread[8][2] := oRet:nInt
+				___MultThread[9][2] := oRet:nSize
 			#ELSE
 				___MultThread := ClassDataArr( oRet )
 			#ENDIF	

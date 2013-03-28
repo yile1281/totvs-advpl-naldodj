@@ -1006,6 +1006,9 @@ Static Procedure __ConOut(fhLog,e,d)
 	Local p		AS CHARACTER
 
 	Local nATd  AS NUMBER
+	
+	Local x		AS UNDEFINED
+	Local y		AS UNDEFINED
 
 #IFDEF __HARBOUR__	
 	MEMVAR __CRLF
@@ -1017,24 +1020,24 @@ Static Procedure __ConOut(fhLog,e,d)
 
 	ASSIGN ld	:= .NOT.(Empty(d))
 
-	ASSIGN e 	:= cValToChar(e)
+	ASSIGN x 	:= cValToChar(e)
 
 	IF (ld)
-		ASSIGN d 	:= cValToChar(d)
-		ASSIGN nATd	:= AT("RESULT",d)
+		ASSIGN y	:= cValToChar(d)
+		ASSIGN nATd	:= AT("RESULT",y)
 	Else
-		ASSIGN d	:= ""
+		ASSIGN y	:= ""
 	EndIF	
 
-	ASSIGN p := e + IF(ld , " " + d , "")
+	ASSIGN p := x + IF(ld , " " + y , "")
 	
 	? p
 
 	IF ((ld) .and. (nATd > 0))
-		fWrite(fhLog,e+__CRLF)
-		fWrite(fhLog,"...................................................................................................."+d+__CRLF)
+		fWrite(fhLog,x+__CRLF)
+		fWrite(fhLog,"...................................................................................................."+y+__CRLF)
 	Else
-		fWrite(fhLog,e+d+__CRLF)
+		fWrite(fhLog,x+y+__CRLF)
 	EndIF	
 
 Return

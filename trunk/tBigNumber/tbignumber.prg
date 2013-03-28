@@ -1014,7 +1014,7 @@ Return( __adoNR )
 			Next x
 
 			For x := y To 1 STEP -1
-				z 	:= ( x - 1 )
+				z 	:= x - 1
 				cT1	:= aNR[x][5]
 				IF z > 0 .and. Len( cT1 ) > MAX_LENGHT_ADD_THREAD
 					cT2 := SubStr(cT1,1,1)
@@ -3801,6 +3801,8 @@ return(x)
 		Local y 		:= n + 1
 		Local c 		:= aNumber( Replicate( "0" , y ) , y , "ADD_C" )
 		Local k 		:= 1
+
+		Local cNR
 		
 		#IFDEF __HARBOUR__
 			FIELD FN
@@ -3826,6 +3828,8 @@ return(x)
 			++k
 			--n
 		End While
+
+		cNR	:= GetcN( @c , @y )
 
 		#IFDEF __ADDMT__
 		
@@ -3855,7 +3859,7 @@ return(x)
 					
 		#ENDIF
 
-	Return( GetcN( @c , @y ) )
+	Return( cNR )
 	
 	/*
 		Funcao		: Sub
@@ -3871,6 +3875,8 @@ return(x)
 		Local y 		:= n
 		Local c 		:= aNumber( Replicate( "0" , y ) , y , "SUB_C" )
 		Local k 		:= 1
+		
+		Local cNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
@@ -3897,6 +3903,8 @@ return(x)
 			++k
 			--n
 		End While
+		
+		cNR	:= GetcN( @c , @y )
 
 		#IFDEF __SUBMT__
 		
@@ -3926,7 +3934,7 @@ return(x)
 		
 		#ENDIF
 
-	Return( GetcN( @c , @y ) )
+	Return( cNR )
 	
 	/*
 		Funcao		: Mult
@@ -3951,6 +3959,8 @@ return(x)
 		Local x
 		Local j
 		Local w
+		
+		Local cNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
@@ -4017,6 +4027,8 @@ return(x)
 			l++
 		End While
 		
+		cNR	:= GetcN( @c , @k )
+		
 		#IFDEF __MULTMT__
 		
 			IF Select(a) > 0
@@ -4045,7 +4057,7 @@ return(x)
 			
 		#ENDIF
 
-	Return( GetcN( @c , @k ) )
+	Return( cNR )
 
 	/*
 		Funcao		: aNumber

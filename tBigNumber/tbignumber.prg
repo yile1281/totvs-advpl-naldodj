@@ -415,64 +415,64 @@ Return( self )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: GetValue
-	Sintaxe		: tBigNumber():GetValue( lAbs , lObj ) -> uBigNR
+	Sintaxe		: tBigNumber():GetValue( lAbs , lObj ) -> uNR
 */
 Method GetValue( lAbs , lObj ) CLASS tBigNumber
 
-	Local uBigNR
+	Local uNR
 
 	DEFAULT lAbs	:= .F.
 	DEFAULT lObj	:= .F.
 	
-    uBigNR	:= IF( lAbs , "" , self:cSig )
-    uBigNR	+= self:cInt
-    uBigNR	+= "."
-    uBigNR	+= self:cDec
+    uNR	:= IF( lAbs , "" , self:cSig )
+    uNR	+= self:cInt
+    uNR	+= "."
+    uNR	+= self:cDec
 
 	IF lObj
-		uBigNR	:= tBigNumber():New( uBigNR )
+		uNR	:= tBigNumber():New( uNR )
 	EndIF
 
-Return( uBigNR )        
+Return( uNR )        
 
 /*
 	Method		: ExactValue
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: ExactValue
-	Sintaxe		: tBigNumber():ExactValue( lAbs ) -> uBigNR
+	Sintaxe		: tBigNumber():ExactValue( lAbs ) -> uNR
 */
 Method ExactValue( lAbs , lObj ) CLASS tBigNumber
 
 	Local cDec
 
-	Local uBigNR
+	Local uNR
 
 	DEFAULT lAbs	:= .F.
 	DEFAULT lObj	:= .F.
 
-    uBigNR	:= IF( lAbs , "" , self:cSig )
+    uNR	:= IF( lAbs , "" , self:cSig )
 
-    uBigNR	+= self:cInt
+    uNR	+= self:cInt
     cDec	:= self:Dec(NIL,NIL,self:nBase==10)
 
 	IF .NOT.( Empty( cDec ) )
-	    uBigNR	+= "."
-	    uBigNR	+= cDec
+	    uNR	+= "."
+	    uNR	+= cDec
 	EndIF
 
 	IF lObj
-		uBigNR	:= tBigNumber():New( uBigNR )
+		uNR	:= tBigNumber():New( uNR )
 	EndIF
 
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		: Abs
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Retorna o Valor Absoluto de um Numero
-	Sintaxe		: tBigNumber():Abs() -> uBigNR
+	Sintaxe		: tBigNumber():Abs() -> uNR
 */
 Method Abs( lObj ) CLASS tBigNumber
 Return( self:GetValue( .T. , @lObj ) )
@@ -482,26 +482,26 @@ Return( self:GetValue( .T. , @lObj ) )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Retorna a Parte Inteira de um Numero
-	Sintaxe		: tBigNumber():Int(lObj , lSig) -> uBigNR
+	Sintaxe		: tBigNumber():Int(lObj , lSig) -> uNR
 */
 Method Int( lObj , lSig ) CLASS tBigNumber
-	Local uBigNR
+	Local uNR
 	DEFAULT lObj	:= .F.
 	DEFAULT lSig	:= .F.
-	uBigNR			:= IF(lSig,self:cSig,"")+self:cInt
+	uNR	:= IF(lSig,self:cSig,"")+self:cInt
 	IF lObj
-		uBigNR		:= tBigNumber():New(uBigNR)
+		uNR	:= tBigNumber():New(uNR)
 	Else
-		uBigNR		:= uBigNR
+		uNR	:= uNR
 	EndIF
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		:	Dec
 	Autor		:	Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		:	04/02/2013
 	Descricao	:	Retorna a Parte Decimal de um Numero
-	Sintaxe		:	tBigNumber():Dec( lObj , lSig , lNotZ ) -> uBigNR
+	Sintaxe		:	tBigNumber():Dec( lObj , lSig , lNotZ ) -> uNR
 */
 Method Dec( lObj , lSig , lNotZ ) CLASS tBigNumber
 
@@ -509,7 +509,7 @@ Method Dec( lObj , lSig , lNotZ ) CLASS tBigNumber
     
     Local nDec
     
-    Local uBigNR
+    Local uNR
 
 	DEFAULT lNotZ := .F.
 	IF lNotZ
@@ -522,12 +522,12 @@ Method Dec( lObj , lSig , lNotZ ) CLASS tBigNumber
 	DEFAULT lObj := .F.
 	DEFAULT lSig := .F.
 	IF lObj
-		uBigNR	:= tBigNumber():New(IF(lSig,self:cSig,"")+"0."+cDec)
+		uNR	:= tBigNumber():New(IF(lSig,self:cSig,"")+"0."+cDec)
 	Else
-		uBigNR	:= IF(lSig,self:cSig,"")+cDec
+		uNR	:= IF(lSig,self:cSig,"")+cDec
 	EndIF
 
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		: eq
@@ -668,58 +668,58 @@ Return( self:lt( @uBigN ) .or. self:eq( @uBigN ) )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Retorna o maior valor entre o valor corrente e o valor passado como parametro
-	Sintaxe		: tBigNumber():Max( uBigN ) -> uBigNR
+	Sintaxe		: tBigNumber():Max( uBigN ) -> uNR
 */
 Method Max( uBigN ) CLASS tBigNumber
 	
 	Local lgte
 	Local lGetValue
 
-	Local uBigNR
+	Local uNR
 
 	lgte	:= self:gte( @uBigN )
 
 	IF lgte
 		lGetValue	:= ValType( uBigN ) == "C"
 		IF lGetValue
-			uBigNR	:= self:GetValue()
+			uNR	:= self:GetValue()
 		Else
-			uBigNR	:= self
+			uNR	:= self
 		EndIF
 	Else
-		uBigNR		:= uBigN
+		uNR		:= uBigN
 	EndIF
 
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		: Min
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 04/02/2013
 	Descricao	: Retorna o menor valor entre o valor corrente e o valor passado como parametro
-	Sintaxe		: tBigNumber():Min( uBigN ) -> uBigNR
+	Sintaxe		: tBigNumber():Min( uBigN ) -> uNR
 */
 Method Min( uBigN ) CLASS tBigNumber
 	
 	Local llte
 	Local lGetValue
 
-	Local uBigNR
+	Local uNR
 
 	llte	:= self:lte( @uBigN )
 
 	IF llte
 		lGetValue	:= ValType( uBigN ) == "C"
 		IF lGetValue
-			uBigNR	:= self:GetValue()
+			uNR	:= self:GetValue()
 		Else
-			uBigNR	:= self
+			uNR	:= self
 		EndIF
 	Else
-		uBigNR		:= uBigN
+		uNR		:= uBigN
 	EndIF
 
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		: Add
@@ -733,9 +733,9 @@ Method Add( uBigN ) CLASS tBigNumber
 	Local cInt		
 	Local cDec		
 
-	Local cBigN1
-	Local cBigN2
-	Local cBigNT
+	Local cN1
+	Local cN2
+	Local cNT
 
 	Local lNeg	 	
 	Local lInv
@@ -764,8 +764,8 @@ Method Add( uBigN ) CLASS tBigNumber
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __adoN2:nDec <= 4
-				cBigNT	:= LTrim(Str(n1+n2))
-				__adoNR:SetValue( cBigNT )
+				cNT	:= LTrim(Str(n1+n2))
+				__adoNR:SetValue( cNT )
 				BREAK
 			EndIF
 		EndIF	
@@ -773,23 +773,23 @@ Method Add( uBigN ) CLASS tBigNumber
 	    nDec	:= __adoN1:nDec
 	    nSize	:= __adoN1:nSize
 	
-	    cBigN1	:= __adoN1:cInt
-	    cBigN1	+= __adoN1:cDec
+	    cN1	:= __adoN1:cInt
+	    cN1	+= __adoN1:cDec
 	
-	    cBigN2	:= __adoN2:cInt
-	    cBigN2	+= __adoN2:cDec
+	    cN2	:= __adoN2:cInt
+	    cN2	+= __adoN2:cDec
 	
 	    lNeg	:= ( __adoN1:lNeg .and. .NOT.( __adoN2:lNeg ) ) .or. ( .NOT.( __adoN1:lNeg ) .and. __adoN2:lNeg )
 	
 		IF lNeg
 			lAdd	:= .F.
-			lInv	:=  cBigN1 < cBigN2
+			lInv	:=  cN1 < cN2
 			lNeg	:= ( __adoN1:lNeg .and. .NOT.( lInv ) ) .or. ( __adoN2:lNeg .and. lInv )
 			IF lInv
-				cBigNT	:= cBigN1
-				cBigN1	:= cBigN2
-				cBigN2	:= cBigNT
-				cBigNT	:= NIL
+				cNT	:= cN1
+				cN1	:= cN2
+				cN2	:= cNT
+				cNT	:= NIL
 			EndIF
 	    Else
 	    	lNeg	:= __adoN1:lNeg
@@ -797,32 +797,32 @@ Method Add( uBigN ) CLASS tBigNumber
 	
 		IF lAdd
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD
-			        __adoNR:SetValue( AddThread( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int( nSize / MAX_LENGHT_ADD_THREAD ) >= 2
+			        __adoNR:SetValue( AddThread( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 		        Else
-		        	__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        	__adoNR:SetValue( Add( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 		        EndIF
 			#ELSE
-				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+				__adoNR:SetValue( Add( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 			#ENDIF
 		Else
 			#IFDEF __SUBMT__
-				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+				__adoNR:SetValue( Sub( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 			#ELSE
-				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+				__adoNR:SetValue( Sub( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 			#ENDIF
 		EndIF
 	
-	    cBigNT	:= __adoNR:cInt
+	    cNT	:= __adoNR:cInt
 	    
-	    cDec	:= SubStr( cBigNT , -nDec  )
-	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	    cDec	:= SubStr( cNT , -nDec  )
+	    cInt	:= SubStr( cNT ,  1 , Len( cNT ) - nDec )
 	
-	    cBigNT	:= cInt
-	    cBigNT	+= "."
-	    cBigNT	+= cDec
+	    cNT	:= cInt
+	    cNT	+= "."
+	    cNT	+= cDec
 	
-		__adoNR:SetValue( cBigNT )
+		__adoNR:SetValue( cNT )
 	
 		IF lNeg
 			IF  __adoNR:gt( "0" )
@@ -1039,9 +1039,9 @@ Return( __adoNR )
 
 	#IFDEF __PROTHEUS__
 		User Function ThAdd( cN1 , cN2 , nSize , nBase , cID )
-			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][CALC][" + cN1 + " ^ " + cN2 + "]" )
+			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][CALC][" + cN1 + " + " + cN2 + "]" )
 				PutGlbValue( cID , Add( @cN1 , @cN2 , @nSize , @nBase ) )
-			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][END][" + cN1 + " ^ " + cN2 + "]" )
+			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][END][" + cN1 + " + " + cN2 + "]" )
 		Return( .T. )
 	#ELSE
 		Function ThAdd( cN1 , cN2 , nSize , nBase )
@@ -1062,9 +1062,9 @@ Method Sub( uBigN ) CLASS tBigNumber
 	Local cInt		
 	Local cDec		
 
-	Local cBigN1 	
-	Local cBigN2 	
-	Local cBigNT 		
+	Local cN1 	
+	Local cN2 	
+	Local cNT 		
 
 	Local lNeg		
 	Local lInv		
@@ -1093,8 +1093,8 @@ Method Sub( uBigN ) CLASS tBigNumber
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __sboN2:nDec <= 4
-				cBigNT	:= LTrim(Str(n1-n2))
-				__sboNR:SetValue( cBigNT )
+				cNT	:= LTrim(Str(n1-n2))
+				__sboNR:SetValue( cNT )
 				BREAK
 			EndIF
 		EndIF	
@@ -1102,11 +1102,11 @@ Method Sub( uBigN ) CLASS tBigNumber
 	    nDec	:= __sboN1:nDec
 	    nSize	:= __sboN1:nSize
 	
-	    cBigN1	:= __sboN1:cInt
-	    cBigN1	+= __sboN1:cDec
+	    cN1	:= __sboN1:cInt
+	    cN1	+= __sboN1:cDec
 	
-	    cBigN2	:= __sboN2:cInt
-	    cBigN2	+= __sboN2:cDec
+	    cN2	:= __sboN2:cInt
+	    cN2	+= __sboN2:cDec
 	
 	    lNeg	:= ( __sboN1:lNeg .and. .NOT.( __sboN2:lNeg ) ) .or. ( .NOT.( __sboN1:lNeg ) .and. __sboN2:lNeg )
 	
@@ -1114,44 +1114,44 @@ Method Sub( uBigN ) CLASS tBigNumber
 			lSub	:= .F.
 			lNeg	:= __sboN1:lNeg
 		Else
-			lInv	:= cBigN1 < cBigN2
+			lInv	:= cN1 < cN2
 			lNeg	:= __sboN1:lNeg .or. lInv
 			IF lInv
-				cBigNT	:= cBigN1
-				cBigN1	:= cBigN2
-				cBigN2	:= cBigNT
-				cBigNT	:= NIL
+				cNT	:= cN1
+				cN1	:= cN2
+				cN2	:= cNT
+				cNT	:= NIL
 			EndIF
 		EndIF
 	
 	    IF lSub
 			#IFDEF __SUBMT__
-				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+				__sboNR:SetValue( Sub( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 	    	#ELSE
-				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+				__sboNR:SetValue( Sub( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 	    	#ENDIF
 	    Else
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD
-			        __sboNR:SetValue( AddThread( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int( nSize / MAX_LENGHT_ADD_THREAD ) >= 2
+			        __sboNR:SetValue( AddThread( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 		        Else
-		        	__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        	__sboNR:SetValue( Add( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 		        EndIF
 	    	#ELSE
-				__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )    		
+				__sboNR:SetValue( Add( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )    		
 	    	#ENDIF
 	    EndIF
 	
-	    cBigNT	:= __sboNR:cInt
+	    cNT	:= __sboNR:cInt
 	    
-	    cDec	:= SubStr( cBigNT , -nDec  )
-	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	    cDec	:= SubStr( cNT , -nDec  )
+	    cInt	:= SubStr( cNT ,  1 , Len( cNT ) - nDec )
 	    
-	    cBigNT	:= cInt
-	    cBigNT	+= "."
-	    cBigNT	+= cDec
+	    cNT	:= cInt
+	    cNT	+= "."
+	    cNT	+= cDec
 		
-		__sboNR:SetValue( cBigNT )
+		__sboNR:SetValue( cNT )
 	
 		IF lNeg
 			IF __sboNR:gt( "0" )
@@ -1176,9 +1176,9 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	Local cInt
 	Local cDec
 
-	Local cBigN1
-	Local cBigN2
-	Local cBigNT
+	Local cN1
+	Local cN2
+	Local cNT
 
 	Local lNeg	
 	Local lNeg1 
@@ -1207,8 +1207,8 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 			n1	:= Val(__mtoN1:ExactValue())
 			n2	:= Val(__mtoN2:ExactValue())
 			IF n1 <= 2999999.90 .and. __mtoN1:nDec <= 2 .and. n2 <= 2999999.90 .and. __mtoN2:nDec <= 2
-				cBigNT	:= LTrim(Str(n1*n2))
-				__mtoNR:SetValue( cBigNT )
+				cNT	:= LTrim(Str(n1*n2))
+				__mtoNR:SetValue( cNT )
 				BREAK
 			EndIF
 		EndIF	
@@ -1220,34 +1220,34 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	    lNeg2	:= __mtoN2:lNeg	
 	    lNeg	:= ( lNeg1 .and. .NOT.( lNeg2 ) ) .or. ( .NOT.( lNeg1 ) .and. lNeg2 )
 	
-	    cBigN1	:= __mtoN1:cInt
-	    cBigN1	+= __mtoN1:cDec
+	    cN1	:= __mtoN1:cInt
+	    cN1	+= __mtoN1:cDec
 	
-	    cBigN2	:= __mtoN2:cInt
-	    cBigN2	+= __mtoN2:cDec
+	    cN2	:= __mtoN2:cInt
+	    cN2	+= __mtoN2:cDec
 	
 	    DEFAULT __lMult := .F.
 	
 	    IF __lMult
-			__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 ) , NIL , NIL , .F. )    		
+			__mtoNR:SetValue( __Mult( @cN1 , @cN2 ) , NIL , NIL , .F. )    		
 	    Else
-			__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+			__mtoNR:SetValue( Mult( @cN1 , @cN2 , @nSize ) , NIL , NIL , .F. )
 	    EndIF	
 	
-	    cBigNT	:= __mtoNR:cInt
+	    cNT	:= __mtoNR:cInt
 	    
-	    cDec	:= SubStr( cBigNT , -nDec  )
-	    cInt	:= SubStr( cBigNT ,  1 , Len( cBigNT ) - nDec )
+	    cDec	:= SubStr( cNT , -nDec  )
+	    cInt	:= SubStr( cNT ,  1 , Len( cNT ) - nDec )
 	    
-	    cBigNT	:= cInt
-	    cBigNT	+= "."
-	    cBigNT	+= cDec
+	    cNT	:= cInt
+	    cNT	+= "."
+	    cNT	+= cDec
 		
-		__mtoNR:SetValue( cBigNT )
+		__mtoNR:SetValue( cNT )
 	    
-	    cBigNT	:= __mtoNR:ExactValue()
+	    cNT	:= __mtoNR:ExactValue()
 		
-		__mtoNR:SetValue( cBigNT )
+		__mtoNR:SetValue( cNT )
 	
 		IF lNeg
 			IF __mtoNR:gt( "0" )
@@ -1271,9 +1271,9 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 
 	Local cDec
 	
-	Local cBigN1
-	Local cBigN2
-	Local cBigNR
+	Local cN1
+	Local cN2
+	Local cNR
 
 	Local lNeg	
 	Local lNeg1 
@@ -1310,15 +1310,15 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	    lNeg2	:= __dvoN2:lNeg	
 	    lNeg	:= ( lNeg1 .and. .NOT.( lNeg2 ) ) .or. ( .NOT.( lNeg1 ) .and. lNeg2 )
 	
-	    cBigN1	:= __dvoN1:cInt
-	    cBigN1	+= __dvoN1:cDec
+	    cN1	:= __dvoN1:cInt
+	    cN1	+= __dvoN1:cDec
 	
-	    cBigN2	:= __dvoN2:cInt
-	    cBigN2	+= __dvoN2:cDec
+	    cN2	:= __dvoN2:cInt
+	    cN2	+= __dvoN2:cDec
 
 		DEFAULT lFloat := .T.
 
-		__dvoNR:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
+		__dvoNR:SetValue( Div( @cN1 , @cN2 , @nAcc , @lFloat ) )
 	
 		__dvoRDiv:SetValue( __dvoNR:cRDiv , NIL , NIL , .F. )
 	
@@ -1328,7 +1328,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	
 				cDec	:= ""
 		
-				__dvoN2:SetValue( cBigN2 )
+				__dvoN2:SetValue( cN2 )
 		
 				While __dvoRDiv:lt( __dvoN2 )
 					__dvoRDiv:cInt	+= "0"
@@ -1344,13 +1344,13 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 					__dvoRDiv:SetValue( __dvoRDiv:Normalize( @__dvoRDiv  , @__dvoRDiv  , @__dvoN2 ) , NIL , NIL , .F. )
 					__dvoN2:SetValue( __dvoN2:Normalize( @__dvoN2 , @__dvoN2 , @__dvoRDiv  ) , NIL , NIL , .F. )
 		
-		    		cBigN1	:= __dvoRDiv:cInt
-		    		cBigN1	+= __dvoRDiv:cDec
+		    		cN1	:= __dvoRDiv:cInt
+		    		cN1	+= __dvoRDiv:cDec
 		
-		    		cBigN2	:= __dvoN2:cInt
-		    		cBigN2	+= __dvoN2:cDec
+		    		cN2	:= __dvoN2:cInt
+		    		cN2	+= __dvoN2:cDec
 
-					__dvoRDiv:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
+					__dvoRDiv:SetValue( Div( @cN1 , @cN2 , @nAcc , @lFloat ) )
 
 					cDec	+= __dvoRDiv:ExactValue( .T. )
 					nDec	:= Len( cDec )
@@ -1362,7 +1362,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 						Exit
 					EndIF
 		
-					__dvoN2:SetValue( cBigN2 )
+					__dvoN2:SetValue( cN2 )
 		
 					
 					While __dvoRDiv:lt( __dvoN2 )
@@ -1376,11 +1376,11 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 				
 				End While
 		
-				cBigNR	:= __dvoNR:ExactValue(.T.)
-				cBigNR	+= "."
-				cBigNR	+= SubStr( cDec , 1 , nAcc )
+				cNR	:= __dvoNR:ExactValue(.T.)
+				cNR	+= "."
+				cNR	+= SubStr( cDec , 1 , nAcc )
 		
-				__dvoNR:SetValue( cBigNR , NIL , __dvoRDiv:ExactValue(.T.) )
+				__dvoNR:SetValue( cNR , NIL , __dvoRDiv:ExactValue(.T.) )
 	
 			EndIF
 	
@@ -1402,7 +1402,7 @@ Return( __dvoNR )
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 05/03/2013
 	Descricao	: Resto da Divisao
-	Sintaxe		: tBigNumber():Mod( uBigN ) -> uBigNR
+	Sintaxe		: tBigNumber():Mod( uBigN ) -> uNR
 */
 Method Mod( uBigN ) CLASS tBigNumber
 
@@ -1410,19 +1410,19 @@ Method Mod( uBigN ) CLASS tBigNumber
 	
 	Local oBigNR := tBigNumber():New()
 	
-	Local uBigNR
+	Local uNR
 
 	oBigNR:SetValue( self:Div( @uBigN , .F. ) )
 
     lGetValue	:= ValType( uBigN ) == "C"
 	
 	IF lGetValue
-	    uBigNR	:= oBigNR:cRDiv
+	    uNR	:= oBigNR:cRDiv
 	Else
-	    uBigNR	:= oBigNR:SetValue( oBigNR:cRDiv , NIL , NIL , .F. )
+	    uNR	:= oBigNR:SetValue( oBigNR:cRDiv , NIL , NIL , .F. )
 	EndIF
 
-Return( uBigNR )
+Return( uNR )
 
 /*
 	Method		: Pow
@@ -2645,7 +2645,7 @@ Return( self:aLog( o1exp:Exp() ) )
 	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data:		05/03/2013
 	Descricao:	Operacoes Matematicas
-	Sintaxe:	tBigNumber():MathC( uBigN1 , cOperator , uBigN2 ) -> cBigNR
+	Sintaxe:	tBigNumber():MathC( uBigN1 , cOperator , uBigN2 ) -> cNR
 */
 Method MathC( uBigN1 , cOperator , uBigN2 ) CLASS tBigNumber
 Return( MathO( @uBigN1 , @cOperator , @uBigN2 , .F. ) )

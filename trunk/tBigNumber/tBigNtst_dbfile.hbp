@@ -8,6 +8,9 @@
 /DTBN_DBFILE
 /D__POWMT__
 /D__ROOTMT__
+/D__ADDMT__
+/D__SUBTMT__
+/D__MULTMT__
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3

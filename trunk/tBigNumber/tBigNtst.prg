@@ -107,7 +107,6 @@ User Function tBigNTst()
 		__ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))
 	#ENDIF
 
-
 	#IFDEF TBN_DBFILE
 		#IFNDEF TBN_MEMIO
 			__ConOut(fhLog,"USING       : " , "DBFILE")
@@ -118,10 +117,28 @@ User Function tBigNTst()
 		__ConOut(fhLog,"USING       : " , "ARRAY")
 	#ENDIF	
 
-	#ifdef __MT__
-		__ConOut(fhLog,"MULTITHREAD : " , "True")
+	#ifdef __POWMT__
+		__ConOut(fhLog,"POWTHREAD   : " , "True")
 	#else
-		__ConOut(fhLog,"MULTITHREAD : " , "False")
+		__ConOut(fhLog,"POWTHREAD   : " , "False")
+	#endif
+
+	#ifdef __ROOTMT__
+		__ConOut(fhLog,"ROOTTHREAD  : " , "True")
+	#else
+		__ConOut(fhLog,"ROOTTHREAD  : " , "False")
+	#endif
+
+	#ifdef __SUBTMT__
+		__ConOut(fhLog,"SUBTHREAD   : " , "True")
+	#else
+		__ConOut(fhLog,"SUBTHREAD   : " , "False")
+	#endif
+
+	#ifdef __MULTMT__
+		__ConOut(fhLog,"MULTTHREAD  : " , "True")
+	#else
+		__ConOut(fhLog,"MULTTHREAD  : " , "False")
 	#endif
 
 	__ConOut(fhLog,"---------------------------------------------------------")
@@ -135,9 +152,8 @@ User Function tBigNTst()
 	ASSIGN oPrime := tPrime():New() 
 
 	__ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
-
 	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
-	
+
 	__ConOut(fhLog,"")
 
 	For n := 1 To 1000

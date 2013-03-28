@@ -9,8 +9,13 @@ THREAD Static __aFiles
 THREAD Static __nthRootAcc
 THREAD Static __nSetDecimals
 
-#DEFINE RANDOM_MAX_EXIT		5
-#DEFINE EXIT_MAX_RANDOM		50
+#DEFINE RANDOM_MAX_EXIT			5
+#DEFINE EXIT_MAX_RANDOM			50
+#IFDEF __PROTHEUS__
+	#DEFINE MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
+#ELSE
+	#DEFINE MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
+#ENDIF	
 
 #DEFINE MAX_SYS_SQRT		"9999999999999999"
 
@@ -20,17 +25,21 @@ THREAD Static __nSetDecimals
 
 	#IFDEF __PROTHEUS__
 		/DTBN_DBFILE 
-		/D__MT__ 
 		/D__TBN_DYN_OBJ_SET__ 
 		/D__POWMT__
 		/D__ROOTMT__
+		/D__ADDMT__
+		/D__SUBTMT__
+		/D__MULTMT__
 	#ELSE //__HARBOUR__
 		/DTBN_DBFILE 
 		/DTBN_MEMIO 
-		/D__MT__ 
 		/D__TBN_DYN_OBJ_SET__ 
 		/D__POWMT__ 
 		/D__ROOTMT__
+		/D__ADDMT__
+		/D__SUBTMT__
+		/D__MULTMT__
 		/D__HB_Q_SQRT__
 	#ENDIF
 
@@ -737,13 +746,7 @@ Method Add( uBigN ) CLASS tBigNumber
 
 	Local nDec		
 	Local nSize 	
-	
-#IFDEF __MT__
-	Local xResult
-	#IFNDEF __PROTHEUS__
-	Local oThread
-	#ENDIF
-#ENDIF
+
 	THREAD Static __adoNR
 	THREAD Static __adoN1
 	THREAD Static __adoN2
@@ -793,28 +796,18 @@ Method Add( uBigN ) CLASS tBigNumber
 	    EndIF
 	
 		IF lAdd
-			#IFDEF __MT__
-				#IFNDEF __PROTHEUS__ //TODO: Implementar Adicao em MT quando nSize > 4
-					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-				#ELSE
-					xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
-				#ENDIF
-				__adoNR:SetValue( xResult , NIL , NIL , .F. )
+			#IFDEF __ADDMT__
+		        IF nSize > MAX_LENGHT_ADD_THREAD
+			        __adoNR:SetValue( AddThread( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        Else
+		        	__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        EndIF
 			#ELSE
-				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )			
+				__adoNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 			#ENDIF
 		Else
-			#IFDEF __MT__
-				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-				#ELSE
-					xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
-				#ENDIF
-				__adoNR:SetValue( xResult , NIL , NIL , .F. )
+			#IFDEF __SUBMT__
+				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 			#ELSE
 				__adoNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 			#ENDIF
@@ -842,6 +835,221 @@ Method Add( uBigN ) CLASS tBigNumber
 
 Return( __adoNR )
 
+#IFDEF __ADDMT__
+
+	/*/
+		Funcao:		AddThread
+		Autor:		Marinaldo de Jesus
+		Data:		25/02/2013
+		Descricao:	ADD via JOB
+		Sintaxe:	AddThread( oN1 , oN2 )
+	/*/
+	Static Function AddThread( cN1 , cN2 , nSize , nBase )
+	
+		Local aNR
+
+		Local cNR
+		Local cT1
+		Local cT2
+
+		Local aThreads
+
+	#IFDEF __PROTHEUS__
+		Local cGlbV
+		Local cThread	:= AllTrim( Str( ThreadID() ) )
+	#ENDIF	
+
+		Local lAdd1		:= .F.
+		Local lExit		:= .F.
+
+	#IFDEF __PROTHEUS__
+		Local nNR
+	#ENDIF
+		Local nID
+	#IFDEF __PROTHEUS__
+		Local nIDs
+		Local n
+		Local t
+	#ENDIF		
+		Local w
+		Local x
+		Local y			:= Mod(nSize,MAX_LENGHT_ADD_THREAD)
+		Local z
+	
+		BEGIN SEQUENCE
+
+			lAdd1	:= ( y > 0 )
+			
+			IF ( lAdd1 )
+				cT1 := SubStr(cN1,1,y)
+				cT2 := SubStr(cN2,1,y)
+				y   := 1
+			EndIF
+
+			aNR		:= Array(Int(nSize/MAX_LENGHT_ADD_THREAD)+y,5)
+			
+			IF ( lAdd1 )
+				aNR[1][2]	:= cT1
+				aNR[1][3]	:= cT2
+				x			:= 2
+				y			:= Len(cT1)+1
+				cT1			:= SubStr(cN1,y)
+				cT2			:= SubStr(cN2,y)
+			Else
+				x   		:= 1
+				cT1			:= cN1
+				cT2			:= cN2
+			EndIF
+
+			z := 1
+			y := Len(aNR)
+			
+			For x := x To y
+				aNR[x][2]	:= SubStr(cT1,z,MAX_LENGHT_ADD_THREAD)
+				aNR[x][3]	:= SubStr(cT2,z,MAX_LENGHT_ADD_THREAD)
+				z			+= MAX_LENGHT_ADD_THREAD
+			Next x
+            
+			x := 0
+			z := 0
+
+			aThreads	:= Array(0)
+
+			For x := 1 TO y
+
+				#IFDEF __PROTHEUS__
+					lExit	:= KillApp()
+					IF lExit
+						Exit
+					EndIF
+				#ENDIF	
+            
+				++z
+
+				nID	:= x
+	
+				aNR[nID][1]	:= .F.
+
+	        	#IFDEF __HARBOUR__
+		        	aNR[nID][4]	:= hb_threadStart( "ThAdd" , aNR[nID][2] , aNR[nID][3] , Len(aNR[nID][2]) , nBase )
+		        	aNR[nID][5]	:= Array(0)
+		        	hb_threadJoin( aNR[nID][4] , @aNR[nID][5] )
+		        	aAdd( aThreads , aNR[nID][4] )
+				#ELSE //__PROTHEUS__
+		        	aNR[nID][4]	:= ( "__ADD__" + "ThAdd__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+		        	PutGlbValue( aNR[nID][4] , "" )
+		        	StartJob( "U_ThAdd" , __cEnvSrv , .F. , aNR[nID][2] , aNR[nID][3] , Len(aNR[nID][2]) , nBase , aNR[nID][4] )
+		        	aAdd( aThreads , nID )
+		        #ENDIF //__HARBOUR__
+
+				IF z == y .or. Mod(z,5) == 0
+					
+					#IFDEF __HARBOUR__
+					
+						hb_threadWaitForAll( aThreads )
+
+					#ELSE //__PROTHEUS__
+
+						t 		:= Len( aThreads )
+						nIDs	:= t
+	
+						While .NOT.( lExit )
+						
+							lExit	:= lExit .or. KillApp()
+							IF lExit
+								Exit
+							EndIF
+	
+							nNR		:= 0
+
+							For n := 1 To t
+								
+								nID := aThreads[n]
+			
+								IF .NOT.( aNR[nID][1] )
+				
+									cGlbV	:= GetGlbValue( aNR[nID][4] )
+									
+									IF .NOT.( cGlbV == "" )
+					
+										aNR[nID][1] := .T.
+										aNR[nID][5] := cGlbV
+						
+										cGlbV	:= NIL
+				
+										ClearGlbValue( aNR[nID][4] )
+				
+										lExit	:= ++nNR == nIDs
+				                                                                      	
+										IF lExit
+											Exit
+										EndIF
+				
+									EndIF
+				
+								Else
+				
+									lExit := ++nNR == nIDs
+				
+									IF lExit
+										Exit
+									EndIF
+							
+								EndIF
+				
+							Next i
+				
+							IF lExit
+								Exit
+							EndIF
+	
+						End While
+	
+					#ENDIF	//__HARBOUR__
+
+					aSize( aThreads , 0 )
+
+				EndIF
+
+			Next x
+
+			For x := y To 1 STEP -1
+				z 	:= ( x - 1 )
+				cT1	:= aNR[x][5]
+				IF z > 0 .and. Len( cT1 ) > MAX_LENGHT_ADD_THREAD
+					cT2 := SubStr(cT1,1,1)
+					cT1	:= SubStr(cT1,2)
+					IF cT2 <> "0"
+						w   		:= Len(aNR[z][5])
+						cT2			:= Add(aNR[z][5],PadL(cT2,w,"0"),w,nBase)
+						aNR[z][5]	:= IF(SubStr(cT2,1,1)=="0",SubStr(cT2,2),cT2)
+					EndIF
+					aNR[x][5] 		:= cT1
+				EndIF
+			Next x
+
+			cNR := ""
+			For x := 1 To y
+				cNR += aNR[x][5]
+			Next x
+
+		END SEQUENCE
+	
+	Return( cNR )
+
+	#IFDEF __PROTHEUS__
+		User Function ThAdd( cN1 , cN2 , nSize , nBase , cID )
+			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][CALC][" + cN1 + " ^ " + cN2 + "]" )
+				PutGlbValue( cID , Add( @cN1 , @cN2 , @nSize , @nBase ) )
+			PTInternal( 1 , "[tBigNumber][ADD][U_THADD]["+cID+"][END][" + cN1 + " ^ " + cN2 + "]" )
+		Return( .T. )
+	#ELSE
+		Function ThAdd( cN1 , cN2 , nSize , nBase )
+		Return( Add( @cN1 , @cN2 , @nSize , @nBase ) )
+	#ENDIF
+
+#ENDIF
+
 /*
 	Method		: Sub
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
@@ -867,13 +1075,6 @@ Method Sub( uBigN ) CLASS tBigNumber
 
 	Local nDec		
 	Local nSize 	
-
-#IFDEF __MT__
-	Local xResult
-	#IFNDEF __PROTHEUS__
-	Local oThread
-	#ENDIF
-#ENDIF
 
 	THREAD Static __sboNR
 	THREAD Static __sboN1
@@ -924,28 +1125,18 @@ Method Sub( uBigN ) CLASS tBigNumber
 		EndIF
 	
 	    IF lSub
-			#IFDEF __MT__ //TODO: Implementar Adicao em MT quando nSize > 4
-				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "SubThread" , @cBigN1 , @cBigN2 , @nSize )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-			    #ELSE
-			    	xResult := StartJob( "U_SubThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
-			    #ENDIF
-			    __sboNR:SetValue( xResult , NIL , NIL , .F. )
+			#IFDEF __SUBMT__
+				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 	    	#ELSE
-				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )    		
+				__sboNR:SetValue( Sub( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 	    	#ENDIF
 	    Else
-			#IFDEF __MT__
-				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "AddThread" , @cBigN1 , @cBigN2 , @nSize )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-			    #ELSE
-			    	xResult := StartJob( "U_AddThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
-			    #ENDIF
-			    __sboNR:SetValue( xResult , NIL , NIL , .F. )
+			#IFDEF __ADDMT__
+		        IF nSize > MAX_LENGHT_ADD_THREAD
+			        __sboNR:SetValue( AddThread( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        Else
+		        	__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
+		        EndIF
 	    	#ELSE
 				__sboNR:SetValue( Add( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )    		
 	    	#ENDIF
@@ -999,14 +1190,6 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	Local nDec	
 	Local nSize 
 
-#IFDEF __MT__
-	Local nAcc		:= __nSetDecimals
-	Local xResult
-	#IFNDEF __PROTHEUS__
-	Local oThread
-	#ENDIF
-#ENDIF
-
 	THREAD Static __mtoNR
 	THREAD Static __mtoN1
 	THREAD Static __mtoN2
@@ -1046,31 +1229,9 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 	    DEFAULT __lMult := .F.
 	
 	    IF __lMult
-			#IFDEF __MT__  //TODO: 	Implementar a Multiplicação em MT
-				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "__MultThread" , @cBigN1 , @cBigN2 , @nAcc )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-				#ELSE
-					xResult := StartJob( "U___MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nAcc )
-				#ENDIF
-				__mtoNR:SetValue( xResult , NIL , NIL , .F. )
-	    	#ELSE
-				__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 ) , NIL , NIL , .F. )    		
-	    	#ENDIF
+			__mtoNR:SetValue( __Mult( @cBigN1 , @cBigN2 ) , NIL , NIL , .F. )    		
 	    Else
-			#IFDEF __MT__ //TODO: 	Implementar a Multiplicação em MT
-				#IFNDEF __PROTHEUS__
-					oThread := hb_threadStart( "MultThread" , @cBigN1 , @cBigN2 , @nSize )
-					hb_threadJoin( oThread , @xResult )
-					hb_threadWaitForAll( { oThread } )
-		    	#ELSE
-			    	xResult := StartJob( "U_MultThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nSize )
-		    	#ENDIF
-		    	__mtoNR:SetValue( xResult , NIL , NIL , .F. )
-	    	#ELSE
-				__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
-	    	#ENDIF
+			__mtoNR:SetValue( Mult( @cBigN1 , @cBigN2 , @nSize ) , NIL , NIL , .F. )
 	    EndIF	
 	
 	    cBigNT	:= __mtoNR:cInt
@@ -1121,13 +1282,6 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	Local nAcc	:= __nSetDecimals
 	Local nDec 
 
-#IFDEF __MT__
-	Local xResult
-	#IFNDEF __PROTHEUS__
-	Local oThread
-	#ENDIF
-#ENDIF
-
 	THREAD Static __dvoNR
 	THREAD Static __dvoN1
 	THREAD Static __dvoN2
@@ -1164,18 +1318,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		#IFDEF __MT__ //TODO : Implementar a Divisao em MT
-			#IFNDEF __PROTHEUS__
-				oThread := hb_threadStart( "DivThread" , @cBigN1 , @cBigN2 , @nAcc , @lFloat )
-				hb_threadJoin( oThread , @xResult )
-				hb_threadWaitForAll( { oThread } )
-		   	#ELSE
-			   	xResult := StartJob( "U_DivThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nAcc , @lFloat )
-		   	#ENDIF
-		   	__dvoNR:SetValue( xResult )
-		#ELSE
-			__dvoNR:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
-		#ENDIF   	
+		__dvoNR:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
 	
 		__dvoRDiv:SetValue( __dvoNR:cRDiv , NIL , NIL , .F. )
 	
@@ -1207,18 +1350,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 		    		cBigN2	:= __dvoN2:cInt
 		    		cBigN2	+= __dvoN2:cDec
 
-					#IFDEF __MT__
-						#IFNDEF __PROTHEUS__
-							oThread := hb_threadStart( "DivThread" , @cBigN1 , @cBigN2 , @nAcc , @lFloat )
-							hb_threadJoin( oThread , @xResult )
-							hb_threadWaitForAll( { oThread } )
-						#ELSE
-							xResult := StartJob( "U_DivThread" , __cEnvSrv , .T. , @cBigN1 , @cBigN2 , @nAcc , @lFloat )
-						#ENDIF
-						__dvoRDiv:SetValue( xResult )
-					#ELSE
-						__dvoRDiv:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
-					#ENDIF	
+					__dvoRDiv:SetValue( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
 
 					cDec	+= __dvoRDiv:ExactValue( .T. )
 					nDec	:= Len( cDec )
@@ -3695,7 +3827,7 @@ return(x)
 			--n
 		End While
 
-		#IFDEF __MT__
+		#IFDEF __ADDMT__
 		
 			IF Select(a) > 0
 				(a)->( dbCloseArea() )
@@ -3766,7 +3898,7 @@ return(x)
 			--n
 		End While
 
-		#IFDEF __MT__
+		#IFDEF __SUBMT__
 		
 			IF Select(a) > 0
 				(a)->( dbCloseArea() )
@@ -3885,7 +4017,7 @@ return(x)
 			l++
 		End While
 		
-		#IFDEF __MT__
+		#IFDEF __MULTMT__
 		
 			IF Select(a) > 0
 				(a)->( dbCloseArea() )
@@ -4572,83 +4704,6 @@ Static Function __eTthD()
 						"905198704230017946553679"
 		
 Return( __eTthD )
-
-#IFDEF __MT__
-
-	#IFDEF __PROTHEUS__
-		User Function AddThread( cBigN1 , cBigN2 , nSize )
-		Return( Add( @cBigN1 , @cBigN2 , @nSize ) )
-	#ELSE
-		Function AddThread( cBigN1 , cBigN2 , nSize )
-		Return( Add( @cBigN1 , @cBigN2 , @nSize ) )
-	#ENDIF
-	
-	#IFDEF __PROTHEUS__
-		User Function SubThread( cBigN1 , cBigN2 , nSize )
-		Return( Sub( @cBigN1 , @cBigN2 , @nSize ) )
-	#ELSE
-		Function SubThread( cBigN1 , cBigN2 , nSize )
-		Return( Sub( @cBigN1 , @cBigN2 , @nSize ) )
-	#ENDIF
-	
-	#IFDEF __PROTHEUS__
-		User Function DivThread( cBigN1 , cBigN2 , nAcc , lFloat )
-			Local oRet := Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat )
-			Static _DivThread
-			#IFNDEF __TBN_DYN_OBJ_SET__
-				DEFAULT _DivThread  := Array(9,2)
-				_DivThread[1][2] := oRet:cDec
-				_DivThread[2][2] := oRet:cInt
-				_DivThread[3][2] := oRet:cRDiv
-				_DivThread[4][2] := oRet:cSig
-				_DivThread[5][2] := oRet:lNeg
-				_DivThread[6][2] := oRet:nBase
-				_DivThread[7][2] := oRet:nDec
-				_DivThread[8][2] := oRet:nInt
-				_DivThread[9][2] := oRet:nSize
-			#ELSE
-				_DivThread := ClassDataArr( oRet )
-			#ENDIF	
-		Return( _DivThread )
-	#ELSE
-		Function DivThread( cBigN1 , cBigN2 , nAcc , lFloat )
-		Return( Div( @cBigN1 , @cBigN2 , @nAcc , @lFloat ) )
-	#ENDIF
-
-	#IFDEF __PROTHEUS__
-		User Function MultThread( cBigN1 , cBigN2 , nSize ) 	
-		Return( Mult( @cBigN1 , @cBigN2 , @nSize ) )
-	#ELSE
-		Function MultThread( cBigN1 , cBigN2 , nSize )
-		Return( Mult( @cBigN1 , @cBigN2 , @nSize ) )
-	#ENDIF
-	
-	#IFDEF __PROTHEUS__
-		User Function __MultThread( cBigN1 , cBigN2 , nAcc )	
-			Local oRet := __Mult( @cBigN1 , @cBigN2 , @nAcc )
-			Static ___MultThread
-			#IFNDEF __TBN_DYN_OBJ_SET__
-				DEFAULT ___MultThread  := Array(9,2)
-				___MultThread[1][2] := oRet:cDec
-				___MultThread[2][2] := oRet:cInt
-				___MultThread[3][2] := oRet:cRDiv
-				___MultThread[4][2] := oRet:cSig
-				___MultThread[5][2] := oRet:lNeg
-				___MultThread[6][2] := oRet:nBase
-				___MultThread[7][2] := oRet:nDec
-				___MultThread[8][2] := oRet:nInt
-				___MultThread[9][2] := oRet:nSize
-			#ELSE
-				___MultThread := ClassDataArr( oRet )
-			#ENDIF	
-		Return( ___MultThread )
-		
-	#ELSE
-		Function __MultThread( cBigN1 , cBigN2 , nAcc )
-		Return( __Mult( @cBigN1 , @cBigN2 , @nAcc ) )
-	#ENDIF
-
-#ENDIF
 
 #IFDEF __HARBOUR__
 	#IFDEF __HB_Q_SQRT__

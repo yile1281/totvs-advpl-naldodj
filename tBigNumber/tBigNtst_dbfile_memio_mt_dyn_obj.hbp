@@ -7,10 +7,11 @@
 
 /DTBN_DBFILE
 /DTBN_MEMIO
-/D__MT__
-/D__TBN_DYN_OBJ_SET__
 /D__POWMT__
 /D__ROOTMT__
+/D__ADDMT__
+/D__SUBTMT__
+/D__MULTMT__
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3

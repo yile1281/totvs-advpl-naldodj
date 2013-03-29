@@ -1,6 +1,7 @@
 #IFDEF PROTHEUS
 	#DEFINE __PROTHEUS__
 	#include "protheus.ch"
+	#xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
 #ELSE
 	#IFDEF __HARBOUR__
 		#include "hbclass.ch"
@@ -297,7 +298,7 @@ METHOD ErrorMsg( cText ) CLASS tfRead
       ELSE
          nTemp := self:nLastOp + 1
       ENDIF
-      cMessage := IF( EMPTY( cText ), "", cText ) + "Error " + ALLTRIM( STR( self:nError ) ) + " " + s_cAction[ nTemp ] + " " + self:cFile
+      cMessage := IF( EMPTY( cText ), "", cText ) + "Error " + hb_ntos( self:nError ) + " " + s_cAction[ nTemp ] + " " + self:cFile
    ENDIF
 
 RETURN cMessage

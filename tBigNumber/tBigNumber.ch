@@ -28,6 +28,7 @@
 		#DEFINE __PROTHEUS__
 		#include "protheus.ch"
 		#xtranslate THREAD Static => Static
+		#xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
 	#ELSE
 		#IFDEF __HARBOUR__
 			#include "common.ch"

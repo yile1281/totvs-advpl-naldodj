@@ -366,10 +366,10 @@ Method SetValue( uBigN , nBase , cRDiv , lLRmvZ , nAcc ) CLASS tBigNumber
 			EndIF	
 		CASE ( nFP == 1 )
 		    self:cInt	:= "0"
-		    self:cDec	:= SubStr( uBigN , ( nFP + 1 ) )
+		    self:cDec	:= SubStr( uBigN , nFP + 1 )
 		OTHERWISE
-		    self:cInt	:= SubStr( uBigN , 1 , ( nFP - 1 ) )
-		    self:cDec	:= SubStr( uBigN , ( nFP + 1 ) )
+		    self:cInt	:= SubStr( uBigN , 1 , nFP - 1 )
+		    self:cDec	:= SubStr( uBigN , nFP + 1 )
 		ENDCASE
 		
 		IF self:nBase <> 10
@@ -764,7 +764,7 @@ Method Add( uBigN ) CLASS tBigNumber
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __adoN2:nDec <= 4
-				cNT	:= LTrim(Str(n1+n2))
+				cNT	:= hb_ntos(n1+n2)
 				__adoNR:SetValue( cNT )
 				BREAK
 			EndIF
@@ -856,7 +856,7 @@ Return( __adoNR )
 
 	#IFDEF __PROTHEUS__
 		Local cGlbV
-		Local cThread	:= AllTrim( Str( ThreadID() ) )
+		Local cThread	:= hb_ntos( ThreadID() )
 	#ENDIF	
 
 		Local lAdd1		:= .F.
@@ -936,7 +936,7 @@ Return( __adoNR )
 		        	hb_threadJoin( aNR[nID][4] , @aNR[nID][5] )
 		        	aAdd( aThreads , aNR[nID][4] )
 				#ELSE //__PROTHEUS__
-		        	aNR[nID][4]	:= ( "__ADD__" + "ThAdd__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+		        	aNR[nID][4]	:= ( "__ADD__" + "ThAdd__" + cThread + "__ID__" + hb_ntos( nID ) )
 		        	PutGlbValue( aNR[nID][4] , "" )
 		        	StartJob( "U_ThAdd" , __cEnvSrv , .F. , aNR[nID][2] , aNR[nID][3] , Len(aNR[nID][2]) , nBase , aNR[nID][4] )
 		        	aAdd( aThreads , nID )
@@ -1093,7 +1093,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
 			IF n1 <= 999999999.99999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __sboN2:nDec <= 4
-				cNT	:= LTrim(Str(n1-n2))
+				cNT	:= hb_ntos(n1-n2)
 				__sboNR:SetValue( cNT )
 				BREAK
 			EndIF
@@ -1207,7 +1207,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 			n1	:= Val(__mtoN1:ExactValue())
 			n2	:= Val(__mtoN2:ExactValue())
 			IF n1 <= 2999999.90 .and. __mtoN1:nDec <= 2 .and. n2 <= 2999999.90 .and. __mtoN2:nDec <= 2
-				cNT	:= LTrim(Str(n1*n2))
+				cNT	:= hb_ntos(n1*n2)
 				__mtoNR:SetValue( cNT )
 				BREAK
 			EndIF
@@ -1610,7 +1610,7 @@ Return( __pwoNR )
 		Local aResults
 	#ELSE //__PROTHEUS__
 		Local cGlbV
-		Local cThread	:= AllTrim( Str( ThreadID() ) )
+		Local cThread	:= hb_ntos( ThreadID() )
 	#ENDIF	
 	
 		Local lM10		:= .F.
@@ -1670,7 +1670,7 @@ Return( __pwoNR )
 					#ELSE //__PROTHEUS__
 			        	aNR[nID][1]	:= oCN1:GetValue()
 		        		aNR[nID][2]	:= oM10:GetValue()
-			        	aNR[nID][3]	:= ( "__POW__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+			        	aNR[nID][3]	:= ( "__POW__" + "ThreadID__" + cThread + "__ID__" + hb_ntos( nID ) )
 			        	PutGlbValue( aNR[nID][3] , "" )
 			        	StartJob( "U_POWJOB" , __cEnvSrv , .F. , aNR[nID][1] , aNR[nID][2] , aNR[nID][3] , __nSetDecimals , __nthRootAcc )
 			        #ENDIF //__HARBOUR__
@@ -2217,7 +2217,7 @@ Return( othRoot )
 		Local cGlbV
 		Local cFExit	:= oAccTo:GetValue()
 		Local cRootE	:= oRootE:GetValue()	
-		Local cThread	:= AllTrim( Str( ThreadID() ) )
+		Local cThread	:= hb_ntos( ThreadID() )
 		
 		Local nNR
 		Local lExit		:= .F.
@@ -2235,7 +2235,7 @@ Return( othRoot )
 	        #IFDEF __HARBOUR__
 				aNR[nID][3]	:= nID
 			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ( "__ROOT__I__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+		        aNR[nID][3]	:= ( "__ROOT__I__" + "ThreadID__" + cThread + "__ID__" + hb_ntos( nID ) )
 	        #ENDIF //__HARBOUR__
 			IF oRootE:eq( aIPF[nIPF][2] )
 				aNR[nID][4] := .T.
@@ -2254,7 +2254,7 @@ Return( othRoot )
 	        #IFDEF __HARBOUR__
 				aNR[nID][3]	:= nID
 			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ( "__ROOT__D__" + "ThreadID__" + cThread + "__ID__" + AllTrim( Str( nID ) ) )
+		        aNR[nID][3]	:= ( "__ROOT__D__" + "ThreadID__" + cThread + "__ID__" + hb_ntos( nID ) )
 	        #ENDIF //__HARBOUR__
 			IF oRootE:eq( aDPF[nDPF][2] )
 				aNR[nID][4] := .T.
@@ -2446,7 +2446,7 @@ Method SQRT() CLASS tBigNumber
 
 		IF oSQRT:lte( self:SysSQRT() )
 			nSetDec := Set( _SET_DECIMALS , __nSetDecimals )
-			oSQRT:SetValue( __sqrt( Str( Val( oSQRT:GetValue() ) ) ) )
+			oSQRT:SetValue( __sqrt( hb_ntos( Val( oSQRT:GetValue() ) ) ) )
 			Set( _SET_DECIMALS, nSetDec )
 			BREAK
 		EndIF
@@ -2482,7 +2482,7 @@ Method SysSQRT( uSet ) CLASS tBigNumber
 	__uSysSQRT			:= uSet
 	cType				:= ValType( __uSysSQRT )
 
-	oSysSQRT:SetValue( IF( cType $ "C|O" , __uSysSQRT , IF( cType == "N" , Str( __uSysSQRT ) , "0" ) ) )
+	oSysSQRT:SetValue( IF( cType $ "C|O" , __uSysSQRT , IF( cType == "N" , hb_ntos( __uSysSQRT ) , "0" ) ) )
 
 	IF oSysSQRT:gt(MAX_SYS_SQRT)
 		oSysSQRT:SetValue(MAX_SYS_SQRT)
@@ -2677,14 +2677,14 @@ Method Rnd( nAcc ) CLASS tBigNumber
 	DEFAULT nAcc := Min( self:nDec , __nSetDecimals )
 
 	IF .NOT.( oDec:eq( "0" ) )
-		oAcc := tBigNumber():New( SubStr( oDec:ExactValue() , ( nAcc + 1 ) , 1 ) )
+		oAcc := tBigNumber():New( SubStr( oDec:ExactValue() , nAcc + 1 , 1 ) )
 		IF oAcc:gte( "5" )
 			oDec:SetValue("10")
 			cAdd := "0."
 			cAdd += Replicate("0",@nAcc)
 			cAdd += oDec:Sub(oAcc):cInt
 		Else
-			oAcc := tBigNumber():New( SubStr( oDec:ExactValue() , ( nAcc ) , 1 ) )
+			oAcc := tBigNumber():New( SubStr( oDec:ExactValue() , nAcc , 1 ) )
 			IF oAcc:gte( "5" )
 				oDec:SetValue("10")
 				cAdd := "0."
@@ -2849,7 +2849,7 @@ Method H2D() CLASS tBigNumber
 	Local otNI	:= tBigNumber():New()
 	Local otAT	:= tBigNumber():New()
 
-	Local cHexB	:= LTrim(Str(self:nBase))
+	Local cHexB	:= hb_ntos(self:nBase)
 	Local cHexC	:= "0123456789ABCDEFGHIJKLMNOPQRSTUV"
 	Local cHexN	:= self:cInt
 	
@@ -2861,11 +2861,11 @@ Method H2D() CLASS tBigNumber
 	Local nI	:= nLn
 
 	otH:SetValue( cHexB )
-	otLN:SetValue( LTrim( Str( nLn ) ) )
+	otLN:SetValue( hb_ntos( nLn ) )
 
 	While nI > 0
-		otNI:SetValue( LTrim( Str( --nI ) ) )
-	    otAT:SetValue( LTrim( Str( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) ) ) 
+		otNI:SetValue( hb_ntos( --nI ) )
+	    otAT:SetValue( hb_ntos( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) ) 
         otPw:SetValue( otLN:Sub( otNI ) )
         otPw:SetValue( otPw:Sub( otN1 ) )
 		otPw:SetValue( otH:Pow( otPw ) )
@@ -2879,11 +2879,11 @@ Method H2D() CLASS tBigNumber
 	nLn		:= Len( cHexN )
 	nI		:= nLn
 
-	otLN:SetValue( LTrim( Str( nLn ) ) )
+	otLN:SetValue( hb_ntos( nLn ) )
 
 	While nI > 0
-		otNI:SetValue( LTrim( Str( --nI ) ) )
-	    otAT:SetValue( LTrim( Str( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) ) ) 
+		otNI:SetValue( hb_ntos( --nI ) )
+	    otAT:SetValue( hb_ntos( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) )
         otPw:SetValue( otLN:Sub( otNI ) )
         otPw:SetValue( otPw:Sub( otN1 ) )
 		otPw:SetValue( otH:Pow( otPw ) )
@@ -2948,7 +2948,7 @@ Method H2B() CLASS tBigNumber
 	Local cDec
 
 	Local cSig	:= self:cSig
-	Local cHexB := LTrim(Str(self:nBase))
+	Local cHexB := hb_ntos(self:nBase)
 	Local cHexN	:= self:cInt
 
 	Local oBin	:= tBigNumber():New(NIL,2)
@@ -3184,7 +3184,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			nE	:= Val( oM:ExactValue() )
 			nB	:= Int( nE / 2 )
 			nR	:= __Random( nB , nE )
-			cR	:= LTrim( Str( nR ) )
+			cR	:= hb_ntos( nR )
 			
 			oR:SetValue( cR )
 			
@@ -3193,7 +3193,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			
 			While oR:lt( oM )
 				nR	:= __Random( nB , nE )
-				cR	+= LTrim( Str( nR ) )
+				cR	+= hb_ntos( nR )
 				nT	:= nS
 				IF lI
 					While nT > 0
@@ -3224,7 +3224,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			
 			While oR:lt( oE )
 				nR	:= __Random( nB , nE )
-				cR	+= LTrim( Str( nR ) )
+				cR	+= hb_ntos( nR )
 				nT	:= nS
 				IF lI
 					While  nT > 0
@@ -3263,7 +3263,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			nB	:= Val( oB:ExactValue() )
 			nE	:= Val( oE:ExactValue() )
 			nR	:= __Random( nB , nE )	
-			cR	+= LTrim( Str( nR ) )
+			cR	+= hb_ntos( nR )
 			oR:SetValue( cR )
 		    BREAK
 		EndIF
@@ -3278,7 +3278,7 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 			nB	:= Val( oB:ExactValue() )
 			nE	:= Val( oM:ExactValue() )
 			nR	:= __Random( nB , nE )
-			cR	+= LTrim( Str( nR ) )
+			cR	+= hb_ntos( nR )
 			nT	:= nS
 			IF lI
 				While nT > 0
@@ -3324,14 +3324,14 @@ Method Randomize( uB , uE , nExit ) CLASS tBigNumber
 		While oR:lt( oB )
 			oR:SetValue( oR:Add( oT ) )
 			nR	:= __Random( 1 , nT )
-			cR	:= LTrim( Str( nR ) )
+			cR	:= hb_ntos( nR )
 			oR:SetValue( oR:Sub( cR ) )
 		End	While 
 	
 		While oR:gt( oE )
 			oR:SetValue( oR:Sub( oT ) )
 			nR	:= __Random( 1 , nT )
-			cR	:= LTrim( Str( nR ) )
+			cR	:= hb_ntos( nR )
 			oR:SetValue( oR:Add( cR ) )
 		End While
 
@@ -3769,12 +3769,12 @@ Static Function __sqrt(p,n)
 	IF p:lte( MAX_SYS_SQRT )
 		#IFDEF __HARBOUR__
 			#IFDEF __HB_Q_SQRT__
-				x := tBigNumber():New(Str(HB_Q_SQRT(Val(p:GetValue()),n)))
+				x := tBigNumber():New(hb_ntos(HB_Q_SQRT(Val(p:GetValue()),n)))
 			#ELSE
-				x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
+				x := tBigNumber():New(hb_ntos(SQRT(Val(p:GetValue()))))
 			#ENDIF
 		#ELSE
-			x := tBigNumber():New(Str(SQRT(Val(p:GetValue()))))
+			x := tBigNumber():New(hb_ntos(SQRT(Val(p:GetValue()))))
 		#ENDIF	
 	Else
 		t := tBigNumber():New("2")
@@ -4107,7 +4107,7 @@ return(x)
 			End While
 			While y >= 1
 				(a)->(dbGoTo(y--))
-				s	+= Str( (a)->FN , 1 )
+				s	+= hb_ntos( (a)->FN )
 			End While
 		End While
 	
@@ -4357,7 +4357,7 @@ return(x)
 				y--
 			End While
 			While y >= 1
-				s	+= Str( a[y] , 1 )
+				s	+= hb_ntos( a[y] )
 				y--
 			End While
 		End While

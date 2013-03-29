@@ -157,7 +157,7 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For n := 1 To 1000
-		ASSIGN cN			:= LTrim(Str(n))
+		ASSIGN cN			:= hb_ntos(n)
 		ASSIGN aPFact	:= otBigN:SetValue(cN):PFactors()
 		For x := 1 To Len( aPFact )
 			ASSIGN cW	:= aPFact[x][2]
@@ -224,9 +224,9 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For x := 1 TO N_TEST
-		ASSIGN cX := LTrim(Str(x))
+		ASSIGN cX := hb_ntos(x)
 		For n := N_TEST To 1 Step -1
-			ASSIGN cN	:= LTrim(Str(n))
+			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cW	:= otBigN:SetValue(cX):GCD(cN):GetValue()
 			__ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
 			ASSIGN cW	:= otBigN:LCM(cN):GetValue()
@@ -251,12 +251,12 @@ User Function tBigNTst()
 
 	For x := 0 TO 99999 STEP 99
 		ASSIGN n	:= x
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("16"):Int()
 		__ConOut(fhLog,cN+':tBigNumber():D2H(16)',"RESULT: "+cHex)
 		ASSIGN cN	:= otBH16:SetValue(cHex):H2D():Int()
 		__ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))
+		__ConOut(fhLog,cN+"=="+hb_ntos(n),"RESULT: "+cValToChar(cN==hb_ntos(n)))
 		ASSIGN cN	:= otBH16:H2B():Int()
 		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
 		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('16'):Int()
@@ -280,12 +280,12 @@ User Function tBigNTst()
 
 	For x := 0 TO 99999 STEP 99
 		ASSIGN n	:= x
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN cHex	:= otBigN:SetValue(cN):D2H("32"):Int()
 		__ConOut(fhLog,cN+':tBigNumber():D2H(32)',"RESULT: "+cHex)
 		ASSIGN cN	:= otBH32:SetValue(cHex):H2D("32"):Int()
 		__ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-		__ConOut(fhLog,cN+"=="+LTrim(Str(n)),"RESULT: "+cValToChar(cN==LTrim(Str(n))))
+		__ConOut(fhLog,cN+"=="+hb_ntos(n),"RESULT: "+cValToChar(cN==hb_ntos(n)))
 		ASSIGN cN	:= otBH32:H2B('32'):Int()
 		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
 		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('32'):Int()
@@ -311,9 +311,9 @@ User Function tBigNTst()
 	otBigN:SetValue("1")
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= 9999.9999999999
-		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Add("9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -339,9 +339,9 @@ User Function tBigNTst()
 	otBigN:SetValue(cN)
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= 9999.9999999999
-		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Add("9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -363,9 +363,9 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= -9999.9999999999
-		__ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:add("-9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -387,9 +387,9 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	-=9999.9999999999
-		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -409,9 +409,9 @@ User Function tBigNTst()
 	__ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN := LTrim(Str(n))
+		ASSIGN cN := hb_ntos(n)
 		ASSIGN n  -= 9999.9999999999
-		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN := otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -431,9 +431,9 @@ User Function tBigNTst()
 	__ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
 
 	For x := 1 TO N_TEST
-		ASSIGN cN := LTrim(Str(n))
+		ASSIGN cN := hb_ntos(n)
 		ASSIGN n  -= -9999.9999999999
-		__ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: " + hb_ntos(n))
 		ASSIGN cN := otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
 		__ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
@@ -459,7 +459,7 @@ User Function tBigNTst()
 	otBigW:SetValue("1")
 	
 	For x := 1 TO N_TEST
-		ASSIGN cN	:= LTrim(Str(n))
+		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN z	:= Len(cN)
 		While ((SubStr(cN,-1) == "0") .and. (z > 1))
 			ASSIGN cN := SubStr(cN,1,--z)
@@ -469,7 +469,7 @@ User Function tBigNTst()
 			ASSIGN cN := SubStr(cN,1,--z)
 		End While
 		ASSIGN n	*= 1.5
-		__ConOut(fhLog,cN+'*=1.5',"RESULT: " + LTrim(Str(n)))
+		__ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Mult("1.5"))
 		__ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+otBigN:ExactValue())
@@ -497,7 +497,7 @@ User Function tBigNTst()
 	otBigW:SetValue("1")
 
 	For x := 1 TO 50
-		ASSIGN cN	:= LTrim(Str(w))
+		ASSIGN cN	:= hb_ntos(w)
 		ASSIGN w	*=3.555
 		ASSIGN z	:= Len(cN)
 		While ((SubStr(cN,-1) == "0") .and. (z > 1))
@@ -507,7 +507,7 @@ User Function tBigNTst()
 		While ((SubStr(cN,-1) == "*") .and. (z > 1))
 			ASSIGN cN := SubStr(cN,1,--z)
 		End While
-		__ConOut(fhLog,cN+'*=3.555',"RESULT: " + LTrim(Str(w)))
+		__ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
 		ASSIGN cN := otBigW:ExactValue()
 		otBigW:SetValue(otBigW:Mult("3.555",.T.))
 		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555,.T.)',"RESULT: "+otBigW:ExactValue())
@@ -529,12 +529,12 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For n := 0 TO N_TEST
-		ASSIGN cN := LTrim(Str(n))
+		ASSIGN cN := hb_ntos(n)
 		otBigN:SetValue(cN)
 		For x := 0 TO N_TEST
-			ASSIGN cX := LTrim(Str(x))
+			ASSIGN cX := hb_ntos(x)
 			otBigN:SetValue(cN)
-			__ConOut(fhLog,cN+'/'+cX,"RESULT: " + LTrim(Str(n/x)))
+			__ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigN:Div(cX):ExactValue())
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next x
@@ -557,13 +557,13 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	ASSIGN cN := LTrim(Str(n))
+	ASSIGN cN := hb_ntos(n)
 	otBigN:SetValue(cN)
 
 	For x := 1 TO N_TEST
-		ASSIGN cW	:= LTrim(Str(n))
+		ASSIGN cW	:= hb_ntos(n)
 		ASSIGN n	/= 1.5
-		__ConOut(fhLog,cW+'/=1.5',"RESULT: "+LTrim(Str(n)))
+		__ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
 		ASSIGN cN	:= otBigN:ExactValue()
 		otBigN:SetValue(otBigN:Div("1.5"))
 		__ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+otBigN:ExactValue())
@@ -586,9 +586,9 @@ User Function tBigNTst()
 
 	otBigN:SetValue("1")
 	For x := 1 TO N_TEST
-		ASSIGN cN := LTrim(Str(x))
+		ASSIGN cN := hb_ntos(x)
 		otBigN:SetValue(cN)
-		__ConOut(fhLog,cN+"/3","RESULT: "+LTrim(Str(x/3)))
+		__ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
 		otBigN:SetValue(otBigN:Div("3"))
 		__ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+otBigN:ExactValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
@@ -608,7 +608,7 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For n := 1 To N_TEST
-		ASSIGN cN := LTrim(Str(n))
+		ASSIGN cN := hb_ntos(n)
 		__ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
 	Next n
@@ -631,8 +631,8 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 	For x := 1 TO N_TEST
 		ASSIGN n  	:= x
-		ASSIGN cN 	:= LTrim(Str(n))
-		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + LTrim(Str(SQRT(n))))
+		ASSIGN cN 	:= hb_ntos(n)
+		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		otBigN:SetValue(otBigN:SQRT())
 		ASSIGN cW	:= otBigN:GetValue()
@@ -658,8 +658,8 @@ User Function tBigNTst()
 
 	For x := 999999999999999 - 999 TO 999999999999999 + 999 STEP 99
 		ASSIGN n  := x
-		ASSIGN cN := LTrim(Str(n))
-		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + LTrim(Str(SQRT(n))))
+		ASSIGN cN := hb_ntos(n)
+		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigN:SQRT():GetValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
@@ -681,8 +681,8 @@ User Function tBigNTst()
 
 	For x := 1 TO N_TEST
 		ASSIGN n  	:= x
-		ASSIGN cN 	:= LTrim(Str(n))
-		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + LTrim(Str(SQRT(n))))
+		ASSIGN cN 	:= hb_ntos(n)
+		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		otBigN:SetValue(otBigN:SQRT())
 		ASSIGN cW	:= otBigN:GetValue()
@@ -708,8 +708,8 @@ User Function tBigNTst()
 
 	For x := 999999999999999 - 100 TO 999999999999999 + 100 STEP 10
 		ASSIGN n  := x
-		ASSIGN cN := LTrim(Str(n))
-		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + LTrim(Str(SQRT(n))))
+		ASSIGN cN := hb_ntos(n)
+		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigN:SQRT():Rnd(ACC_SET):GetValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
@@ -734,8 +734,8 @@ User Function tBigNTst()
 	
 	For x := 0 TO (N_TEST / 2)
 		ASSIGN n  := x
-		ASSIGN cN := LTrim(Str(n))
-		__ConOut(fhLog,'Exp('+cN+')',"RESULT: " + LTrim(Str(Exp(n))))
+		ASSIGN cN := hb_ntos(n)
+		__ConOut(fhLog,'Exp('+cN+')',"RESULT: " + hb_ntos(Exp(n)))
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:Exp():ExactValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
@@ -756,12 +756,12 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For x := IF(.NOT.(IsHb()) , 1 , 0) TO N_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0 ^ -n) e Senta..........
-		ASSIGN cN := LTrim(Str(x))
+		ASSIGN cN := hb_ntos(x)
 		For w := -N_TEST To 0
-			ASSIGN cW	:= Ltrim(Str(w))
+			ASSIGN cW	:= hb_ntos(w)
 			ASSIGN n 	:= x
 			ASSIGN n	:= (n ^ w)
-			__ConOut(fhLog,cN+'^'+cW,"RESULT: " + LTrim(Str(n)))
+			__ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
 			otBigN:SetValue(cN)
 			ASSIGN cN	:= otBigN:ExactValue()
 			otBigN:SetValue(otBigN:Pow(cW))
@@ -786,12 +786,12 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	For x := 0 TO N_TEST STEP 10
-		ASSIGN cN := LTrim(Str(x))
+		ASSIGN cN := hb_ntos(x)
 		For w := 0 To N_TEST STEP 10
-			ASSIGN cW	:= LTrim(Str(w+.5))
+			ASSIGN cW	:= hb_ntos(w+.5)
 			ASSIGN n 	:= x
 			ASSIGN n	:= (n ^ (w+.5))
-			__ConOut(fhLog,cN+'^'+cW,"RESULT: " + LTrim(Str(n)))
+			__ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
 			otBigN:SetValue(cN)
 			ASSIGN cN	:= otBigN:ExactValue()
 			otBigN:SetValue(otBigN:Pow(cW))
@@ -898,10 +898,10 @@ User Function tBigNTst()
 	//Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
 	For w := 2 TO N_TEST
-		ASSIGN cW := LTrim(Str(w))
+		ASSIGN cW := hb_ntos(w)
 		otBigW:SetValue(cW)
 		For n := 0 TO INT( MAX( N_TEST , 5 ) / 5 )
-			ASSIGN cN	:= Ltrim(Str(n))
+			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cX	:= otBigW:SetValue(cW):Log(cN):GetValue()
 			__ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")'  ,"RESULT: "+cX)
 *			__ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):GetValue())
@@ -927,7 +927,7 @@ User Function tBigNTst()
 	//Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 	
 	For w := 0 TO N_TEST
-		ASSIGN cW	:= LTrim(Str(w))
+		ASSIGN cW	:= hb_ntos(w)
 		ASSIGN cX	:= otBigW:SetValue(cW):Ln():GetValue()
 		__ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
 *		__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
@@ -954,7 +954,7 @@ User Function tBigNTst()
 		Else
 			ASSIGN n += 2
 		EndIF
-		ASSIGN cN 	:= LTrim(Str(n))
+		ASSIGN cN 	:= hb_ntos(n)
 		ASSIGN lMR	:= otBigN:SetValue(cN):millerRabin("2")
 		ASSIGN lPn	:= oPrime:IsPrime(cN,.T.)
 		__ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))

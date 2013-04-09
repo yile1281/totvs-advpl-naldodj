@@ -5,7 +5,7 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			 25
+#DEFINE ACC_SET			 32
 #DEFINE ROOT_ACC_SET	 10
 
 #DEFINE __SLEEP 0
@@ -622,8 +622,6 @@ User Function tBigNTst()
 *	otBigN:SysSQRT(999999999999999)
 	otBigN:SysSQRT(0)
 
-	otBigN:SetValue("999999999999297"):SQRT()
-
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste SQRT 0 -------------- ")
@@ -955,8 +953,8 @@ User Function tBigNTst()
 			ASSIGN n += 2
 		EndIF
 		ASSIGN cN 	:= hb_ntos(n)
-		ASSIGN lMR	:= otBigN:SetValue(cN):millerRabin("2")
 		ASSIGN lPn	:= oPrime:IsPrime(cN,.T.)
+		ASSIGN lMR	:= IF( lPn , lPn , otBigN:SetValue(cN):millerRabin("2") )
 		__ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
 		__ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
 		__ConOut(fhLog,"---------------------------------------------------------")

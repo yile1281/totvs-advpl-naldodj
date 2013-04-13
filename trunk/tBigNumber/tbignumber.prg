@@ -763,7 +763,7 @@ Method Add( uBigN ) CLASS tBigNumber
 		IF __adoN1:nBase == 10 .and. __adoN1:nSize <= 14 .and. __adoN2:nSize <= 14
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
-			IF n1 <= 999999999.99999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __adoN2:nDec <= 4
+			IF n1 <= 999999999.9999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.9999 .and. __adoN2:nDec <= 4
 				cNT	:= hb_ntos(n1+n2)
 				__adoNR:SetValue( cNT )
 				BREAK
@@ -1092,7 +1092,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 		IF __sboN1:nBase == 10 .and. __sboN1:nSize <= 14 .and. __sboN2:nSize <= 14
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
-			IF n1 <= 999999999.99999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.99999 .and. __sboN2:nDec <= 4
+			IF n1 <= 999999999.9999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.9999 .and. __sboN2:nDec <= 4
 				cNT	:= hb_ntos(n1-n2)
 				__sboNR:SetValue( cNT )
 				BREAK

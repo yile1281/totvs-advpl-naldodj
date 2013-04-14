@@ -1,5 +1,10 @@
 #include "tBigNumber.ch"
 
+Static __o0
+Static __o1
+Static __l01
+
+THREAD Static __lSet
 THREAD Static __aFiles
 
 #IFDEF __PROTHEUS__
@@ -167,20 +172,31 @@ End Class
 	Sintaxe		: tBigNumber():New( uBigN , nBase ) -> self
 */
 Method New( uBigN , nBase ) CLASS tBigNumber
-
+	
 	DEFAULT uBigN	:= "0"
 	DEFAULT nBase	:= 10
-
+	
 	self:nBase		:= nBase
-
+	
 	#IFDEF __PROTHEUS__
 		DEFAULT __cEnvSrv := GetEnvServer()
 	#ENDIF
 
-	self:SetDecimals()
-	self:nthRootAcc()
+	IF __lSet == NIL
+		__lSet := .F.
+		self:SetDecimals()
+		self:nthRootAcc()
+		__lSet := .T.
+	EndIF	
 
-	self:SetValue( @uBigN )
+	self:SetValue( @uBigN , @nBase )
+
+	IF __l01 == NIL
+		__l01 := .F.
+		__o0  := tBigNumber():New("0",@nBase)
+		__o1  := tBigNumber():New("1",@nBase)
+		__l01 := .T.
+	EndIF
 
 Return( self )
 
@@ -825,7 +841,7 @@ Method Add( uBigN ) CLASS tBigNumber
 		__adoNR:SetValue( cNT )
 	
 		IF lNeg
-			IF  __adoNR:gt( "0" )
+			IF  __adoNR:gt( __o0 )
 				__adoNR:cSig	:= "-"
 				__adoNR:lNeg	:= lNeg
 			EndIF
@@ -1154,7 +1170,7 @@ Method Sub( uBigN ) CLASS tBigNumber
 		__sboNR:SetValue( cNT )
 	
 		IF lNeg
-			IF __sboNR:gt( "0" )
+			IF __sboNR:gt( __o0 )
 			    __sboNR:cSig	:= "-"
 			    __sboNR:lNeg	:= lNeg
 			EndIF
@@ -1250,7 +1266,7 @@ Method Mult( uBigN , __lMult ) CLASS tBigNumber
 		__mtoNR:SetValue( cNT )
 	
 		IF lNeg
-			IF __mtoNR:gt( "0" )
+			IF __mtoNR:gt( __o0 )
 			    __mtoNR:cSig := "-"
 			    __mtoNR:lNeg	:= lNeg
 			EndIF
@@ -1286,16 +1302,14 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	THREAD Static __dvoN1
 	THREAD Static __dvoN2
 
-	THREAD Static __dvoZero
 	THREAD Static __dvoRDiv
 	
 	BEGIN SEQUENCE
 
-		DEFAULT __dvoZero	:= tBigNumber():New()
 		DEFAULT __dvoNR 	:= tBigNumber():New()
 	
-		IF __dvoZero:eq( uBigN )
-			__dvoNR:SetValue( __dvoZero )
+		IF __o0:eq( uBigN )
+			__dvoNR:SetValue( __o0 )
 			BREAK
 		EndIF
 
@@ -1324,7 +1338,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 	
 		IF lFloat
 			
-			IF __dvoRDiv:gt( __dvoZero )
+			IF __dvoRDiv:gt( __o0 )
 	
 				cDec	:= ""
 		
@@ -1358,7 +1372,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 					__dvoRDiv:SetValue( __dvoRDiv:cRDiv , NIL , NIL , .F. )
 					__dvoRDiv:SetValue( __dvoRDiv:ExactValue( .T. ) )
 
-					IF __dvoRDiv:eq( __dvoZero ) .or. nDec >= nAcc
+					IF __dvoRDiv:eq( __o0 ) .or. nDec >= nAcc
 						Exit
 					EndIF
 		
@@ -1387,7 +1401,7 @@ Method Div( uBigN , lFloat ) CLASS tBigNumber
 		EndIF
 	
 		IF lNeg
-			IF __dvoNR:gt( __dvoZero )
+			IF __dvoNR:gt( __o0 )
 			    __dvoNR:cSig	:= "-"
 			    __dvoNR:lNeg	:= lNeg
 			EndIF
@@ -1451,53 +1465,49 @@ Method Pow( uBigN ) CLASS tBigNumber
 	THREAD Static __pwoA
 	THREAD Static __pwoB
 	
-	THREAD Static __pwoN0
-	THREAD Static __pwoN1
 	THREAD Static __pwoNP
 	THREAD Static __pwoNR
 	THREAD Static __pwoNT
 	
 	THREAD Static __pwoGCD
 
-	DEFAULT __pwoN0	:= tBigNumber():New()
-	DEFAULT __pwoN1	:= tBigNumber():New("1")
 	DEFAULT __pwoNP	:= tBigNumber():New()
 	DEFAULT __pwoNR	:= tBigNumber():New()
 	DEFAULT __pwoNT	:= tBigNumber():New()
 
-	lPoWN	:= __pwoNP:SetValue( uBigN ):lt( __pwoN0 )
+	lPoWN	:= __pwoNP:SetValue( uBigN ):lt( __o0 )
 
 	BEGIN SEQUENCE
 
-		IF self:eq( __pwoN0 ) .and. __pwoNP:eq( __pwoN0 )
-			__pwoNR:SetValue( __pwoN1 )
+		IF self:eq( __o0 ) .and. __pwoNP:eq( __o0 )
+			__pwoNR:SetValue( __o1 )
 			BREAK
 		EndIF
 
-		IF self:eq( __pwoN0 )
-			__pwoNR:SetValue( __pwoN0 )
+		IF self:eq( __o0 )
+			__pwoNR:SetValue( __o0 )
 			BREAK
 		EndIF
 
-		IF __pwoNP:eq( __pwoN0 )
-			__pwoNR:SetValue( __pwoN1 )
+		IF __pwoNP:eq( __o0 )
+			__pwoNR:SetValue( __o1 )
 			BREAK
 		EndIF
 
 		__pwoNR:SetValue( self )
 
-		IF __pwoNR:eq( __pwoN1 )
-			__pwoNR:SetValue( __pwoN1 )
+		IF __pwoNR:eq( __o1 )
+			__pwoNR:SetValue( __o1 )
 			BREAK
 		EndIF
 
-		IF __pwoN1:eq( __pwoNP:SetValue( __pwoNP:Abs() ) )
+		IF __o1:eq( __pwoNP:SetValue( __pwoNP:Abs() ) )
 			BREAK
 		EndIF
 
 		DEFAULT __pwoA	:= tBigNumber():New()
 
-		lPowF := __pwoA:SetValue( __pwoNP:cDec ):gt( __pwoN0 )
+		lPowF := __pwoA:SetValue( __pwoNP:cDec ):gt( __o0 )
 		
 		IF lPowF
 
@@ -1511,7 +1521,7 @@ Method Pow( uBigN ) CLASS tBigNumber
 
 			cPowB	:= cM10
 
-			IF __pwoB:SetValue( cPowB ):gt( __pwoN1 )
+			IF __pwoB:SetValue( cPowB ):gt( __o1 )
 				DEFAULT __pwoGCD	:= tBigNumber():New()
 				__pwoGCD:SetValue( __pwoA:GCD( __pwoB ) )
 				#IFDEF __HARBOUR__
@@ -1557,11 +1567,11 @@ Method Pow( uBigN ) CLASS tBigNumber
 				EndIF
 			#ENDIF	
 
-			__pwoNT:SetValue( __pwoN0 )
-			__pwoNP:SetValue( __pwoNP:Sub( __pwoN1 ) )
+			__pwoNT:SetValue( __o0 )
+			__pwoNP:SetValue( __pwoNP:Sub( __o1 ) )
 			While __pwoNT:lt( __pwoNP )
 				__pwoNR:SetValue( __pwoNR:Mult( self ) )
-				__pwoNT:SetValue( __pwoNT:Add( __pwoN1 ) )
+				__pwoNT:SetValue( __pwoNT:Add( __o1 ) )
 			End While
 
 		END SEQUENCE
@@ -1573,7 +1583,7 @@ Method Pow( uBigN ) CLASS tBigNumber
 	END SEQUENCE
 
 	IF lPoWN
-		__pwoNR:SetValue( __pwoN1:Div( __pwoNR ) )	
+		__pwoNR:SetValue( __o1:Div( __pwoNR ) )	
 	EndIF
 
 Return( __pwoNR )
@@ -1593,8 +1603,7 @@ Return( __pwoNR )
 	
 		Local oNR		:= tBigNumber():New()
 	
-		Local oNZ		:= tBigNumber():New()
-		Local oNO		:= tBigNumber():New("1")
+		Local oNO		:= tBigNumber():New(__o1)
 	
 		Local oN5		:= tBigNumber():New( "5" )
 		Local oM10		:= tBigNumber():New( "10" )
@@ -1632,7 +1641,7 @@ Return( __pwoNR )
 			lM10		:= oCN2:eq( oM10 )
 			
 			IF .NOT.( lM10 )
-				lM10	:= oCN2:Mod( oM10 ):eq( oNZ )
+				lM10	:= oCN2:Mod( oM10 ):eq( __o0 )
 			EndIF	
 	
 			oQ10:SetValue( oCN2:Div( oM10 ):Int( .T. ) )
@@ -1642,7 +1651,7 @@ Return( __pwoNR )
 	
 			aNR	:= Array(0)
 
-			While oQ10:gt( oNZ )
+			While oQ10:gt( __o0 )
 	
 				oQTh:SetValue( oN5:Min( oQ10 ) )
 				oQ10:SetValue( oQ10:Sub( oQTh ) )
@@ -1654,7 +1663,7 @@ Return( __pwoNR )
 					EndIF
 				#ENDIF	
 	
-				While oQTh:gt( oNZ )
+				While oQTh:gt( __o0 )
 					
 					oQTh:SetValue( oQTh:Sub( oNO ) )
 	
@@ -1845,7 +1854,6 @@ Method e( lForce ) CLASS tBigNumber
 	Local oDiv1P
 	Local oDiv1S
 	Local oBigNC
-	Local oBigN1
 	Local oAdd1N
 	Local oSub1N
 	Local oPoWNAd
@@ -1865,18 +1873,17 @@ Method e( lForce ) CLASS tBigNumber
 		EndIF
 
 		oBigNC	:= tBigNumber():New( self )
-		oBigN1	:= tBigNumber():New( "1" )
 		
-		IF oBigNC:eq( "0" )
-			oBigNC:SetValue( oBigN1 )
+		IF oBigNC:eq( __o0 )
+			oBigNC:SetValue( __o1 )
 		EndIF
 
 		oPowN   := tBigNumber():New( oBigNC )
 		
 		oPowN:SetValue( oPowN:Pow( oPowN )  )
 		
-		oAdd1N	:= oBigNC:Add( oBigN1 )
-		oSub1N	:= oBigNC:Sub( oBigN1 )
+		oAdd1N	:= oBigNC:Add( __o1 )
+		oSub1N	:= oBigNC:Sub( __o1 )
 
 		oPoWNAd	:= oAdd1N:Pow( oAdd1N )
 		oPoWNS1	:= oSub1N:Pow( oSub1N )
@@ -1943,7 +1950,6 @@ Return( oPITthD )
 */
 Method GCD( uBigN ) CLASS tBigNumber
 
- 	Local o0	:= tBigNumber():New()
  	Local oNX	:= tBigNumber():New(uBigN)
  	Local oNT	:= tBigNumber():New()
  	Local oGCD	:= tBigNumber():New(self)
@@ -1959,7 +1965,7 @@ Method GCD( uBigN ) CLASS tBigNumber
 	
 	oNX:SetValue( oNT )
 
-	While oNX:ne( o0 )
+	While oNX:ne( __o0 )
 		oGCD:SetValue( oGCD:Mod( oNX ) )
 		oNT:SetValue( oGCD )
 		oGCD:SetValue( oNX )
@@ -1977,32 +1983,29 @@ Return( oGCD )
 */
 Method LCM( uBigN ) CLASS tBigNumber
 	
-	Local o0	:= tBigNumber():New()
-	Local o1	:= tBigNumber():New("1")
-
 	Local oN1	:= tBigNumber():New(self)
 	Local oN2	:= tBigNumber():New(uBigN)
 
 	Local oNI	:= tBigNumber():New("2")
 	
-	Local oLCM	:= tBigNumber():New(o1)
+	Local oLCM	:= tBigNumber():New(__o1)
 
 	BEGIN SEQUENCE
 
 		While .T.
-			While oN1:Mod( oNI ):eq( o0 ) .or. oN2:Mod( oNI ):eq( o0 )
+			While oN1:Mod( oNI ):eq( __o0 ) .or. oN2:Mod( oNI ):eq( __o0 )
 				oLCM:SetValue( oLCM:Mult( oNI ) )
-				IF oN1:Mod( oNI ):eq( o0 )
+				IF oN1:Mod( oNI ):eq( __o0 )
 					oN1:SetValue( oN1:Div( oNI , .F. ) )
 				EndIF
-				IF oN2:Mod( oNI ):eq( o0 )
+				IF oN2:Mod( oNI ):eq( __o0 )
 					oN2:SetValue( oN2:Div( oNI , .F. ) )
 				EndIF
 			End While
-			IF oN1:eq( o1 ) .and. oN2:eq( o1 )
+			IF oN1:eq( __o1 ) .and. oN2:eq( __o1 )
 				BREAK
 			EndIF
-			oNI:SetValue( oNI:Add( o1 ) )		
+			oNI:SetValue( oNI:Add( __o1 ) )		
 		End While
 
 	END SEQUENCE
@@ -2031,8 +2034,6 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 	Local nPFs
 	Local nAcc		:= __nSetDecimals
 
-	Local oRoot0
-	Local oRoot1
 	Local oRootB
 	Local oRootD
 	Local othRoot
@@ -2054,10 +2055,9 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		oRoot0	:= tBigNumber():New()
 		oRootB	:= tBigNumber():New( self )
 
-		IF oRootB:eq( oRoot0 )
+		IF oRootB:eq( __o0 )
 			BREAK
 		EndIF
 
@@ -2065,20 +2065,18 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		oRoot1	:= tBigNumber():New("1")
-
-		IF oRootB:eq( oRoot1 )
-			othRoot:SetValue( oRoot1 )
+		IF oRootB:eq( __o1 )
+			othRoot:SetValue( __o1 )
 			BREAK
 		EndIF
 
 		oRootE	:= tBigNumber():New( uBigN )
 
-		IF oRootE:eq( oRoot0 )
+		IF oRootE:eq( __o0 )
 			BREAK
 		EndIF
 
-		IF oRootE:eq( oRoot1 )
+		IF oRootE:eq( __o1 )
 			othRoot:SetValue( oRootB )
 			BREAK
 		EndIF
@@ -2091,7 +2089,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 
 		oFExit:SetValue( cFExit , NIL , NIL , NIL , @__nthRootAcc )
 
-		IF oRootB:Dec(.T.):gt(oRoot0)
+		IF oRootB:Dec(.T.):gt(__o0)
 			
 			oRootD	:= tBigNumber():New( "1" + Replicate( "0" , Len( oRootB:Dec(NIL,NIL,.T.) ) ) )
 			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
@@ -2141,7 +2139,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 			#IFDEF __ROOTMT__
 				othRoot:SetValue( RootThread( @aIPF , @aDPF , @oRootE , @oFExit ) )
 			#ELSE
-				othRoot:SetValue(oRoot1)
+				othRoot:SetValue(__o1)
 				othRootD	:= tBigNumber():New()
 				oRootT		:= tBigNumber():New()
 				For nPF := 1 To nPFs
@@ -2155,7 +2153,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 				IF .NOT.( Empty( aDPF ) )
 					nPFs		:= Len( aDPF )
 					IF nPFs > 0
-						othRootD:SetValue(oRoot1)
+						othRootD:SetValue(__o1)
 						For nPF := 1 To nPFs
 							IF oRootE:eq( aDPF[nPF][2] )
 								othRootD:SetValue( othRootD:Mult( aDPF[nPF][1] ) )
@@ -2164,7 +2162,7 @@ Method nthRoot( uBigN ) CLASS tBigNumber
 								othRootD:SetValue( othRootD:Mult( nthRoot( @oRootT , @oRootE , @oFExit , @nAcc ):Pow( aDPF[nPF][2] ) ) )
 							EndIF
 						Next nPF
-						IF othRootD:gt( oRoot0 )
+						IF othRootD:gt( __o0 )
 							othRoot:SetValue( othRoot:Div( othRootD ) )	
 						EndIF
 					EndIF	
@@ -2350,8 +2348,8 @@ Return( othRoot )
 		#ENDIF
 
 		othTRoot	:= tBigNumber():New()
-		othIRoot	:= tBigNumber():New("1")
-		othDRoot	:= tBigNumber():New("1")
+		othIRoot	:= tBigNumber():New(__o1)
+		othDRoot	:= tBigNumber():New(__o1)
 
 		For nID := 1 To nIDs
 			othTRoot:SetValue(aNR[nID][5])
@@ -2434,14 +2432,11 @@ Return( othRoot )
 Method SQRT() CLASS tBigNumber
 
 	Local oSQRT
-	Local oZero
 
 	Local nSetDec
 
 	oSQRT	:= tBigNumber():New( self )
-
-	oZero	:= tBigNumber():New("0")
-
+	
 	BEGIN SEQUENCE
 
 		IF oSQRT:lte( self:SysSQRT() )
@@ -2451,8 +2446,8 @@ Method SQRT() CLASS tBigNumber
 			BREAK
 		EndIF
 
-		IF oSQRT:eq( oZero )
-			oSQRT:SetValue( oZero )
+		IF oSQRT:eq( __o0 )
+			oSQRT:SetValue( __o0 )
 			BREAK
 		EndIF
 
@@ -2500,12 +2495,10 @@ Return( oSysSQRT )
 */
 Method Log( uBigNB ) CLASS tBigNumber
 
-	Local o0		:= tBigNumber():New()
-	Local o1		:= tBigNumber():New("1")
 	Local o2		:= tBigNumber():New("2")
 	Local oS 		:= tBigNumber():New()
 	Local oT 		:= tBigNumber():New()
-	Local oI 		:= tBigNumber():New("1")
+	Local oI 		:= tBigNumber():New(__o1)
 	Local oX 		:= tBigNumber():New(self)
 	Local oY		:= tBigNumber():New()
 	Local oLT		:= tBigNumber():New()
@@ -2520,34 +2513,34 @@ Method Log( uBigNB ) CLASS tBigNumber
 
 	oT:SetValue(uBigNB)
 
-	IF o0:lt( oT ) .and. oT:lt( o1 )
+	IF __o0:lt( oT ) .and. oT:lt( __o1 )
 	 	lflag := .NOT.( lflag )
-	 	oT:SetValue( o1:Div( oT ) )
+	 	oT:SetValue( __o1:Div( oT ) )
 	EndIF
 
-	While oX:gt( oT ) .and. oT:gt( o1 )
+	While oX:gt( oT ) .and. oT:gt( __o1 )
 		oY:SetValue( oY:Add( oI ) )
 		oX:SetValue( oX:Div( oT ) )
 	End While 
 
 	oS:SetValue( oS:Add( oY ) )
-	oY:SetValue( o0 )
+	oY:SetValue( __o0 )
 	oT:SetValue( oT:Sqrt() )
 	oI:SetValue( oI:Div( o2 ) )
     
-	While oT:gt( o1 )
+	While oT:gt( __o1 )
 
-		While oX:gt( oT ) .and. oT:gt( o1 )
+		While oX:gt( oT ) .and. oT:gt( __o1 )
 			oY:SetValue( oY:Add( oI ) )
 			oX:SetValue( oX:Div( oT ) )
 		End While 
 	
 		oS:SetValue( oS:Add( oY ) )
-		oY:SetValue( o0 )
+		oY:SetValue( __o0 )
 		oLT:SetValue( oT )
 		oT:SetValue( oT:Sqrt() )
 		IF oT:eq( oLT )
-        	oT:SetValue(o0)	
+        	oT:SetValue(__o0)	
 		EndIF 
 		oI:SetValue( oI:Div( o2 ) )
 
@@ -2593,8 +2586,7 @@ Return( self:Log( ob10 ) )
 	Sintaxe		: tBigNumber():Ln() -> oBigNR
 */
 Method Ln() CLASS tBigNumber
-	Local o1exp	:= tBigNumber():New("1")
-Return( self:Log( o1exp:Exp() ) )
+Return( self:Log( __o1:Exp() ) )
 
 /*
 	Method		: aLog
@@ -2637,8 +2629,7 @@ Return( self:aLog( ob10 ) )
 	Sintaxe		: tBigNumber():aLn() -> oBigNR
 */
 Method aLn() CLASS tBigNumber
-	Local o1exp	:= tBigNumber():New("1")
-Return( self:aLog( o1exp:Exp() ) )
+Return( self:aLog( __o1:Exp() ) )
 
 /*
 	Method:		MathC
@@ -2782,7 +2773,6 @@ Return( __NoN0 )
 */
 Method D2H( cHexB ) CLASS tBigNumber
 
-	Local o0	:= tBigNumber():New()
 	Local otH	:= tBigNumber():New()
 	Local otN	:= tBigNumber():New( self:cInt )
 
@@ -2801,7 +2791,7 @@ Method D2H( cHexB ) CLASS tBigNumber
 
 	otH:SetValue( cHexB )
 	
-	While otN:gt( o0 )
+	While otN:gt( __o0 )
 		otN:SetValue( otN:Div( otH , .F. ) )
 		nAT		:= Val( otN:cRDiv ) + 1
 		cHexN	:= SubStr( cHexC , nAT , 1 ) + cHexN
@@ -2816,7 +2806,7 @@ Method D2H( cHexB ) CLASS tBigNumber
 	cHexN	:= ""
 	otN		:= tBigNumber():New( self:Dec(NIL,NIL,.T.) )
 
-	While otN:gt( o0 )
+	While otN:gt( __o0 )
 		otN:SetValue( otN:Div( otH , .F. ) )
 		nAT		:= Val( otN:cRDiv ) + 1
 		cHexN	:= SubStr( cHexC , nAT , 1 ) + cHexN
@@ -2842,7 +2832,6 @@ Return( oHexN )
 Method H2D() CLASS tBigNumber
 
 	Local otH	:= tBigNumber():New()
-	Local otN1	:= tBigNumber():New("1")
 	Local otNR	:= tBigNumber():New()
 	Local otLN	:= tBigNumber():New()
 	Local otPw	:= tBigNumber():New()
@@ -2867,7 +2856,7 @@ Method H2D() CLASS tBigNumber
 		otNI:SetValue( hb_ntos( --nI ) )
 	    otAT:SetValue( hb_ntos( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) ) 
         otPw:SetValue( otLN:Sub( otNI ) )
-        otPw:SetValue( otPw:Sub( otN1 ) )
+        otPw:SetValue( otPw:Sub( __o1 ) )
 		otPw:SetValue( otH:Pow( otPw ) )
         otAT:SetValue( otAT:Mult( otPw ) )
         otNR:SetValue( otNR:Add( otAT ) )
@@ -2885,7 +2874,7 @@ Method H2D() CLASS tBigNumber
 		otNI:SetValue( hb_ntos( --nI ) )
 	    otAT:SetValue( hb_ntos( ( AT( SubStr( cHexN , nI + 1 , 1 ) , cHexC ) - 1 ) ) )
         otPw:SetValue( otLN:Sub( otNI ) )
-        otPw:SetValue( otPw:Sub( otN1 ) )
+        otPw:SetValue( otPw:Sub( __o1 ) )
 		otPw:SetValue( otH:Pow( otPw ) )
         otAT:SetValue( otAT:Mult( otPw ) )
         otNR:SetValue( otNR:Add( otAT ) )
@@ -3376,12 +3365,10 @@ Return( nR )
 */
 Method millerRabin( uI ) CLASS tBigNumber
 
-	Local o0		:= tBigNumber():New()
-	Local o1		:= tBigNumber():New( "1" )
 	Local o2		:= tBigNumber():New( "2" )
 
 	Local oN		:= tBigNumber():New( self )
-	Local oD		:= tBigNumber():New( oN:Sub( o1 ) )
+	Local oD		:= tBigNumber():New( oN:Sub( __o1 ) )
 	Local oS		:= tBigNumber():New()
 	Local oI		:= tBigNumber():New()
 	Local oA		:= tBigNumber():New()
@@ -3390,26 +3377,26 @@ Method millerRabin( uI ) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF oN:lte( o1 )
+		IF oN:lte( __o1 )
 			lPrime	:= .F.
 			BREAK
 		EndIF
 	
 		DEFAULT uI		:= "2"
 	
-		While oD:Mod( o2 ):eq( o0 )
+		While oD:Mod( o2 ):eq( __o0 )
 			oD:SetValue( oD:Div( o2 , .F. ) )
-			oS:SetValue( oS:Add( o1 ) )
+			oS:SetValue( oS:Add( __o1 ) )
 		End While
 	
 		oI:SetValue( uI )
-		While oI:gt( o0 )
-			oA:SetValue( oA:Randomize( o1 , oN ) )
+		While oI:gt( __o0 )
+			oA:SetValue( oA:Randomize( __o1 , oN ) )
 			lPrime := mrPass( oA , oS , oD , oN )
 			IF .NOT.( lPrime )
 				BREAK
 			EndIF
-			oI:SetValue( oI:Sub( o1 ) )
+			oI:SetValue( oI:Sub( __o1 ) )
 		End While
 
 	END SEQUENCE
@@ -3426,33 +3413,30 @@ Return( lPrime )
 */
 Static Function mrPass(uA,uS,uD,uN)
 
-	Local o0	:= tBigNumber():New()
-	Local o1	:= tBigNumber():New( "1" )
-	
 	Local oA	:= tBigNumber():New( uA )
 	Local oS	:= tBigNumber():New( uS )
 	Local oD	:= tBigNumber():New( uD )
 	Local oN	:= tBigNumber():New( uN )
-	Local oM	:= tBigNumber():New( oN:Sub( o1 ) )
+	Local oM	:= tBigNumber():New( oN:Sub( __o1 ) )
 
 	Local oP	:= tBigNumber():New( oA:Pow( oD ):Mod( oN ) )
-	Local oW	:= tBigNumber():New( oS:Sub( o1 ) )
+	Local oW	:= tBigNumber():New( oS:Sub( __o1 ) )
 	
 	Local lmrP  := .T.
 
 	BEGIN SEQUENCE
 
-		IF oP:eq( o1 )
+		IF oP:eq( __o1 )
 			BREAK
 		EndIF
 
-		While oW:gt( o0 )
+		While oW:gt( __o0 )
 			lmrP	:= 	oP:eq( oM )
 			IF lmrP
 				BREAK
 			EndIF
 			oP:SetValue( oP:Mult( oP ):Mod( oN )  )
-			oW:SetValue( oW:Sub( o1 ) )
+			oW:SetValue( oW:Sub( __o1 ) )
 		End While
 
 		lmrP	:= 	oP:eq( oM )		
@@ -3486,23 +3470,20 @@ Return( lmrP )
 Method FI() CLASS tBigNumber
 
 	Local oT	:= tBigNumber():New( self:Int( .T. ) )
-	
-	Local o0	:= tBigNumber():New()		
-	Local o1	:= tBigNumber():New( "1" )
 
 	Local oI	:= tBigNumber():New( "2" )
 	Local oN	:= tBigNumber():New( oT )
 
 	While oI:Mult( oI ):lte( self )
-		IF oN:Mod( oI ):eq( o0 )
+		IF oN:Mod( oI ):eq( __o0 )
 			oT:SetValue( oT:Sub( oT:Div( oI , .F. ) ) )
 		EndIF
-		While oN:Mod( oI ):eq( o0 )
+		While oN:Mod( oI ):eq( __o0 )
 			oN:SetValue( oN:Div( oI , .F. ) )
 		End While
-		oI:SetValue( oI:Add( o1 ) )
+		oI:SetValue( oI:Add( __o1 ) )
 	End While
-	IF oN:gt( o1 )
+	IF oN:gt( __o1 )
 		oT:SetValue( oT:Sub( oT:Div( oN , .F. ) ) )		
 	EndIF
 
@@ -3521,8 +3502,6 @@ Method PFactors() CLASS tBigNumber
 	
 	Local cP		:= ""
 
-	Local o0		:= tBigNumber():New()
-	Local o1		:= tBigNumber():New( "1" )
 	Local oN		:= tBigNumber():New( self )
 	Local oP		:= tBigNumber():New()
 	Local oT		:= tBigNumber():New()
@@ -3544,19 +3523,19 @@ Method PFactors() CLASS tBigNumber
 			aAdd( aPFactors , { oN:cInt , "1" } )
 			EXIT
 		EndIF
-		While oN:Mod( oP ):eq( o0 )
+		While oN:Mod( oP ):eq( __o0 )
 			nP := aScan( aPFactors , { |e| e[1] == cP } )
 			IF nP == 0
 				aAdd( aPFactors , { cP , "1" } )
 			Else
 				oT:SetValue(aPFactors[nP][2])
-				aPFactors[nP][2]	:= oT:SetValue( oT:Add( o1 ) ):ExactValue()
+				aPFactors[nP][2]	:= oT:SetValue( oT:Add( __o1 ) ):ExactValue()
 			EndIF
 			oN:SetValue( oN:Div( oP , .F. ) )
 			nC 		:= 0
 			lPrime	:= .T.
 		End While
-		IF oN:lte( o1 )
+		IF oN:lte( __o1 )
 			EXIT
 		EndIF
 	End While
@@ -3590,7 +3569,7 @@ Static Function __Mult( cN1 , cN2 , nAcc )
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
 
-	oPe	:= tBigNumber():New("1")
+	oPe	:= tBigNumber():New(__o1)
 	oPd := tBigNumber():New(cN2)
 	
 	While .T.
@@ -3655,7 +3634,7 @@ Static Function Div( cN , cD , nAcc , lFloat )
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
 
-	oPe	:= tBigNumber():New("1")
+	oPe	:= tBigNumber():New(__o1)
 	oPd	:= tBigNumber():New(oD)
 
 	While .T.
@@ -3714,9 +3693,6 @@ Return( oNR )
 */
 Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 
-	Local o0		:= tBigNumber():New()
-	Local o1		:= tBigNumber():New("1")
-
 	Local oT1		:= tBigNumber():New()
 	Local oT2		:= tBigNumber():New()
 	Local oT3		:= tBigNumber():New()
@@ -3733,9 +3709,9 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
 
-	oAccNo:SetValue( oAccTo:Add(o1) )
-	o1divE:SetValue( o1:Div(oRootE) )
-	oESub1:SetValue( oRootE:Sub(o1) )
+	oAccNo:SetValue( oAccTo:Add(__o1) )
+	o1divE:SetValue( __o1:Div(oRootE) )
+	oESub1:SetValue( oRootE:Sub(__o1) )
 
 	IF oRootE:eq("2")
 		othRootT:SetValue(__sqrt(oRootB))
@@ -3748,7 +3724,7 @@ Static Function nthRoot( oRootB , oRootE , oAccTo , nAcc )
 		oT2:SetValue(oESub1:Mult(othRootT))
 		oT3:SetValue(oT1:Add(oT2))
 		othRoot:SetValue(o1divE:Mult(oT3))
-		IF othRootT:eq(o0)
+		IF othRootT:eq(__o0)
 			Exit
 		EndIF
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))

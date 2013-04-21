@@ -1,3 +1,7 @@
+@echo off
+echo BATCH FILE FOR Harbour MinGW32
+rem ============================================================================
+
 c:\hb32\bin\hbmk2.exe -cpp tBigNtst_array.hbp
 c:\hb32\bin\upx.exe   tBigNtst_array.exe
 c:\hb32\bin\hbmk2.exe -cpp tBigNtst_array_mt.hbp

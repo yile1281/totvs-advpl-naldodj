@@ -32,8 +32,7 @@ CLASS TSQLite FROM FWDBAccess
 	#ENDIF	
 
     DATA cCRLF
-    DATA cClassName
-	DATA cCurrentAlias
+ 	DATA cCurrentAlias
 	DATA nCurrentAlias
 
 	DATA nAdvConnection
@@ -138,7 +137,6 @@ METHOD New( cDBMSName , cDBMSAlias , cDBMSServer , nDBMSPort ) CLASS TSQLite
 		Self:aSuperClass		:= Array(2)
 	#ENDIF	
 	Self:cCRLF					:= __cCRLF
-	Self:cClassName 			:= "TSQLITE"
 	Self:cCurrentAlias			:= ""
 	Self:nCurrentAlias			:= 0
 	Self:nCommitInterval		:= 10
@@ -193,7 +191,7 @@ Return( _Super:Destroy() )
      Uso           : Retorna o Nome da Classe
 */
 METHOD ClassName() CLASS TSQLite
-Return( Self:cClassName )
+Return( "TSQLITE" )
 
 /*
      Method		   : OpenConnection
@@ -592,7 +590,7 @@ METHOD FieldGet(uField) CLASS TSQLite
 Return(uFldGet)
 
 /*
-     Method		   : FieldGet
+     Method		   : FieldPut
      Autor         : Marinaldo de jesus [ www.blacktdn.com.br ]
      Data          : 10/06/2012
      Uso           : Atualiza o conteudo do Campo passado como parametro

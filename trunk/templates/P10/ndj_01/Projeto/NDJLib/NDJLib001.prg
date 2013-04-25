@@ -2659,6 +2659,125 @@ Return( GetSx3Cache( cField , "X3_DECIMAL" ) )
 Static Function X3Picture(cField)
 Return( GetSx3Cache( cField , "X3_PICTURE" ) )
 
+/*/
+    Function:   FolderSetOption
+    Autor:      Marinaldo de Jesus
+    Data:       24/04/2013
+    Descricao:  Valida a MudanÃ§a de Folder
+    Sintaxe:    FolderSetOption(nTarget,nSource,aObjFolder,aGdObjects,nActFolder,lVldFolder)
+	nTarget		01 -> Folder Para o Qual se Vai
+    nSource		02 -> Folder de Onde se Vem
+    aObjFolder	03 -> Objetos do Folder
+    aGdObjects	04 -> Verifica se o Objeto eh uma GetDados
+    nActFolder	05 -> Folder Ativo
+    lVldFolder	06 -> Verifica se Deve Efetuar a Validacao do Folder quando nTarget nLastFoder forem iguais
+
+/*/
+Static Function FolderSetOption(nTarget,nSource,aObjFolder,aGdObjects,nActFolder,lVldFolder)
+
+    Local lSetOption    := .T.
+    Local lObjisGd      := .F.
+   
+    Local nSetOption    := 0
+    
+    Local aClassData
+  
+    Local lIsObject
+    Local lIsBlock
+   
+    Local nFolder
+    Local nFolders
+    Local nObj
+    Local nObjs
+    Local nPosClassName
+    
+    DEFAULT lVldFolder  := .T.
+    lVldFolder          := IF( .NOT.( lVldFolder ) , ( nTarget <> nSource ) , lVldFolder )
+    
+    nFolders := Len( aObjFolder )
+    IF ( lVldFolder )
+        For nFolder := nSource To nSource
+            nObjs   := Len( aObjFolder[nFolder] )
+            For nObj := 1 To nObjs
+                IF ( lIsObject := ( ValType( aObjFolder[nFolder][nObj][01] ) == "O" ) )
+                    IF ( lIsBlock := ( ValType( aObjFolder[nFolder][nObj][02] ) == "B" ) )
+                        IF .NOT.( lSetOption := Eval( aObjFolder[nFolder][nObj][02] ) ) //Valid
+                            Exit
+                        EndIF
+                    EndIF
+                EndIF
+            Next nObj
+            IF .NOT.( lSetOption )
+                nSetOption  := nFolder
+                Exit
+            EndIF
+        Next nFolder
+    EndIF
+    
+    aGdObjects := {}
+    For nFolder := 1 To nFolders
+        aAdd( aGdObjects , {} )
+        nObjs := Len( aObjFolder[nFolder] )
+        For nObj := 1 To nObjs
+            lObjisGd := .F.
+            IF ( lIsObject := ( ValType( aObjFolder[nFolder][nObj][01] ) == "O" ) )
+                aClassData  := ClassDataArr( aObjFolder[nFolder][nObj][01] )
+                IF ( ( nPosClassName := aScan( aClassData , { |eData| ( Upper( AllTrim( eData[1] ) ) == "CCLASSNAME" ) } ) ) > 0 )
+                    lObjisGd := ( aClassData[nPosClassName][2] $ "MSNEWGETDADOS/MSGETDADOS" )
+                EndIF
+                aObjFolder[nFolder][nObj][01]:Hide()
+            EndIF
+            aAdd( aGdObjects[ Len( aGdObjects ) ] , lObjisGd )
+        Next nObj
+    Next nFolder
+    
+    IF .NOT.( lSetOption )
+        For nFolder := nSetOption To nSetOption
+            nObjs := Len( aObjFolder[nFolder] )
+            For nObj := 1 To nObjs
+                IF ( lIsObject := ( ValType( aObjFolder[nFolder][nObj][01] ) == "O" ) )
+                    aObjFolder[ nFolder , nObj , 01 ]:Show()
+                    IF ( lIsBlock := ( ValType( aObjFolder[nFolder][nObj][03] ) == "B" ) )
+                        Eval( aObjFolder[nFolder][nObj][03] )   //Init
+                    EndIF
+                EndIF
+            Next nObj
+        Next nFolder
+    Else
+        For nFolder := nTarget To nTarget
+            nObjs := Len( aObjFolder[nFolder] )
+            For nObj := 1 To nObjs
+                IF ( lIsObject := ( ValType( aObjFolder[nFolder][nObj][01] ) == "O" ) )
+                    aObjFolder[ nFolder , nObj , 01 ]:Show()
+                    IF ( lIsBlock := ( ValType( aObjFolder[nFolder][nObj][03] ) == "B" ) )
+                        Eval( aObjFolder[nFolder][nObj][03] )   //Init
+                    EndIF
+                EndIF
+            Next nObj
+        Next nFolder
+        For nFolder := nSource To nSource
+            nObjs := Len( aObjFolder[nFolder] )
+            For nObj := 1 To nObjs
+                IF ( Len( aObjFolder[nFolder][nObj] ) >= 4 )
+                    IF ( lIsBlock := ( ValType( aObjFolder[ nFolder , nObj , 04 ] ) == "B" ) )
+                        Eval( aObjFolder[nFolder][nObj][04] )   //Exit
+                    EndIF
+                EndIF
+            Next nObj
+        Next nFolder
+    EndIF
+    
+    IF ( nSetOption == 0 )
+        IF ( lSetOption )
+            nSetOption  := nTarget
+        Else
+            nSetOption  := nSource
+        EndIF
+    EndIF
+    nActFolder  := nSetOption
+
+Return( lSetOption )
+
 Static Function __Dummy( lRecursa )
 	Local oException
 	TRYEXCEPTION
@@ -2704,6 +2823,7 @@ Static Function __Dummy( lRecursa )
     	X3Tamanho() 
     	X3Decimal()
     	X3Picture()
+		FolderSetOption()
 		lRecursa := __Dummy( .F. )
 		SYMBOL_UNUSED( __cCRLF )
 	CATCHEXCEPTION USING oException

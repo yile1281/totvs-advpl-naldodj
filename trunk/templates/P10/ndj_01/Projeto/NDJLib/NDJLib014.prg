@@ -234,6 +234,20 @@ Static Function InGrpAdmin( lFinal , cFinalMsg )
 
 	Local lIsGrpAdmin	:= ( PswUsrGrp( RetCodUsr() , "000000" ) .or. ( RetCodUsr() == "000000" ) )
 	
+	Local bError
+	Local bErrorBlock
+
+	IF .NOT.( lIsGrpAdmin ) 
+		bError      	:= { |e| BREAK(e) }
+		bErrorBlock		:= ErrorBlock( bError )
+		BEGIN SEQUENCE
+			lIsGrpAdmin := FWIsAdmin(RetCodUsr())
+		RECOVER
+			lIsGrpAdmin	:= .F.
+		END SEQUENCE
+		ErrorBlock( bErrorBlock )
+	EndIF	
+	
 	DEFAULT lFinal		:= .T.
 	DEFAULT cFinalMsg	:= "Apenas Adminisrtradores Podem Executar Essa Rotina"
 	

@@ -5,8 +5,8 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			 32
-#DEFINE ROOT_ACC_SET	 10
+#DEFINE ACC_SET			 35
+#DEFINE ROOT_ACC_SET	 15
 
 #DEFINE __SLEEP 0
 
@@ -69,7 +69,8 @@ User Function tBigNTst()
 	Local z			AS NUMBER
 
 	Local fhLog		AS NUMBER
-	Local nSetDec	AS NUMBER	
+	Local nSetDec	AS NUMBER
+	Local nAccRoot	AS NUMBER	
 	
 	Local lMR		AS LOGICAL
 	Local lPn		AS LOGICAL
@@ -806,77 +807,81 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog,"")
+	
+	nSetDec 	:= otBigN:SetDecimals(500)
+	nAccRoot	:= otBigN:nthRootAcc(499)
 
 	__ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
 	
 	__ConOut(fhLog,"")
+	
 
 	ASSIGN cX	:= otBigW:SetValue("1215"):Ln():GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Ln()',"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log2():GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log2()',"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:SetValue(cX):aLog2():GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:SetValue(cX):aLog2():GetValue())
 	__ConOut(fhLog,"")
 	
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log10():GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log10()',"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:SetValue(cX):aLog10():GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:SetValue(cX):aLog10():GetValue())
 
 	__ConOut(fhLog,"")
 	__ConOut(fhLog,"")
 
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("1")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("1")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("1")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("1")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("2")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("2")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("2")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("2")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("3")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("3")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("3")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("3")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("4")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("4")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("4")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("4")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("5")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("5")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("5")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("5")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("6")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("6")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("6")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("6")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("7")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("7")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("7")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("7")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("8")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("8")'  ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("8")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("8")):GetValue())
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("9")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("9")'  ,"RESULT: "+cX) 
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("9")):GetValue()) 	
+	__ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("9")):GetValue()) 	
 	__ConOut(fhLog,"")
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log(otBigN:SetValue("10")):GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log("10")' ,"RESULT: "+cX)
-*	__ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("10")):GetValue())
+	__ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:SetValue(cX):aLog(otBigN:SetValue("10")):GetValue())
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog,"")
@@ -902,7 +907,7 @@ User Function tBigNTst()
 			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cX	:= otBigW:SetValue(cW):Log(cN):GetValue()
 			__ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")'  ,"RESULT: "+cX)
-*			__ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):GetValue())
+			__ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):GetValue())
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next n
 		__tbnSleep()
@@ -928,7 +933,7 @@ User Function tBigNTst()
 		ASSIGN cW	:= hb_ntos(w)
 		ASSIGN cX	:= otBigW:SetValue(cW):Ln():GetValue()
 		__ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
-*		__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
+		__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
 		__ConOut(fhLog,"---------------------------------------------------------")
 		__tbnSleep()
 	Next w
@@ -940,6 +945,9 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	__tbnSleep()
+    
+	otBigN:SetDecimals(nSetDec)
+	otBigN:nthRootAcc(nAccRoot)
 
 	__ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
 	

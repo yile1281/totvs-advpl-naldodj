@@ -2902,12 +2902,15 @@ Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 			BREAK
 		EndIF
 		
+		IF .NOT.( ApOleClient("MsExcel") )
+			BREAK
+		EndIF
+		
 		oMsExcel := MsExcel():New()
 		oMsExcel:WorkBooks:Open( cFile )
 		oMsExcel:SetVisible( .T. )
-		
 		oMsExcel := oMsExcel:Destroy()
-	
+		
 	END SEQUENCE
 		
 	oFWMSExcel	:= FreeObj( oFWMSExcel )

@@ -2800,9 +2800,9 @@ Return( lSetOption )
 /*/
 	Funcao:		GDToExcel
 	Autor:		Marinaldo de Jesus 
-	Data:		08/06/2013
+	Data:		01/06/2013
 	Descricao:	Mostrar os Dados no Excel
-	Sintaxe:	StaticCall(NDJLIB001,GDToExcel,aHeader,aCols,cWorkSheet,cTable,lTotalize)
+	Sintaxe:	StaticCall(NDJLIB001,GDToExcel,aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 /*/
 Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 

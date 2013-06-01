@@ -1759,7 +1759,7 @@ Static __nPublicV	:= 0
 		
 		Local lSDULogin		:= .T.
 	
-		IF !Empty( cUserName )
+		IF .NOT.( Empty( cUserName ) )
 			//...Testa o usuario
 		EndIF
 	
@@ -1777,7 +1777,7 @@ Static __nPublicV	:= 0
 		Local cUserName		:= ParamIxb[1]
 		Local lSDULogOut	:= .T.
 		
-		IF !Empty( cUserName )
+		IF .NOT.( Empty( cUserName ) )
 			//...Testa o usuario
 		EndIF
 	
@@ -1966,7 +1966,7 @@ Static Function MySetOnEXIT()
 		EndIF
 	EndIF
 
-	lSetErrorBlock	:= !( ValType( __bErrorBlock ) == "B" )
+	lSetErrorBlock	:= .NOT.( ValType( __bErrorBlock ) == "B" )
 	IF ( lSetErrorBlock )
 
 		bErrorBlock			:= ErrorBlock()
@@ -2020,7 +2020,7 @@ Static Function ReSetPublic( lModule , cStack )
 	Local aStack
 	Local aModName
 
-	Local bReset	:= { || AddPublic( @__aPublicV[ nBL , 1 ] , NIL , @__aPublicV[ nBL , 2 ] , @__aPublicV[ nBL , 3 ] , @.T. , @lModule , @cStack ) }
+	Local bReset	:= { || AddPublic( @__aPublicV[nBL][1] , NIL , @__aPublicV[nBL][2] , @__aPublicV[nBL][3] , @.T. , @lModule , @cStack ) }
 
 	Local nAT
 	Local nBL
@@ -2052,7 +2052,7 @@ Static Function ReSetPublic( lModule , cStack )
 				Eval( bReset )
 			EndIF	
 		Next nBL
-	ElseIF !( cStack == NIL )
+	ElseIF .NOT.( cStack == NIL )
 		nEL 			:= __nPublicV
 		For nBL := 1 To nEL
 			IF ( cStack == __aPublicV[ nBL ][ 4 ] )
@@ -2087,7 +2087,7 @@ Static Function AddPublic( cPublic , uSet , cType , nSize , lRestart , lModule ,
 	Local nEL
 
 	DEFAULT cPublic		:= "__UndefPVar__"
-	DEFAULT lRestart	:= !( ValType( uSet ) == "U" )
+	DEFAULT lRestart	:= .NOT.( ValType( uSet ) == "U" )
 	DEFAULT lModule		:= .T.
 
 	cVar				:= Upper( AllTrim( cPublic ) )
@@ -2124,11 +2124,11 @@ Static Function AddPublic( cPublic , uSet , cType , nSize , lRestart , lModule ,
 			lRestart	:= .T.
 		EndIF	
 		DEFAULT uSet	:= GetValType( @cType , @nSize )
-		IF !( Type( cVar ) == cType )
+		IF .NOT.( Type( cVar ) == cType )
 			_SetNamedPrvt( @cVar , @uSet , @cStack )
 		ElseIF ( lRestart )
 			IF ( cType == "A" )
-				IF ( ( ValType( uSet ) == "A" ) .or. !( Type( cVar ) == "A" ) )
+				IF ( ( ValType( uSet ) == "A" ) .or. .NOT.( Type( cVar ) == "A" ) )
 					_SetNamedPrvt( @cVar , aClone( uSet ) , @cStack )
 				Else
 					aSize( &cVar , @nSize )
@@ -2154,7 +2154,7 @@ Static Function AddPublic( cPublic , uSet , cType , nSize , lRestart , lModule ,
 				__aPublicV[ nAT ][ 3 ]	:= nSize
 			EndIF
 			IF ( cType == "A" )
-				IF ( ( ValType( uSet ) == "A" ) .or. !( Type( cVar ) == "A" ) )
+				IF ( ( ValType( uSet ) == "A" ) .or. .NOT.( Type( cVar ) == "A" ) )
 					_SetNamedPrvt( @cVar , aClone( uSet ) , @cStack )
 				Else
 					aSize( &cVar , @nSize )
@@ -2182,7 +2182,7 @@ Static Function __Dummy( lRecursa )
 	Local oException
 	TRYEXCEPTION
         lRecursa := .F.
-		IF !( lRecursa )
+		IF .NOT.( lRecursa )
 			BREAK
 		EndIF
     	lRecursa := __Dummy( .F. )

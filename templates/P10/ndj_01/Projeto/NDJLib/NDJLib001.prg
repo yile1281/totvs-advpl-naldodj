@@ -14,7 +14,7 @@ Static Function IsCpoVar( cField )
 
 	Local cVar
 
-	IF !( Type( "__READVAR" ) == "C" )
+	IF .NOT.( Type( "__READVAR" ) == "C" )
 		Private __READVAR := ""	
 	EndIF
 
@@ -144,12 +144,12 @@ Static Function IsInGetDados( uField , aLocalHeader , aLocalCols , nLocalN )
 			Private aHeader := aLocalHeader
 		Else
 			lIsInGetDados := ( Type( "aHeader" ) == "A" )
-			IF !( lIsInGetDados )
+			IF .NOT.( lIsInGetDados )
 				BREAK
 			EndIF
 		EndIF
 		lIsInGetDados := ( Len( aHeader ) > 0 )
-		IF !( lIsInGetDados )
+		IF .NOT.( lIsInGetDados )
 			BREAK
 		EndIF
 
@@ -158,18 +158,18 @@ Static Function IsInGetDados( uField , aLocalHeader , aLocalCols , nLocalN )
 			lIsInGetDados	:= .T.
 		Else
 			lIsInGetDados := ( Type( "aCols" ) == "A" )
-			IF !( lIsInGetDados )
+			IF .NOT.( lIsInGetDados )
 				BREAK
 			EndIF
 		EndIF
 		lIsInGetDados := ( Len( aCols ) > 0 )
-		IF !( lIsInGetDados )
+		IF .NOT.( lIsInGetDados )
 			BREAK
 		EndIF
 		
-		IF !( lLocalCols )
+		IF .NOT.( lLocalCols )
 			lIsInGetDados := ( Type( "N" ) == "N" )
-			IF !( lIsInGetDados )
+			IF .NOT.( lIsInGetDados )
 				BREAK
 			EndIF
 		ElseIF ( ValType( nLocalN ) == "N" )
@@ -177,12 +177,12 @@ Static Function IsInGetDados( uField , aLocalHeader , aLocalCols , nLocalN )
 		EndIF
 
 		lIsInGetDados := ( ( Type( "N" ) == "N" ) .and. ( n >= 1 ) .and. ( n <= Len( aCols ) ) )
-		IF !( lIsInGetDados )
+		IF .NOT.( lIsInGetDados )
 			BREAK
 		EndIF
 
 		lIsInGetDados := ( Len( aCols[1] ) >= Len( aHeader ) )
-		IF !( lIsInGetDados )
+		IF .NOT.( lIsInGetDados )
 			BREAK
 		EndIF
 		
@@ -193,7 +193,7 @@ Static Function IsInGetDados( uField , aLocalHeader , aLocalCols , nLocalN )
 		EndIF
 
 		lIsInGetDados := ( ValType( aFields ) == "A" )
-		IF !( lIsInGetDados )
+		IF .NOT.( lIsInGetDados )
 			BREAK
 		EndIF
 
@@ -202,7 +202,7 @@ Static Function IsInGetDados( uField , aLocalHeader , aLocalCols , nLocalN )
 			cField			:= aFields[ nField ]
 			nFieldPos 		:= GdFieldPos( cField )
 			lIsInGetDados	:= ( ( nFieldPos > 0 ) .and. ( Len( aCols[ n ] ) >= nFieldPos ) )
-			IF !( lIsInGetDados )
+			IF .NOT.( lIsInGetDados )
 				BREAK
 			EndIF
 		Next nField
@@ -241,8 +241,8 @@ Static Function NDJFromTo( cFromAlias , cToAlias , aFromTo )
 
 	BEGIN SEQUENCE
 
-		lChangeKey		:= !( __cLastKey == cEmpAnt )
-		IF !( lChangeKey )
+		lChangeKey		:= .NOT.( __cLastKey == cEmpAnt )
+		IF .NOT.( lChangeKey )
 			nPosAlias	:= aScan( __aFromTo , { |aFromTo| ( aFromTo[1] == cKeyAlias ) } )
 		EndIF
 
@@ -271,7 +271,7 @@ Static Function NDJFromTo( cFromAlias , cToAlias , aFromTo )
 
 		EndIF	
 
-		IF !( lIsLocked )
+		IF .NOT.( lIsLocked )
 			lLock	:= ( cToAlias )->( RecLock( cToAlias , .F. ) )
 		Else
 			lLock	:= lIsLocked	
@@ -290,7 +290,7 @@ Static Function NDJFromTo( cFromAlias , cToAlias , aFromTo )
 					EndIF	
 				EndIF
 			Next nField
-			IF !( lIsLocked )
+			IF .NOT.( lIsLocked )
 				( cToAlias )->( MsUnLock() )
 			EndIF
 		EndIF
@@ -407,7 +407,7 @@ Static Function __dbDelete( cAlias , lPack , cRddName , cRetSqlName )
 		DEFAULT lPack		:= .F.
 		DEFAULT cRddName	:= ( cAlias )->( RddName() )
 	
-		IF !( cRddName == "TOPCONN" )
+		IF .NOT.( cRddName == "TOPCONN" )
 	
 			IF ( lPack )
 				( cAlias )->( __dbPack() )
@@ -589,7 +589,7 @@ Static Function XALTHRS( cAlias , cField , cXAltHrs , lChkChange )
 
 		DEFAULT cAlias		:= AliasCpo( cField )
 
-		IF !( cAlias == PosAlias( "SX2" , cAlias , NIL , "X2_CHAVE" , 1 , .F. ) )
+		IF .NOT.( cAlias == PosAlias( "SX2" , cAlias , NIL , "X2_CHAVE" , 1 , .F. ) )
 			BREAK
 		EndIF
 
@@ -619,9 +619,9 @@ Static Function XALTHRS( cAlias , cField , cXAltHrs , lChkChange )
 		EndIF                                                     
 
 		IF (;   
-				!( lChkChange );
+				.NOT.( lChkChange );
 				.or.;
-				!Compare( @uCntVar , @uReadVar );
+				.NOT.Compare( @uCntVar , @uReadVar );
 			)
             lMemVar      := IsMemVar( cXAltHrs )
             lGetDados    := IsInGetDados( cXAltHrs )
@@ -633,7 +633,7 @@ Static Function XALTHRS( cAlias , cField , cXAltHrs , lChkChange )
 			ElseIF ( lMemVar )
                 SetMemVar( cXAltHrs , Time() )
 			ElseIF ( (cAlias)->( nFieldPos := FieldPos( cXAltHrs ) ) > 0 )
-				IF ( (cAlias)->( !Eof() .and. RecLock( cAlias , .F. ) ) )
+				IF ( (cAlias)->( .NOT.( Eof() ) .and. RecLock( cAlias , .F. ) ) )
 					(cAlias)->( FieldPut( nFieldPos , Time() )  )
 					(cAlias)->( MsUnLock() )
 				EndIF	
@@ -732,11 +732,14 @@ Return( NIL )
 	Autor:		Marinaldo de Jesus 
 	Data:		08/12/2010
 	Descricao:	Gravar Conteudo em Determinado Campo de Uma Tabela
-    Sintaxe:    StaticCall(NDJLIB001,__FieldPut,cAlias,cField,uCntPut,lForceTable)
+    Sintaxe:    StaticCall(NDJLIB001,__FieldPut,cAlias,uField,uCntPut,lForceTable)
 /*/
-Static Function __FieldPut( cAlias , cField , uCntPut , lForceTable )
+Static Function __FieldPut(cAlias,uField,uCntPut,lForceTable)
 
+	Local cField
+	
 	Local lLock
+	Local lFieldN	:= ( ValType( uField ) == "N" )
 	Local lIsLocked
 
 	Local nFieldPos
@@ -750,8 +753,14 @@ Static Function __FieldPut( cAlias , cField , uCntPut , lForceTable )
 		EndIF
 
 		DEFAULT lForceTable	:= .F.
-
-		IF !( lForceTable )
+        
+		lForceTable	:= ( lForceTable .or. lFieldN )
+		
+		IF .NOT.( lFieldN )
+			cField	:= uField
+		EndIF
+		
+		IF .NOT.( lForceTable )
 		
 			IF IsInGetDados( cField )
 				GdFieldPut( cField , uCntPut )
@@ -765,25 +774,31 @@ Static Function __FieldPut( cAlias , cField , uCntPut , lForceTable )
 		
 		EndIF
 
-		nFieldPos := (cAlias)->( FieldPos( cField ) )
+		IF ( lFieldN )
+			nFieldPos := uField
+		Else
+			nFieldPos := (cAlias)->( FieldPos( cField ) )
+		EndIF
+		
 		IF .NOT.( nFieldPos > 0 )
 			BREAK
 		EndIF
 
-		IF (cAlias)->( Eof() .or. Bof() )
+		lLock := ( lIsLocked := (cAlias)->( IsLocked( cAlias , Recno() ) ) )
+		
+		IF ( .NOT.( lLock ) .and. (cAlias)->( Eof() .or. Bof() ) )
 			BREAK
 		EndIF
 
-		lLock := ( lIsLocked := (cAlias)->( IsLocked( cAlias , Recno() ) ) )
-		IF !( lLock )
+		IF .NOT.( lLock )
 			lLock := (cAlias)->( RecLock( cAlias , .F. ) )
-			IF !( lLock )
+			IF .NOT.( lLock )
 				BREAK
 			EndIF
 		EndIF
 
 		(cAlias)->( FieldPut( nFieldPos , uCntPut ) )
-		IF !( lIsLocked )
+		IF .NOT.( lIsLocked )
 			(cAlias)->( MsUnLock() )	
 		EndIF
 
@@ -820,12 +835,12 @@ Static Function __FieldGet( cAlias , cField , lForceTable , lGdChkCpoVar )
 
 		DEFAULT lForceTable	:= .F.
 
-		IF !( lForceTable )
+		IF .NOT.( lForceTable )
 		
 			IF IsInGetDados( cField )
 				DEFAULT lGdChkCpoVar	:= .T.
 				IF ( lGdChkCpoVar )
-					IF !( IsCpoVar( cField ) )
+					IF .NOT.( IsCpoVar( cField ) )
 						uCntGet := GdFieldGet( cField )
 						BREAK
 					EndIF	
@@ -909,17 +924,17 @@ Begin Sequence
 	bSet15	:= { || GetKeys() , lConfOk := .T. , oDlg:End() }
 	bSet24	:= { || GetKeys() , lConfOk := .F. , oDlg:End() }
 
-	IF !( ValType( oFont ) == "O" )
+	IF .NOT.( ValType( oFont ) == "O" )
 		DEFINE FONT oFont NAME "Arial" SIZE 0,-11
 	EndIF	
-	IF !( Type( "cCadastro" ) == "C" )
+	IF .NOT.( Type( "cCadastro" ) == "C" )
 		Private cCadastro := ""
 	EndIF
 
 	DEFAULT cTitle  := ""
-	IF !Empty( cCadastro )
+	IF .NOT.Empty( cCadastro )
 		cTitCompl	:=	cCadastro
-		IF !Empty( cTitle )
+		IF .NOT.Empty( cTitle )
 			cTitCompl	+=	" - "
 			cTitCompl	+= cTitle
 		EndIF
@@ -931,7 +946,7 @@ Begin Sequence
 
 		@ aObjSize[1][1],aObjSize[1][2] GET oMemoEdit VAR cMemoEdit MEMO OF oDlg SIZE (aObjSize[1][4]-aObjSize[1][2]),((aObjSize[1][3]-aObjSize[1][1])) FONT oFont PIXEL WHEN ( .T. ) DESIGN UPDATE
 
-		oMemoEdit:lReadOnly := !( lModify )
+		oMemoEdit:lReadOnly := .NOT.( lModify )
 		oMemoEdit:EnableVScroll(.T.)
 		oMemoEdit:EnableHScroll(.T.)
 
@@ -944,9 +959,9 @@ Begin Sequence
 		IF ( lConfOk )		//<CTRL-O>
 			DEFAULT bAction	:= { || .T. }
 			Eval( bAction )
-		ElseIF !( lConfOk )	//<CTRL-X>
-			IF !( cSvMemoEdit == cMemoEdit )
-				IF !( MsgNoYes( OemToAnsi( "Abandonar as Alterações?" ) , cTitCompl ) )
+		ElseIF .NOT.( lConfOk )	//<CTRL-X>
+			IF .NOT.( cSvMemoEdit == cMemoEdit )
+				IF .NOT.( MsgNoYes( OemToAnsi( "Abandonar as Alterações?" ) , cTitCompl ) )
 					DlgMemoEdit(;
 									@bAction	,;	//01 -> Acao a ser executada se tudo Ok
 									@cTitle		,;	//02 -> Array com Botoes para Opcao de Edicao dos Campos Memo
@@ -995,7 +1010,7 @@ Static Function GetAlias4Fields( cAlias , aFields )
 
 	TRYEXCEPTION
 
-		IF !Empty( cAlias )
+		IF .NOT.( Empty( cAlias ) )
 			nArea	:= Select( cAlias )
 			IF ( nArea > 0 )
 				nAreas	:= nArea
@@ -1053,9 +1068,9 @@ Return( lFoundAlias )
 	Autor:		Marinaldo de Jesus
 	Data:		26/12/2010
     Uso:        Setar Variavel de Memoria
-    Sintaxe:    StaticCall( NDJLIB001 , SetMemVar , cVar , uSetValue , lSetOwnerPrvt , lForceSetOwner , lRetLastValue , lInitPad , cLado , lPublic )
+    Sintaxe:    StaticCall(NDJLIB001,SetMemVar,cVar,uSetValue,lSetOwnerPrvt,lForceSetOwner,lRetLastValue,lInitPad,cLado,lPublic,cStack)
 /*/
-Static Function SetMemVar( cVar , uSetValue , lSetOwnerPrvt , lForceSetOwner , lRetLastValue , lInitPad , cLado , lPublic )
+Static Function SetMemVar(cVar,uSetValue,lSetOwnerPrvt,lForceSetOwner,lRetLastValue,lInitPad,cLado,lPublic,cStack)
 
 	Local cVarAux
 	
@@ -1072,15 +1087,15 @@ Static Function SetMemVar( cVar , uSetValue , lSetOwnerPrvt , lForceSetOwner , l
 	TRYEXCEPTION
 
 		cVar := Upper( AllTrim( cVar ) )
-		IF !( "M->" == SubStr( cVar , 1 , 3 ) )
+		IF .NOT.( "M->" == SubStr( cVar , 1 , 3 ) )
 			cVarAux := cVar
 			cVar	:= ( "M->" + cVar )
 		Else
 			cVarAux := SubStr( cVar , 4 )
 		EndIF
 
-		IF !( cVar == Upper( "__Undefined__" ) )
-			IF !( GetSx3Cache( cVarAux , "X3_CAMPO" ) == NIL )
+		IF .NOT.( cVar == Upper( "__Undefined__" ) )
+			IF .NOT.( GetSx3Cache( cVarAux , "X3_CAMPO" ) == NIL )
 				DEFAULT uSetValue	:= GetValType( GetSx3Cache( @cVarAux , "X3_TIPO" ) , GetSx3Cache( @cVarAux , "X3_TAMANHO" ) )
 			EndIF
 		EndIF
@@ -1091,12 +1106,16 @@ Static Function SetMemVar( cVar , uSetValue , lSetOwnerPrvt , lForceSetOwner , l
 		Else
 			uRetValue			:= uSetValue
 		EndIF
-        IF ( !IsMemVar( @cVar ) .or. ( lForceSetOwner ) )
+        IF ( .NOT.( IsMemVar( @cVar ) ) .or. ( lForceSetOwner ) )
 			IF ( lSetOwnerPrvt )
 				IF ( lPublic )
-                    StaticCall( NDJLIB004 , SetPublic , @cVarAux , @uSetValue )
+                    StaticCall( NDJLIB004 , SetPublic , @cVarAux , @uSetValue , NIL , NIL , @lForceSetOwner , NIL , @cStack )
 				Else
-					_SetOwnerPrvt( @cVarAux , @uSetValue )
+					IF .NOT.( Empty( cStack ) )
+						_SetNamedPrvt( cVarAux , @uSetValue , @cStack )
+					Else
+						_SetOwnerPrvt( @cVarAux , @uSetValue )
+					EndIF	
 				EndIF
 			EndIF
 		Else
@@ -1131,16 +1150,16 @@ Static Function GetMemVar( cVar , lInitPad , cLado )
 		DEFAULT lInitPad	:= .F.
 		
 		cVar := Upper( AllTrim( cVar ) )
-		IF !( "M->" == SubStr( cVar , 1 , 3 ) )
+		IF .NOT.( "M->" == SubStr( cVar , 1 , 3 ) )
 			cVar := ( "M->" + cVar )
 		EndIF
 		
         IF ( IsMemVar( @cVar ) )
 			uRetValue := &( cVar )
 		Else
-			IF !( cVar == Upper( "__Undefined__" ) )
+			IF .NOT.( cVar == Upper( "__Undefined__" ) )
 				cVarAux := SubStr( cVar , 4 )
-				IF !( GetSx3Cache( @cVarAux , "X3_CAMPO" ) == NIL )
+				IF .NOT.( GetSx3Cache( @cVarAux , "X3_CAMPO" ) == NIL )
 					uRetValue := CriaVar( @cVarAux , @lInitPad , @cLado , .F. )
 				EndIF
 			EndIF
@@ -1172,7 +1191,7 @@ Static Function IsMemVar( cVar )
 		DEFAULT cVar := "__Undefined__"
 		
 		cVar := Upper( AllTrim( cVar ) )
-		IF !( "M->" == SubStr( cVar , 1 , 3 ) )
+		IF .NOT.( "M->" == SubStr( cVar , 1 , 3 ) )
 			cVar := ( "M->" + cVar )
 		EndIF
 		
@@ -1210,7 +1229,7 @@ Static Function GetCallStack( nStart )
 	DEFAULT nStart		:= 0
 
 	nCallStack			:= nStart
-	While ( cCallStack  := ProcName( ++nCallStack ) , !Empty( cCallStack ) )
+	While ( cCallStack  := ProcName( ++nCallStack ) , .NOT.( Empty( cCallStack ) ) )
 		aAdd( aCallStack , cCallStack )
 	End While
 
@@ -1240,7 +1259,7 @@ Static Function QryMaxCod( cAlias , cField , cWhere , lDeleted , lForceWhere )
 	cQuery += 	"MAX(" + cField + ") MAXCOD "
 	cQuery += "FROM "	
 	cQuery += 	RetSqlName( cAlias ) + " " + cAlias + " "
- 	IF !( lForceWhere )
+ 	IF .NOT.( lForceWhere )
 		cPrefixoCpo	:= PrefixoCpo( cAlias )
 		cQuery += "WHERE "
 		cQuery += 	cAlias+"."+cPrefixoCpo+"_FILIAL='" + xFilial( cAlias ) + "'"
@@ -1248,12 +1267,12 @@ Static Function QryMaxCod( cAlias , cField , cWhere , lDeleted , lForceWhere )
 			cQuery += 	" AND "
 			cQuery += 	cAlias+".D_E_L_E_T_<>'*'"
 		EndIF
-		IF !( Empty( cWhere ) )
+		IF .NOT.( Empty( cWhere ) )
 			cQuery += " AND "
 			cQuery += cWhere
 		EndIF
 	Else
-		IF !( Empty( cWhere ) )
+		IF .NOT.( Empty( cWhere ) )
 			cQuery += cWhere
 		EndIF
 	EndIF
@@ -1333,7 +1352,7 @@ Static Function ChgFilial()
 
 		ProcRegua( 0 )
 
-		While SX2->( !Eof() )
+		While SX2->( .NOT.( Eof() ) )
 
 			cAlias 	  	:= SX2->X2_CHAVE
 			lCompart	:= ( SX2->X2_MODO == "C" )
@@ -1342,11 +1361,11 @@ Static Function ChgFilial()
 	
 			TRYEXCEPTION
 
-				IF !( lCompart )
+				IF .NOT.( lCompart )
 					BREAK
 				EndIF
 
-				IF !( ChkFile( cAlias ) )
+				IF .NOT.( ChkFile( cAlias ) )
 					BREAK
 				EndIF
 				
@@ -1356,7 +1375,7 @@ Static Function ChgFilial()
 				
 				lTopConn := ( ( cAlias )->( RddName() ) == "TOPCONN" )
 				
-				IF !( lTopConn )
+				IF .NOT.( lTopConn )
 					BREAK
 				EndIF
 
@@ -1438,7 +1457,7 @@ Static Function RetPictVal( nVal , lDecZero , nInt , nDec , lPictSepMil )
 		IF (;
 				( uDec == 0 );
 				.and.;
-				!( lDecZero );
+				.NOT.( lDecZero );
 			)
 			uDec := NIL
 		EndIF
@@ -1532,11 +1551,11 @@ Static Function GetTopSource( cTopServer , nTopPort , cTopAlias , cTitle )
 		oGroup:oFont:= oFont
 	
 		@ ( aObjSize[1,1] ) + 20 , ( aObjSize[1,2]+ 05 )	SAY "TopServer:"	PIXEL
-		@ ( aObjSize[1,1] ) + 15 , ( aObjSize[1,2]+ 35 )	MSGET oTopServer	VAR cTopServer	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID !Empty(cTopServer)
+		@ ( aObjSize[1,1] ) + 15 , ( aObjSize[1,2]+ 35 )	MSGET oTopServer	VAR cTopServer	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID .NOT.( Empty(cTopServer) )
 		@ ( aObjSize[1,1] ) + 40 , ( aObjSize[1,2]+ 05 )	SAY "TopAlias:"		PIXEL
-		@ ( aObjSize[1,1] ) + 35 , ( aObjSize[1,2]+ 35 )	MSGET oTopAlias 	VAR cTopAlias	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID !Empty(cTopAlias)
+		@ ( aObjSize[1,1] ) + 35 , ( aObjSize[1,2]+ 35 )	MSGET oTopAlias 	VAR cTopAlias	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID .NOT.( Empty(cTopAlias) )
 		@ ( aObjSize[1,1] ) + 60 , ( aObjSize[1,2]+ 05 )	SAY "TopPort:"		PIXEL
-		@ ( aObjSize[1,1] ) + 55 , ( aObjSize[1,2]+ 35 )	MSGET oTopPort		VAR nTopPort	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID !Empty(nTopPort)
+		@ ( aObjSize[1,1] ) + 55 , ( aObjSize[1,2]+ 35 )	MSGET oTopPort		VAR nTopPort	SIZE 150,10 OF oDlg PIXEL FONT oFont	VALID .NOT.( Empty(nTopPort) )
 	
 	ACTIVATE MSDIALOG oDlg CENTERED ON INIT Eval( bDialogInit )
 	
@@ -1614,13 +1633,13 @@ Static Function DirMake( cMakeDir , nTimes , nSleep )
 	Local lMakeOk
 	Local nMakeOk
 	
-	IF !( lMakeOk := lIsDir( cMakeDir ) )
+	IF .NOT.( lMakeOk := lIsDir( cMakeDir ) )
 		MakeDir( cMakeDir )
 		nMakeOk			:= 0
 		DEFAULT nTimes	:= 3
 		DEFAULT nSleep	:= 100
 		While (;
-				!( lMakeOk := lIsDir( cMakeDir ) );
+				.NOT.( lMakeOk := lIsDir( cMakeDir ) );
 				.and.;
 				( ++nMakeOk <= nTimes );
 		   )
@@ -1661,7 +1680,7 @@ Static Function BrwLegenda( cTitulo , cMensagem , aLegend , bAction , cMsgAction
 
 		DEFAULT cTitulo		:= "BrwLegenda"
 		DEFAULT cMensagem	:= ""
-		DEFAULT bAction		:= { |cResName| !Empty( cResName ) }
+		DEFAULT bAction		:= { |cResName| .NOT.( Empty( cResName ) ) }
 		DEFAULT cMsgAction	:= ""
 
 		aListBox := Array( nItens , 2 )
@@ -1724,7 +1743,7 @@ Static Function BrwGetSLeg( cAlias , bGetColors , bGetLegend , cResName , lArrCo
 
 	cEvalGetCL	:= ( cAlias + GetCbSource( bGetColors ) + GetCbSource( bGetLegend ) )
 	
-	lEvalGetCL	:= ( ( __aBrwGetC == NIL ) .or. ( __aBrwGetL == NIL ) .or. !( cEvalGetCL == __cEvGetCL ) )
+	lEvalGetCL	:= ( ( __aBrwGetC == NIL ) .or. ( __aBrwGetL == NIL ) .or. .NOT.( cEvalGetCL == __cEvGetCL ) )
 	__cEvGetCL	:= cEvalGetCL
 
 	IF ( lEvalGetCL )
@@ -1759,14 +1778,14 @@ Static Function BrwGetSLeg( cAlias , bGetColors , bGetLegend , cResName , lArrCo
 				IF ( lFilter )
 					cBmpColor		:= Upper( AllTrim( __aColors_[ nLoop ][ 2 ] ) )
 					nPosBmp			:= aScan( __aLegend_ , { |aBmpLeg| Upper( AllTrim( aBmpLeg[ 1 ] ) ) == cBmpColor } )
-					IF !( nPosBmp == 0 )
+					IF .NOT.( nPosBmp == 0 )
 						uC1Ret	:= __aColors_[ nLoop ][ 1 ]							//Obtem a Condicao de Filtro
 					EndIF	
 				Else
 					IF ( cAlias )->( &( __aColors_[ nLoop ][ 1 ] ) )				//Analisa a Condicao
 						cBmpColor		:= Upper( AllTrim( __aColors_[ nLoop ][ 2 ] ) )
 						nPosBmp			:= aScan( __aLegend_ , { |aBmpLeg| Upper( AllTrim( aBmpLeg[ 1 ] ) ) == cBmpColor } )
-						IF !( nPosBmp == 0 )
+						IF .NOT.( nPosBmp == 0 )
 							uC1Ret	:= OemToAnsi( __aLegend_[ nPosBmp ][ 2 ] )		//Obtem a Descricao
 						EndIF	
 						Exit
@@ -1876,17 +1895,17 @@ Static Function NDJEvalF3( cF3 , lShowHelp , cException )
         
 		lConpad1			:= ConPad1( NIL , NIL , NIL , cF3 )
 		
-		IF !( lConpad1 )
+		IF .NOT.( lConpad1 )
 			cException	:= "Nenhuma informação Selecionada"
-			IF !( lShowHelp )
+			IF .NOT.( lShowHelp )
 				BREAK
 			EndIF
 			UserException( cException )
 		EndIF
 
-		IF !( Type( "aCpoRet" ) == "A" )
+		IF .NOT.( Type( "aCpoRet" ) == "A" )
 			cException	:= "Problemas no Retorno da Consulta Padrão" + __cCRLF + __cCRLF + "Entre em contato com o Administrador do Sistema."
-			IF !( lShowHelp )
+			IF .NOT.( lShowHelp )
 				BREAK
 			EndIF
 			UserException( cException )	
@@ -2137,7 +2156,7 @@ User Function GetMvPar( cEmp , cFil , uMvPar , uDefault , lRpcSet , lReset , lHe
 
 	BEGIN SEQUENCE
 
-		IF !(;
+		IF .NOT.(;
 				( IsInCallStack("_GetMvPar") );
 				.or.;
 				( IsInCallStack("U_GetMvPar") .and. Empty( ProcName(1) ) );
@@ -2172,7 +2191,7 @@ User Function GetMvPar( cEmp , cFil , uMvPar , uDefault , lRpcSet , lReset , lHe
 			Next nMV
 	    EndIF    
 	
-		IF !( lSetCentury )
+		IF .NOT.( lSetCentury )
 			__SetCentury("OFF")		
 		EndIF
 
@@ -2202,7 +2221,7 @@ User Function PutMvPar( cEmp , cFil , uMvPar , uMvCntPut , lRpcSet )
 
 	BEGIN SEQUENCE
 
-		IF !(;
+		IF .NOT.(;
 				( IsInCallStack("_PutMvPar") );
 				.or.;
 				( IsInCallStack("U_PutMvPar") .and. Empty( ProcName(1) ) );
@@ -2232,7 +2251,7 @@ User Function PutMvPar( cEmp , cFil , uMvPar , uMvCntPut , lRpcSet )
 	
 	     uMvRet				:= _GetMvPar( @cEmp , @cFil , @uMvPar , @uMvCntPut , .T. )
 	
-		IF !( lSetCentury )
+		IF .NOT.( lSetCentury )
 			__SetCentury("OFF")		
 		EndIF
 
@@ -2363,7 +2382,7 @@ Static Function FileToArr( cFile )
 	
 	Begin Sequence
 	
-		IF !( File( cFile ) )
+		IF .NOT.( File( cFile ) )
 			Break
 		EndIF
 	
@@ -2371,13 +2390,13 @@ Static Function FileToArr( cFile )
 		IF (;
 				( ( ValType( uUsed ) == "N" ) .and. ( uUsed < 0 ) );
 				.or.;
-				( ( ValType( uUsed ) == "L" ) .and. !( uUsed ) );			
+				( ( ValType( uUsed ) == "L" ) .and. .NOT.( uUsed ) );			
 			)	
 			Break
 		EndIF
 	
 		fT_fGotop()
-		While !( fT_fEof() )
+		While .NOT.( fT_fEof() )
 			cLine := fT_fReadLn()
 			aAdd( aFile , cLine )
 			fT_fSkip()
@@ -2424,10 +2443,10 @@ Static Procedure PutSX1(cPerg,aPerg)
 	SX1->( dbGoTop() )
 	SX1->( dbSeek( cPerg , .F. ) )
 
-	While SX1->( !Eof() .and. X1_GRUPO == cPerg )
+	While SX1->( .NOT.Eof() .and. X1_GRUPO == cPerg )
 		nAT 		:= SX1->( aScan( aPerg , { |x| (  ( x[__nGrupo] == X1_GRUPO ) .and. ( x[__nOrdem] == X1_ORDEM ) ) } ) )
 		lFound	:= ( nAT > 0 )
-		IF !( lFound )
+		IF .NOT.( lFound )
 			IF SX1->( RecLock( "SX1" , .F. ) )	
 				SX1->( dbDelete() )
 				SX1->( MsUnLock() )
@@ -2440,7 +2459,7 @@ Static Procedure PutSX1(cPerg,aPerg)
 		cKeySeek	:= aPerg[nBL][__nGrupo]
 		cKeySeek	+= aPerg[nBL][__nOrdem]
 		lFound	:= SX1->( dbSeek( cKeySeek , .T. ) )
-		lAddNew	:= !( lFound )
+		lAddNew	:= .NOT.( lFound )
 		IF SX1->( RecLock( "SX1" , lAddNew ) )
 			nFields := Len( aPerg[nBL][__nField] )
 			For nField := 1 To nFields
@@ -2479,11 +2498,11 @@ Static Procedure AddPerg(aPerg,cGrupo,cOrdem,cField,uCNT)
 	Static aX1Fields
 	Static __cX1Fields
 
-	IF !( Type("cEmpAnt") == "C" )
+	IF .NOT.( Type("cEmpAnt") == "C" )
 		Private cEmpAnt := ""
 	EndIF
 
-	IF ( ( aX1Fields == NIL ) .or. !( __cX1Fields == cEmpAnt ) )
+	IF ( ( aX1Fields == NIL ) .or. .NOT.( __cX1Fields == cEmpAnt ) )
 		__cX1Fields := cEmpAnt
 		aX1Fields	:= {;
 									{ "X1_GRUPO" 	, NIL , .T. , 0 },;
@@ -2588,7 +2607,7 @@ Static Function SXGSize( cGRPSXG , nSize , nDec , cPicture )
 	DEFAULT nDec		:= 0
 	DEFAULT cPicture	:= ""
 
-	IF !Empty( cGRPSXG )
+	IF .NOT.Empty( cGRPSXG )
 
 		SXG->( dbSetOrder( 1 ) ) //XG_GRUPO
 		
@@ -2778,11 +2797,128 @@ Static Function FolderSetOption(nTarget,nSource,aObjFolder,aGdObjects,nActFolder
 
 Return( lSetOption )
 
+/*/
+	Funcao:		GDToExcel
+	Autor:		Marinaldo de Jesus 
+	Data:		08/06/2013
+	Descricao:	Mostrar os Dados no Excel
+	Sintaxe:	StaticCall(NDJLIB001,GDToExcel,aHeader,aCols,cWorkSheet,cTable,lTotalize)
+/*/
+Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
+
+	Local oFWMSExcel := FWMSExcel():New()
+	
+	Local oMsExcel
+
+	Local aCells
+
+	Local cType
+	Local cColumn
+
+	Local cFile
+	Local cFileTMP
+	
+	Local cPicture
+
+	Local lTotal
+
+	Local nItem
+	Local nItens
+	Local nField
+	Local nFields
+	
+	Local nAlign
+	Local nFormat
+	
+	Local uCell
+
+	DEFAULT cWorkSheet 	:= "GETDADOS"
+	DEFAULT cTable		:= cWorkSheet
+	DEFAULT lTotalize	:= .T.
+	DEFAULT lPicture	:= .F.
+	
+	BEGIN SEQUENCE
+	
+		oFWMSExcel:AddworkSheet(cWorkSheet)
+		oFWMSExcel:AddTable(cWorkSheet,cTable)
+		
+		nFields		:= Len( aHeader )
+		adbStruct	:= Array( nFields )
+		For nField := 1 To nFields
+			cType	:= aHeader[nField][__AHEADER_TYPE__]
+			nAlign	:= IF(cType=="C",1,IF(cType=="N",3,2))
+			nFormat	:= IF(cType=="D",4,IF(cType=="N",2,1))		
+			cColumn	:= aHeader[nField][__AHEADER_TITLE__]
+			lTotal	:= ( lTotalize .and. cType == "N" )
+			oFWMSExcel:AddColumn(@cWorkSheet,@cTable,@cColumn,@nAlign,@nFormat,@lTotal)
+		Next nField
+		
+		aCells	:= Array(nFields)
+	
+		nItens := Len( aCols )
+		For nItem := 1 To nItens
+			For nField := 1 To nFields
+				uCell	:= aCols[nItem][nField]
+				IF ( lPicture )
+					cPicture	:= aHeader[nField][__AHEADER_PICTURE__]
+					IF .NOT.( Empty(cPicture) )
+						uCell	:= Transform(uCell,cPicture)
+					EndIF
+				EndIF
+				aCells[nField]	:= uCell
+			Next nField
+			oFWMSExcel:AddRow(@cWorkSheet,@cTable,aClone(aCells))
+		Next nItem
+	
+		oFWMSExcel:Activate()
+		
+		cFile := ( CriaTrab( NIL, .F. ) + ".xml" )
+		
+		While File( cFile )
+			cFile := ( CriaTrab( NIL, .F. ) + ".xml" )
+		End While
+		
+		oFWMSExcel:GetXMLFile( cFile )
+		oFWMSExcel:DeActivate()
+				
+		IF .NOT.( File( cFile ) )
+			cFile := ""
+			BREAK
+		EndIF
+		
+		cFileTMP := ( GetTempPath() + cFile )
+		IF .NOT.( __CopyFile( cFile , cFileTMP ) )
+			fErase( cFile )
+			cFile := ""
+			BREAK
+		EndIF
+		
+		fErase( cFile )
+		
+		cFile	:= cFileTMP
+		
+		IF .NOT.( File( cFile ) )
+			cFile := ""
+			BREAK
+		EndIF
+		
+		oMsExcel := MsExcel():New()
+		oMsExcel:WorkBooks:Open( cFile )
+		oMsExcel:SetVisible( .T. )
+		
+		oMsExcel := oMsExcel:Destroy()
+	
+	END SEQUENCE
+		
+	oFWMSExcel	:= FreeObj( oFWMSExcel )
+
+Return( cFile )
+
 Static Function __Dummy( lRecursa )
 	Local oException
 	TRYEXCEPTION
         lRecursa := .F.
-		IF !( lRecursa )
+		IF .NOT.( lRecursa )
 			BREAK
 		EndIF
 		BRWLEGENDA()
@@ -2824,6 +2960,7 @@ Static Function __Dummy( lRecursa )
     	X3Decimal()
     	X3Picture()
 		FolderSetOption()
+		GdToExcel()
 		lRecursa := __Dummy( .F. )
 		SYMBOL_UNUSED( __cCRLF )
 	CATCHEXCEPTION USING oException

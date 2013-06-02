@@ -2822,8 +2822,8 @@ Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 
 	Local lTotal
 
-	Local nItem
-	Local nItens
+	Local nRow
+	Local nRows
 	Local nField
 	Local nFields
 	
@@ -2843,7 +2843,6 @@ Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 		oFWMSExcel:AddTable(cWorkSheet,cTable)
 		
 		nFields		:= Len( aHeader )
-		adbStruct	:= Array( nFields )
 		For nField := 1 To nFields
 			cType	:= aHeader[nField][__AHEADER_TYPE__]
 			nAlign	:= IF(cType=="C",1,IF(cType=="N",3,2))
@@ -2855,10 +2854,10 @@ Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 		
 		aCells	:= Array(nFields)
 	
-		nItens := Len( aCols )
-		For nItem := 1 To nItens
+		nRows := Len( aCols )
+		For nRow := 1 To nRows
 			For nField := 1 To nFields
-				uCell	:= aCols[nItem][nField]
+				uCell	:= aCols[nRow][nField]
 				IF ( lPicture )
 					cPicture	:= aHeader[nField][__AHEADER_PICTURE__]
 					IF .NOT.( Empty(cPicture) )
@@ -2868,7 +2867,7 @@ Static Function GDToExcel(aHeader,aCols,cWorkSheet,cTable,lTotalize,lPicture)
 				aCells[nField]	:= uCell
 			Next nField
 			oFWMSExcel:AddRow(@cWorkSheet,@cTable,aClone(aCells))
-		Next nItem
+		Next nRow
 	
 		oFWMSExcel:Activate()
 		

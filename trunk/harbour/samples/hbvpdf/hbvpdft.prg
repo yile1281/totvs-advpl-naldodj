@@ -2138,7 +2138,7 @@ METHOD Execute( cFile ) CLASS tPDF
 RETURN( Self )
 
 METHOD Colorize(cColor,nBase) CLASS tPDF
-	DEFAULT nBase TO 32
+	DEFAULT nBase TO 16
 Return(chr(253)+chr(cton(substr(cColor,1,2),nBase))+chr(cton(substr(cColor,3,2),nBase))+chr(cton(cColor,5,2),nBase))
 
 Method rgbToHex(nR,nG,nB,nBase) CLASS tPDF
@@ -2149,7 +2149,7 @@ Method rgbToHex(nR,nG,nB,nBase) CLASS tPDF
 	DEFAULT nR    TO 0
 	DEFAULT nG    TO 0
 	DEFAULT nB    TO 0
-	DEFAULT nBase TO 32
+	DEFAULT nBase TO 16
 	cR    := LTrim(Str(nR))
 	cG    := LTrim(Str(nG))
 	cB    := LTrim(Str(nB))
@@ -2177,17 +2177,19 @@ return PosIns( PosDel( cStr, nBeg, nDel ), cIns, nBeg )
 */
 //-------------------------\\
 
-static function Chr_RGB( cChar )
-return str(asc( cChar ) / 255, 4, 2)
+static function Chr_RGB(cChar)
+return(Str(Asc(cChar)/255,4,2))
 
-static function cton( cString, nBase ) 
-local cTemp, nI, cChar, n := 0, nLen
+static function cton(cString,nBase) 
+   
+   local cTemp, nI, cChar, n := 0, nLen
 
    nLen := len( cString )
    cTemp := ""
    for nI := nLen to 1 step -1
        cTemp += substr( cString, nI, 1 )
    next
+ 
    cTemp := upper( cTemp )
 
    for nI := 1 to nLen

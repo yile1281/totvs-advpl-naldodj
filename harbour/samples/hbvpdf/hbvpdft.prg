@@ -1,5 +1,6 @@
-#include "protheus.ch"
+#include "shell.ch"
 #include "hbvpdf.ch"
+#include "protheus.ch"
 
 #xtranslate LEFTEQUAL( <x>, <y> )	=> <x> = <y>
 #xtranslate DEFAULT <x> TO <y>		=> DEFAULT <x> := <y>
@@ -89,83 +90,85 @@ CLASS tPDF FROM LongClassName	//$Id: hbvpdft.prg 16754 2011-05-11 16:05:43Z vsza
 	METHOD PageY()
 	METHOD FontSize()
 	METHOD FontName()
+	METHOD Colorize(cColor,nBase)
+	METHOD rgbToHex(nR,nG,nB)
 
 ENDCLASS
 
-USER FUNCTION utPDF( cFile , nLen , lOptimize )
+USER FUNCTION tPDF( cFile , nLen , lOptimize )
 RETURN( tPDF():New( @cFile , @nLen , @lOptimize ) )
 
 METHOD New( cFile, nLen, lOptimize ) CLASS tPDF
 
-local cTemp, nI, nJ, n1, n2 := 896, n12
-
-DEFAULT nLen      TO 200
-DEFAULT lOptimize TO .f.
-
-::aReport 		:= array( PARAMLEN )
-::cClassName	:= "TDECODE"
-
-::PageNumber(0)
-::FontName(1)
-::FontSize(10)
-::PageX(8.5 * 72)
-::PageY(11.0 * 72)
-::Width( nLen )			//200 should be as parameter
-
-::aReport[ FONTNAME     ] := 1
-::aReport[ FONTSIZE     ] := 10
-::aReport[ LPI          ] := 6
-::aReport[ PAGESIZE     ] := "LETTER"
-::aReport[ PAGEORIENT   ] := "P"
-::aReport[ PAGEX        ] := 8.5 * 72
-::aReport[ PAGEY        ] := 11.0 * 72
-::aReport[ REPORTWIDTH  ] := nLen    // 200 // should be as parameter
-::aReport[ REPORTPAGE   ] := 0
-::aReport[ REPORTLINE   ] := 0       // 5
-::aReport[ FONTNAMEPREV ] := 0
-::aReport[ FONTSIZEPREV ] := 0
-::aReport[ PAGEBUFFER   ] := ""
-::aReport[ REPORTOBJ    ] := 1       //2
-::aReport[ DOCLEN       ] := 0
-::aReport[ TYPE1        ] := { "Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic", ;
-                               "Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-BoldOblique", ;
-                               "Courier", "Courier-Bold", "Courier-Oblique", "Courier-BoldOblique" }
-::aReport[ MARGINS      ] := .t.
-::aReport[ HEADEREDIT   ] := .f.
-::aReport[ NEXTOBJ      ] := 0
-::aReport[ PDFTOP       ] := 1      // top
-::aReport[ PDFLEFT      ] := 10     // left & right
-::aReport[ PDFBOTTOM    ] := ::aReport[ PAGEY ] / 72 * ::aReport[ LPI ] - 1 // bottom, default "LETTER", "P", 6
-::aReport[ HANDLE       ] := fcreate( cFile )
-::aReport[ PAGES        ] := {}
-::aReport[ REFS         ] := { 0, 0 }
-::aReport[ BOOKMARK     ] := {}
-::aReport[ HEADER       ] := {}
-::aReport[ FONTS        ] := {}
-::aReport[ IMAGES       ] := {}
-::aReport[ PAGEIMAGES   ] := {}
-::aReport[ PAGEFONTS    ] := {}
-
-cTemp := vpdf_FontsDat()
-n1    := len( cTemp ) / ( 2 * n2 )
-::aReport[ FONTWIDTH    ] := array( n1, n2 )
-
-::aReport[ OPTIMIZE     ] := lOptimize
-::aReport[ NEXTOBJ      ] := ::aReport[ REPORTOBJ ] + 4
-
-n12 := 2 * n2
-for nI := 1 to n1
-   for nJ := 1 to n2
-      ::aReport[ FONTWIDTH ][ nI ][ nJ ] := bin2i( substr( cTemp, ( nI - 1 ) * n12 + ( nJ - 1 ) * 2 + 1, 2 ) )
-   next
-next
-
-::aReport[ DOCLEN       ] := 0
-cTemp                     := "%PDF-1.3" + __cCRLF
-::aReport[ DOCLEN       ] += len( cTemp )
-
-fwrite( ::aReport[ HANDLE ], cTemp )
-
+	local cTemp, nI, nJ, n1, n2 := 896, n12
+	
+	DEFAULT nLen      TO 200
+	DEFAULT lOptimize TO .f.
+	
+	::aReport 		:= array( PARAMLEN )
+	::cClassName	:= "TPDF"
+	
+	::PageNumber(0)
+	::FontName(1)
+	::FontSize(10)
+	::PageX(8.5 * 72)
+	::PageY(11.0 * 72)
+	::Width( nLen )			//200 should be as parameter
+	
+	::aReport[ FONTNAME     ] := 1
+	::aReport[ FONTSIZE     ] := 10
+	::aReport[ LPI          ] := 6
+	::aReport[ PAGESIZE     ] := "LETTER"
+	::aReport[ PAGEORIENT   ] := "P"
+	::aReport[ PAGEX        ] := 8.5 * 72
+	::aReport[ PAGEY        ] := 11.0 * 72
+	::aReport[ REPORTWIDTH  ] := nLen    // 200 // should be as parameter
+	::aReport[ REPORTPAGE   ] := 0
+	::aReport[ REPORTLINE   ] := 0       // 5
+	::aReport[ FONTNAMEPREV ] := 0
+	::aReport[ FONTSIZEPREV ] := 0
+	::aReport[ PAGEBUFFER   ] := ""
+	::aReport[ REPORTOBJ    ] := 1       //2
+	::aReport[ DOCLEN       ] := 0
+	::aReport[ TYPE1        ] := { "Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic", ;
+	                               "Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-BoldOblique", ;
+	                               "Courier", "Courier-Bold", "Courier-Oblique", "Courier-BoldOblique" }
+	::aReport[ MARGINS      ] := .t.
+	::aReport[ HEADEREDIT   ] := .f.
+	::aReport[ NEXTOBJ      ] := 0
+	::aReport[ PDFTOP       ] := 1      // top
+	::aReport[ PDFLEFT      ] := 10     // left & right
+	::aReport[ PDFBOTTOM    ] := ::aReport[ PAGEY ] / 72 * ::aReport[ LPI ] - 1 // bottom, default "LETTER", "P", 6
+	::aReport[ HANDLE       ] := fcreate( cFile )
+	::aReport[ PAGES        ] := {}
+	::aReport[ REFS         ] := { 0, 0 }
+	::aReport[ BOOKMARK     ] := {}
+	::aReport[ HEADER       ] := {}
+	::aReport[ FONTS        ] := {}
+	::aReport[ IMAGES       ] := {}
+	::aReport[ PAGEIMAGES   ] := {}
+	::aReport[ PAGEFONTS    ] := {}
+	
+	cTemp := vpdf_FontsDat()
+	n1    := len( cTemp ) / ( 2 * n2 )
+	::aReport[ FONTWIDTH    ] := array( n1, n2 )
+	
+	::aReport[ OPTIMIZE     ] := lOptimize
+	::aReport[ NEXTOBJ      ] := ::aReport[ REPORTOBJ ] + 4
+	
+	n12 := 2 * n2
+	for nI := 1 to n1
+	   for nJ := 1 to n2
+	      ::aReport[ FONTWIDTH ][ nI ][ nJ ] := bin2i( substr( cTemp, ( nI - 1 ) * n12 + ( nJ - 1 ) * 2 + 1, 2 ) )
+	   next
+	next
+	
+	::aReport[ DOCLEN       ] := 0
+	cTemp                     := "%PDF-1.3" + __cCRLF
+	::aReport[ DOCLEN       ] += len( cTemp )
+	
+	fwrite( ::aReport[ HANDLE ], cTemp )
+	
 RETURN self
 
 METHOD ClassName() CLASS tPDF
@@ -447,9 +450,9 @@ RETURN self
 
 METHOD Box1( nTop, nLeft, nBottom, nRight, nBorderWidth, cBorderColor, cBoxColor ) CLASS tPDF
 
-DEFAULT nBorderWidth to 0.5
-DEFAULT cBorderColor to chr(0) + chr(0) + chr(0)
-DEFAULT cBoxColor to chr(255) + chr(255) + chr(255)
+	DEFAULT nBorderWidth to 0.5
+	DEFAULT cBorderColor to chr(0) + chr(0) + chr(0)
+	DEFAULT cBoxColor to chr(255) + chr(255) + chr(255)
 
    ::aReport[ PAGEBUFFER ] +=  __cCRLF + ;
                          Chr_RGB( substr( cBorderColor, 1, 1 )) + " " + ;
@@ -474,12 +477,12 @@ return nil
 
 METHOD Center( cString, nRow, nCol, cUnits, lExact, cId ) CLASS tPDF
 
-local nLen, nAt
-DEFAULT nRow TO ::aReport[ REPORTLINE ]
-DEFAULT cUnits TO "R"
-DEFAULT lExact TO .f.
-DEFAULT nCol TO IIF( cUnits == "R", ::aReport[ REPORTWIDTH ] / 2, ::aReport[ PAGEX ] / 72 * 25.4 / 2 )
-
+	local nLen, nAt
+	DEFAULT nRow TO ::aReport[ REPORTLINE ]
+	DEFAULT cUnits TO "R"
+	DEFAULT lExact TO .f.
+	DEFAULT nCol TO IIF( cUnits == "R", ::aReport[ REPORTWIDTH ] / 2, ::aReport[ PAGEX ] / 72 * 25.4 / 2 )
+	
    IF ::aReport[ HEADEREDIT ]
       return ::Header( "PDFCENTER", cId, { cString, nRow, nCol, cUnits, lExact } )
    ENDIF
@@ -908,15 +911,15 @@ RETURN ::Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, .f. )
 
 METHOD Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, cColor, lPrint ) CLASS tPDF
 
-local cDelim := chr(0)+chr(9)+chr(10)+chr(13)+chr(26)+chr(32)+chr(138)+chr(141)
-local nI, cTemp, cToken, k, nL, nRow, nLines, nLineLen, nStart
-local lParagraph, nSpace, nNew, nTokenLen, nCRLF, nTokens, nLen
+	local cDelim := chr(0)+chr(9)+chr(10)+chr(13)+chr(26)+chr(32)+chr(138)+chr(141)
+	local nI, cTemp, cToken, k, nL, nRow, nLines, nLineLen, nStart
+	local lParagraph, nSpace, nNew, nTokenLen, nCRLF, nTokens, nLen
 
-DEFAULT nTab     TO -1
-DEFAULT cUnits   TO "R"
-DEFAULT nJustify TO 4
-DEFAULT lPrint   TO .t.
-DEFAULT cColor   TO ""
+	DEFAULT nTab     TO -1
+	DEFAULT cUnits   TO "R"
+	DEFAULT nJustify TO 4
+	DEFAULT lPrint   TO .t.
+	DEFAULT cColor   TO ""
 
    IF cUnits == "M"
       nTop := ::M2R( nTop )
@@ -1025,35 +1028,6 @@ METHOD UnderLine( cString ) CLASS tPDF
 
 RETURN cString + chr(254)
 
-//-------------------------\\
-
-/*METHOD OpenHeader( cFile ) CLASS tPDF
-
-local nAt, cCmd
-
-DEFAULT cFile TO ""
-
-   IF !empty( cFile )
-      cFile := alltrim( cFile )
-      IF len( cFile ) > 12 .or. ;
-         at( " ", cFile ) > 0 .or. ;
-         ( at( " ", cFile ) == 0 .and. len( cFile ) > 8 ) .or. ;
-         ( ( nAt := at( ".", cFile )) > 0 .and. len( substr( cFile, nAt + 1 )) > 3 )
-
-         cCmd := "copy " + cFile + " temp.tmp > nul"
-         RunExternal( cCmd )
-
-         cFile := "temp.tmp"
-      ENDIF
-      // ::aReport[ HEADER ] := FT_RestArr( cFile, @nErrorCode )
-      ::aReport[ HEADER ] := File2Array( cFile )
-   ELSE
-      ::aReport[ HEADER ] := {}
-   ENDIF
-   ::aReport[ MARGINS ] := .t.
-
-RETURN self*/
-
 METHOD OpenHeader( cFile ) CLASS tPDF
 
 	DEFAULT cFile TO ""
@@ -1139,19 +1113,10 @@ RETURN self
 
 //-------------------------\\
 
-/*METHOD SaveHeader( cFile ) CLASS tPDF
-
-local cCmd
-
-Array2File( "temp.tmp", ::aReport[ HEADER ] )
-
-cCmd := "copy temp.tmp " + cFile + " > nul"
-RunExternal( cCmd )
-
-RETURN self*/
 METHOD SaveHeader( cFile ) CLASS tPDF
 	Array2File( cFile , Self:aReport[ HEADER ] )
 RETURN( Self )
+
 //-------------------------\\
 
 METHOD Header( cFunction, cId, arr ) CLASS tPDF
@@ -2154,57 +2119,46 @@ local cTemp, cBuffer, nBuffer, nRead, nI, k, nImage, nFont, nImageHandle
 
 RETURN self
 
-//-------------------------\\
-
-/*METHOD FilePrint( cFile ) CLASS tPDF
-local cPathAcro := "C:\progra~1\Adobe\Acroba~1.0\Reader"
-local cRun := cPathAcro + "\AcroRd32.exe /t " + cFile + " " + ;
-            chr(34) + "HP LaserJet 5/5M PostScript" + chr(34) + " " + ;
-            chr(34) + "LPT1" + chr(34)
-
-IF ( ! RunExternal( cRun, "print" ) )
-   alert( "Error printing to PDF reader." )
-   break
-ENDIF
-
-RETURN self*/
-//TODO : Rever Conceito
 METHOD FilePrint( cFile ) CLASS tPDF
 
-	LOCAL cRun		:= "rundll32.exe shell32.dll,OpenAs_RunDLL " + cFile
-
-	IF ( !RunExternal( cRun ) )
+	IF ( !RunExternal( cFile ) )
 	   alert( "Error printing to PDF reader." )
 	   break
 	ENDIF
 
 RETURN( Self )
 
-
-//-------------------------\\
-
-/*METHOD Execute( cFile ) CLASS tPDF
-//  Replace cPathAcro with the path at your system
-local cPathAcro := "C:\progra~1\Adobe\Acroba~1.0\Reader"
-local cRun := cPathAcro + "\AcroRd32.exe /t " + cFile + " " + chr(34) + "HP LaserJet 5/5M PostScript" + chr(34) + " " + chr(34) + "LPT1" + chr(34)
-
-IF (! RunExternal( cRun, "open", cFile ) )
-   alert("Error printing to PDF reader.")
-   break
-ENDIF
-
-RETURN self*/
-//TODO : Rever Conceito
 METHOD Execute( cFile ) CLASS tPDF
 
-	LOCAL cRun		:= "rundll32.exe shell32.dll,OpenAs_RunDLL " + cFile
-
-	IF ( !RunExternal( cRun ) )
+	IF ( !RunExternal( cFile ) )
 	   alert( "Error printing to PDF reader." )
 	   break
 	ENDIF
 
 RETURN( Self )
+
+METHOD Colorize(cColor,nBase) CLASS tPDF
+	DEFAULT nBase TO 16
+Return(chr(253)+chr(cton(substr(cColor,1,2),nBase))+chr(cton(substr(cColor,3,2),nBase))+chr(cton(cColor,5,2),nBase))
+
+Method rgbToHex(nR,nG,nB) CLASS tPDF
+	Local cR
+	Local cG
+	Local cB	
+	DEFAULT nR TO 0
+	DEFAULT nG TO 0
+	DEFAULT nB TO 0
+	cR := LTrim(Str(nR))
+	cG := LTrim(Str(nG))
+	cB := LTrim(Str(nB))	
+return(toHex(cR)+toHex(cG)+toHex(cB))
+
+static function toHex(cN)
+	Local cHex
+	Static __otBigN	:= tBigNumber():New()
+	__otBigN:SetValue(cN) 
+	cHex  := PadL(__otBigN:D2H():Int(),2,"0")
+return(cHex)
 
 //-------------------------\\
 //-------------------------\\
@@ -2222,6 +2176,27 @@ return PosIns( PosDel( cStr, nBeg, nDel ), cIns, nBeg )
 
 static function Chr_RGB( cChar )
 return str(asc( cChar ) / 255, 4, 2)
+
+static function cton( cString, nBase ) 
+local cTemp, nI, cChar, n := 0, nLen
+
+   nLen := len( cString )
+   cTemp := ""
+   for nI := nLen to 1 step -1
+       cTemp += substr( cString, nI, 1 )
+   next
+   cTemp := upper( cTemp )
+
+   for nI := 1 to nLen
+      cChar := substr( cTemp, nI, 1 )
+      if .not. IsDigit( cChar )
+         n := n + ((Asc( cChar ) - 65) + 10) * ( nBase ^ ( nI - 1 ) )
+      else
+         n := n + (( nBase ^ ( nI - 1 )) * val( cChar ))
+      endif
+   next
+
+return n
 
 //-------------------------\\
 
@@ -2433,22 +2408,16 @@ RETURN n
 
 //-------------------------\\
 
-STATIC FUNCTION RunExternal( cCmd , lInSrv , lWaitRun , cPath )
+STATIC FUNCTION RunExternal( cFile )
 
-	LOCAL lRet		:= .T.
+	Local cDir
+	Local cDrive
+	Local cExtension
 
-	DEFAULT lInSrv	:= .F.
+	SplitPath(cFile,@cDrive,@cDir,@cFile,@cExtension)
+	ShellExecute("OPEN",cFile+cExtension,"",cDrive+cDir,SW_SHOWNORMAL)
 
-	IF ( lInSrv )
-		lRet := WaitRunSrv( cCmd , lWaitRun , cPath )
-	Else
-		lRet := WaitRun( cCmd )
-	EndIF	
-	IF !ISLOGICAL(lRet)
-		lRet := .T.
-	EndIF
-
-RETURN( lRet )
+RETURN( .T. )
 
 STATIC FUNCTION vpdf_FontsDAT() //$Id: hbvpsup.prg 11682 2009-07-09 13:21:43Z vszakats $
 	Local cFontsDAT

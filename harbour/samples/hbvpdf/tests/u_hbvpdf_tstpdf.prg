@@ -60,7 +60,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 		IF ( "(" $ cText )
 			cText := oPdf:StringB(cText)
 		EndIF
-		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",chr(253)+chr(0)+chr(128)+chr(128))
+		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
    Next	nI   
 
    oPdf:FontSize(nFontSize)
@@ -79,7 +79,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    next
 
    oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "10 dots border ", 2, 2, 0 )
+   oPdf:BookAdd( "10 dots border ", 2, oPdf:PageNumber(), 0 )
    oPdf:Box( 0, 0, 792, 612, 10, , "D" )
    nFontSize	:= oPdf:FontSize(12)
    nTab   := 0
@@ -89,7 +89,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 		IF ( "(" $ cText )
 			cText := oPdf:StringB(cText)
 		EndIF
-		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",chr(253)+chr(0)+chr(128)+chr(128))
+		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
    Next	nI   
    oPdf:FontSize(nFontSize)
 
@@ -114,7 +114,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
       nRow := 150 + nI * 10
       for nJ := 1 to 20
           nCol := nJ * 10 - 3
-          oPdf:Box( nRow, nCol, nRow + 10, nCol + 10, 0.01, nI * 10,"M", chr(253) + chr( cton( substr( aColor[ ( nI - 1 ) * 20 + nJ ], 1, 2 ), 16) ) + chr( cton( substr( aColor[ ( nI - 1 ) * 20 + nJ ], 3, 2 ), 16) ) + chr( cton( substr( aColor[ ( nI - 1 ) * 20 + nJ ], 5, 2 ), 16) ) )
+          oPdf:Box( nRow, nCol, nRow + 10, nCol + 10, 0.01, nI * 10,"M", oPdf:Colorize(aColor[(nI-1)*20+nJ]) )
       next
    next
 
@@ -125,7 +125,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
        nLeft   := ( nI - 1 ) * 2.1
        nBottom := oPdf:PageY() - ( nI - 1 ) * 2.47
        nRight  := oPdf:PageX() - ( nI - 1 ) * 2.18
-       oPdf:Box1( nTop, nLeft, nBottom, nRight, 10, chr( cton( substr( aColor[ nI ], 1, 2 ), 16) ) + chr( cton( substr( aColor[ nI ], 3, 2 ), 16) ) + chr( cton( substr( aColor[ nI ], 5, 2 ), 16) ))
+       oPdf:Box1( nTop, nLeft, nBottom, nRight, 10,oPdf:Colorize(aColor[Len(aColor)+1-nI]))
    next
 
    oPdf:NewPage( "LETTER", "P", 6 )
@@ -135,15 +135,15 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    nTab   := 0
    cText  := GetText(1)
 
-   oPdf:Text( cText,   8, 107.95, nWidth, nTab, 5, 'M', chr(253) + chr(0) + chr(0) + chr(255) )
-   oPdf:Text( cText,  40, 107.95, nWidth, nTab, 3, 'M', chr(253) + chr(0) + chr(255) + chr(0) )
-   oPdf:Text( cText,  72, 107.95, nWidth, nTab, 2, 'M', chr(253) + chr(255) + chr(0) + chr(0) )
-   oPdf:Text( cText, 112, 107.95 - nWidth / 2, nWidth, nTab, 1, 'M', chr(253) + chr(255) + chr(255) + chr(0) )
+   oPdf:Text( cText,   8, 107.95, nWidth, nTab, 5, 'M', oPDF:Colorize(oPDF:rgbToHex(255,215,0)) )
+   oPdf:Text( cText,  40, 107.95, nWidth, nTab, 3, 'M', oPDF:Colorize(oPDF:rgbToHex(160,82,45)) )
+   oPdf:Text( cText,  72, 107.95, nWidth, nTab, 2, 'M', oPDF:Colorize(oPDF:rgbToHex(75,0,130)) )
+   oPdf:Text( cText, 112, 107.95 - nWidth / 2, nWidth, nTab, 1, 'M', oPDF:Colorize(oPDF:rgbToHex(0,139,139)) )
 
-   oPdf:Text( cText,  34, 100,    nWidth, nTab, 5, 'R', chr(253) + chr(0) + chr(128) + chr(128) )
-   oPdf:Text( cText,  41, 100,    nWidth, nTab, 3, 'R', chr(253) + chr(0) + chr(191) + chr(255) )
-   oPdf:Text( cText,  48, 100,    nWidth, nTab, 2, 'R', chr(253) + chr(244) + chr(164) + chr(96) )
-   oPdf:Text( cText,  55,  35,    nWidth, nTab, 1, 'R', chr(253) + chr(0) + chr(0) + chr(0) )
+   oPdf:Text( cText,  34, 100,    nWidth, nTab, 5, 'R', oPDF:Colorize(oPDF:rgbToHex(219,112,147)) )
+   oPdf:Text( cText,  41, 100,    nWidth, nTab, 3, 'R', oPDF:Colorize(oPDF:rgbToHex(72,61,139)) )
+   oPdf:Text( cText,  48, 100,    nWidth, nTab, 2, 'R', oPDF:Colorize(oPDF:rgbToHex(0,100,0)) )
+   oPdf:Text( cText,  55,  35,    nWidth, nTab, 1, 'R', oPDF:Colorize(oPDF:rgbToHex(105,105,105)) )
 
    oPdf:NewPage( "LETTER", "P", 6 )
    oPdf:BookAdd( "Fonts", 1, oPdf:PageNumber(), 0 )
@@ -166,8 +166,8 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    oPdf:BookAdd( "Pictures", 1, oPdf:PageNumber(), 0 )
    oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
    oPdf:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 0, 0, "M" , 25 , oPdf:WIDTH() ) // file, row, col, units, height, width
-   oPdf:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),0,5,oPdf:WIDTH(),0,1,"",chr(253)+chr(0)+chr(128)+chr(128))
-   oPdf:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,2,5,oPdf:WIDTH(),0,1,"",chr(253)+chr(0)+chr(128)+chr(128))
+   oPdf:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),0,5,oPdf:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPdf:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,2,5,oPdf:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
    oPdf:RJust(oPdf:Underline("JPEG"), 0, oPdf:WIDTH()+10, "R")
 
    oPdf:NewPage( "LETTER", "P", 6 )
@@ -200,19 +200,22 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 
    oPdf:NewPage( "LETTER", "P", 6 )
    oPdf:BookAdd( "Headers", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Picture Header Page 13", 2, oPdf:PageNumber(), 0 )
-
-   oPdf:AtSay( chr(253)+chr(0)+chr(128)+chr(128) + 'Red Sample of header repeating on pages 13-15', 1, 20, "R" )
-
-   oPdf:NewPage( "LETTER", "P", 6 )
    oPdf:BookAdd( "Picture Header Page 14", 2, oPdf:PageNumber(), 0 )
 
-   oPdf:AtSay( chr(253)+chr(0)+chr(128)+chr(128) + 'Green Sample of header repeating on pages  14-15', 1, 20, "R" )
+   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
+   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(251,45,5)) + 'Red Sample of header repeating on pages 14-16', 1, 20, "R" )
 
    oPdf:NewPage( "LETTER", "P", 6 )
    oPdf:BookAdd( "Picture Header Page 15", 2, oPdf:PageNumber(), 0 )
 
-   oPdf:AtSay( chr(253)+chr(0)+chr(128)+chr(128) + 'Blue Sample of header repeating on pages  15-15', 1, 20, "R" )
+   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
+   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(31,102,36)) + 'Green Sample of header repeating on pages  15-16', 1, 20, "R" )
+
+   oPdf:NewPage( "LETTER", "P", 6 )
+   oPdf:BookAdd( "Picture Header Page 16", 2, oPdf:PageNumber(), 0 )
+
+   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
+   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(44,95,172)) + 'Blue Sample of header repeating on pages  16-16', 1, 20, "R" )
 
    oPdf:Close()
 
@@ -225,27 +228,6 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    hbvpdfResources(cTempPath,.T.)
 
 return( .t. )
-
-static function cton( cString, nBase ) 
-local cTemp, nI, cChar, n := 0, nLen
-
-   nLen := len( cString )
-   cTemp := ""
-   for nI := nLen to 1 step -1
-       cTemp += substr( cString, nI, 1 )
-   next
-   cTemp := upper( cTemp )
-
-   for nI := 1 to nLen
-      cChar := substr( cTemp, nI, 1 )
-      if .not. IsDigit( cChar )
-         n := n + ((Asc( cChar ) - 65) + 10) * ( nBase ^ ( nI - 1 ) )
-      else
-         n := n + (( nBase ^ ( nI - 1 )) * val( cChar ))
-      endif
-   next
-
-return n
 
 Static Function GetText(nText,aText)
 

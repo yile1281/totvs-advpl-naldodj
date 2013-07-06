@@ -166,9 +166,9 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    oPDF:BookAdd( "Pictures", 1, oPDF:PageNumber(), 0 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
    oPDF:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 50, 0, "M" , 25 , oPDF:WIDTH() ) // file, row, col, units, height, width
-   oPDF:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),7,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPDF:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,9,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPDF:RJust(oPDF:Underline("JPEG"), 50, oPDF:WIDTH()+10, "R")
+   oPDF:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),9,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,11,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
@@ -193,7 +193,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
-   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*20 , Min(oPDF:WIDTH(),250)/100*20)
+   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*15 , Min(oPDF:WIDTH(),250)/100*15)
    oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:OpenHeader(cPDFHeader)

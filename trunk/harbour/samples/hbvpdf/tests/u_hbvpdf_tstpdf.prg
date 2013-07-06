@@ -184,7 +184,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    oPDF:BookAdd( "TIFF", 2, oPDF:PageNumber(), 0 )
    //             file,    row, col, units, height, width
    oPDF:Image( cTempPath+"hbvpdf_color.tif", 0,   0,   "M" ) 
-   oPDF:RJust( oPDF:Underline("TIFF"), 1, 1, "R")
+   oPDF:RJust( oPDF:Underline("TIFF"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
@@ -193,7 +193,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
-   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*15 , Min(oPDF:WIDTH(),250)/100*15)
+   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*10 , Min(oPDF:WIDTH(),250)/100*10)
    oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:OpenHeader(cPDFHeader)

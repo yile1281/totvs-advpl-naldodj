@@ -166,35 +166,35 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    oPDF:BookAdd( "Pictures", 1, oPDF:PageNumber(), 0 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
    oPDF:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 50, 0, "M" , 25 , oPDF:WIDTH() ) // file, row, col, units, height, width
-   oPDF:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),4,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPDF:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,18,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
+   oPDF:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),7,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,9,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:RJust(oPDF:Underline("JPEG"), 50, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
    oPDF:Image( cTempPath+"bannerBlackTDN_160_64.JPG", 0, 0, "M" ) // file, row, col, units, height, width
-   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH(), "R")
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
-   oPDF:Image( cTempPath+"BlackTDN_250x250.JPG", 0, 0, "M" , Min(oPDF:WIDTH(),250) , Min(oPDF:WIDTH(),250) ) // file, row, col, units, height, width
-   oPDF:RJust(oPDF:Underline("JPEG"), 5, 0, "R")
+   oPDF:Image( cTempPath+"BlackTDN_250x250.JPG", 50, 0, "M" , Min(oPDF:WIDTH(),250)/100*50 , Min(oPDF:WIDTH(),250)/100*50 ) // file, row, col, units, height, width
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "TIFF", 2, oPDF:PageNumber(), 0 )
    //             file,    row, col, units, height, width
    oPDF:Image( cTempPath+"hbvpdf_color.tif", 0,   0,   "M" ) 
-   oPDF:RJust( oPDF:Underline("TIFF"), 5, 0, "R")
+   oPDF:RJust( oPDF:Underline("TIFF"), 1, 1, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
-   oPDF:Image( cTempPath+"hbvpdf_color.jpg", 50,   0,   "M" ) 
-   oPDF:RJust( oPDF:Underline("JPEG"), 50, oPDF:WIDTH(), "R")
+   oPDF:Image( cTempPath+"hbvpdf_color.jpg", 30,   0,   "M" ) 
+   oPDF:RJust( oPDF:Underline("JPEG"),  0, oPDF:WIDTH()+10, "R")
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
-   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*5 , Min(oPDF:WIDTH(),250)/100*5)
-   oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH(), "R")
+   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250)/100*20 , Min(oPDF:WIDTH(),250)/100*20)
+   oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
    oPDF:OpenHeader(cPDFHeader)
 

@@ -16,8 +16,11 @@ Group hbvpdf
       FoldersCount=2
       Folder Fontes
          VSSPath=Fontes
-         FilesCount=1
+         FilesCount=2
          File \svn\totvs-advpl-naldodj\harbour\samples\hbvpdf\hbvpdft.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\harbour\samples\hbvpdf\hbvpdf.ch
              Type=T
          End
       End
@@ -37,7 +40,7 @@ Group hbvpdf
       End
       Folder Resources
          VSSPath=Nova Pasta2
-         FilesCount=5
+         FilesCount=6
          File \svn\totvs-advpl-naldodj\harbour\samples\hbvpdf\tests\hbvpdf_files\resources\bannerBlackTDN_160_64.JPG
              Type=I
          End
@@ -51,6 +54,9 @@ Group hbvpdf
              Type=I
          End
          File \svn\totvs-advpl-naldodj\harbour\samples\hbvpdf\tests\hbvpdf_files\resources\hbvpdf_color.tif
+             Type=I
+         End
+         File \svn\totvs-advpl-naldodj\harbour\samples\hbvpdf\tests\hbvpdf_files\resources\pdf_logo.jpg
              Type=I
          End
       End

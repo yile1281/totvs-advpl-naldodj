@@ -249,18 +249,18 @@ DEFAULT cId    TO ""
    ENDIF
    IF !empty( cString )
       cString := ::StringB( cString )
-      IF right( cString, 1 ) == chr(255) //reverse
+      IF right( cString, 1 ) == __cCHR255 //reverse
          cString := left( cString, len( cString ) - 1 )
          ::Box( ::aReport[ PAGEY ] - nRow - ::aReport[ FONTSIZE ] + 2.0 , nCol, ::aReport[ PAGEY ] - nRow + 2.0, nCol + ::M2X( ::length( cString )) + 1,,100, "D")
          ::aReport[ PAGEBUFFER ] += " 1 g "
          lReverse := .t.
-      ELSEIF right( cString, 1 ) == chr(254) //underline
+      ELSEIF right( cString, 1 ) == __cCHR254 //underline
          cString := left( cString, len( cString ) - 1 )
          ::Box( ::aReport[ PAGEY ] - nRow + 0.5,  nCol, ::aReport[ PAGEY ] - nRow + 1, nCol + ::M2X( ::length( cString )) + 1,,100, "D")
       ENDIF
 
       // version 0.01
-      IF ( nAt := at( chr(253), cString )) > 0 // some color text inside
+      IF ( nAt := at( __cCHR253, cString )) > 0 // some color text inside
          ::aReport[ PAGEBUFFER ] += __cCRLF + ;
          Chr_RGB( substr( cString, nAt + 1, 1 )) + " " + ;
          Chr_RGB( substr( cString, nAt + 2, 1 )) + " " + ;
@@ -451,8 +451,8 @@ RETURN self
 METHOD Box1( nTop, nLeft, nBottom, nRight, nBorderWidth, cBorderColor, cBoxColor ) CLASS tPDF
 
 	DEFAULT nBorderWidth to 0.5
-	DEFAULT cBorderColor to chr(0) + chr(0) + chr(0)
-	DEFAULT cBoxColor to chr(255) + chr(255) + chr(255)
+	DEFAULT cBorderColor to __cCHR0 + __cCHR0 + __cCHR0
+	DEFAULT cBoxColor to __cCHR255 + __cCHR255 + __cCHR255
 
    ::aReport[ PAGEBUFFER ] +=  __cCRLF + ;
                          Chr_RGB( substr( cBorderColor, 1, 1 )) + " " + ;
@@ -690,7 +690,7 @@ METHOD Length( cString ) CLASS tPDF
 local nWidth := 0.00, nI, nLen, nArr, nAdd := ( ::aReport[ FONTNAME ] - 1 ) % 4
 
    nLen := len( cString )
-   IF right( cString, 1 ) == chr( 255 ) .or. right( cString, 1 ) == chr( 254 )
+   IF right( cString, 1 ) == __cCHR255 .or. right( cString, 1 ) == __cCHR254
       --nLen
    ENDIF
    IF ::GetFontInfo("NAME") == "Times"
@@ -818,7 +818,7 @@ RETURN ::aReport[ REPORTPAGE ]
 
 METHOD Reverse( cString ) CLASS tPDF
 
-RETURN cString + chr(255)
+RETURN cString + __cCHR255
 
 //-------------------------\\
 
@@ -911,7 +911,7 @@ RETURN ::Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, .f. )
 
 METHOD Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, cColor, lPrint ) CLASS tPDF
 
-	local cDelim := chr(0)+chr(9)+chr(10)+chr(13)+chr(26)+chr(32)+chr(138)+chr(141)
+	local cDelim := __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR16+__cCHR32+__cCHR138+__cCHR141
 	local nI, cTemp, cToken, k, nL, nRow, nLines, nLineLen, nStart
 	local lParagraph, nSpace, nNew, nTokenLen, nCRLF, nTokens, nLen
 
@@ -1026,7 +1026,7 @@ RETURN nLines
 
 METHOD UnderLine( cString ) CLASS tPDF
 
-RETURN cString + chr(254)
+RETURN cString + __cCHR254
 
 METHOD OpenHeader( cFile ) CLASS tPDF
 
@@ -1496,7 +1496,7 @@ RETURN aTemp
 
 METHOD TIFFInfo( cFile ) CLASS tPDF
 
-local c40    := chr(0)+chr(0)+chr(0)+chr(0)
+local c40    := __cCHR0+__cCHR0+__cCHR0+__cCHR0
 //local aType  := {"BYTE","ASCII","SHORT","LONG","RATIONAL","SBYTE","UNDEFINED","SSHORT","SLONG","SRATIONAL","FLOAT","DOUBLE"}
 local aCount := { 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8 }
 local nTemp, nHandle, cValues, c2, nFieldType, nCount, nPos, nTag, nValues
@@ -1679,7 +1679,7 @@ local nLength, xRes, yRes, aTemp := {}
    xRes := asc(substr( c255, 15, 1 )) * 256 + asc(substr( c255, 16, 1 ))
    yRes := asc( substr( c255, 17, 1 )) * 256 + asc(substr( c255, 18, 1 ))
 
-   nAt := at( chr(255) + chr(192), c255 ) + 5
+   nAt := at( __cCHR255 + __cCHR192, c255 ) + 5
    nHeight := asc(substr( c255, nAt, 1 )) * 256 + asc(substr( c255, nAt + 1, 1 ))
    nWidth := asc( substr( c255, nAt + 2, 1 )) * 256 + asc(substr( c255, nAt + 3, 1 ))
 
@@ -1926,8 +1926,8 @@ local nAt, cAt, nCRLF, nNew, nRat, nRet := 0
    // check if next spaces paragraph(s)
    nAt := attoken( cString, cDelim, nI ) + len( token( cString, cDelim, nI ) )
    cAt := substr( cString, nAt, attoken( cString, cDelim, nI + 1 ) - nAt )
-   nCRLF := numat( chr(13) + chr(10), cAt )
-   nRat := rat( chr(13) + chr(10), cAt )
+   nCRLF := numat( __cCRLF, cAt )
+   nRat := rat( __cCRLF, cAt )
    nNew := len( cAt ) - nRat - IIF( nRat > 0, 1, 0 )
    IF nCRLF > 1 .or. ( nCRLF == 1 .and. nNew > 0 )
       nRet := nCRLF
@@ -2139,7 +2139,7 @@ RETURN( Self )
 
 METHOD Colorize(cColor,nBase) CLASS tPDF
 	DEFAULT nBase TO 16
-Return(chr(253)+chr(cton(substr(cColor,1,2),nBase))+chr(cton(substr(cColor,3,2),nBase))+chr(cton(cColor,5,2),nBase))
+Return(__cCHR253+chr(cton(substr(cColor,1,2),nBase))+chr(cton(substr(cColor,3,2),nBase))+chr(cton(cColor,5,2),nBase))
 
 Method rgbToHex(nR,nG,nB,nBase) CLASS tPDF
 	Local cR
@@ -2253,7 +2253,7 @@ local nLen    := len( cString )
 local nStart
 local cRet    := 0
 
-DEFAULT cDelimiter TO chr(0)+chr(9)+chr(10)+chr(13)+chr(26)+chr(32)+chr(138)+chr(141)
+DEFAULT cDelimiter TO __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR16+__cCHR32+__cCHR138+__cCHR141
 DEFAULT nAction to 0
 
 // nAction == 0 - numtoken

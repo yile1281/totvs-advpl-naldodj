@@ -244,7 +244,67 @@
 		#define __cCRLF__
 		Static __cCRLF := CRLF
 	#endif
-    
+	
+	#ifndef __cCHR0__
+		#define __cCHR0__
+		Static __cCHR0   := chr(0)
+	#endif
+
+	#ifndef __cCHR9__
+		#define __cCHR9__
+		Static __cCHR9	 := chr(9)
+	#endif
+
+	#ifndef __cCHR10
+		#define __cCHR10__
+		Static __cCHR10  := chr(10)
+	#endif
+
+	#ifndef __cCHR13
+		#define __cCHR13__
+		Static __cCHR13  := chr(13)
+	#endif
+
+	#ifndef __cCHR26
+		#define __cCHR26
+		Static __cCHR26  := chr(26)
+	#endif
+	
+	#ifndef __cCHR32
+		#define __cCHR32
+		Static __cCHR32  := chr(32)
+	#endif
+	
+	#ifndef __cCHR138
+		#define __cCHR138
+		Static __cCHR138 := chr(138)
+	#endif
+	
+	#ifndef __cCHR141
+		#define __cCHR141
+		Static __cCHR141 := chr(141)
+	#endif
+
+	#ifndef __cCHR192
+		#define __cCHR192
+		Static __cCHR192 := chr(192)
+	#endif
+
+	#ifndef __cCHR253
+		#define __cCHR253
+		Static __cCHR253 := chr(253)
+	#endif
+
+	#ifndef __cCHR254
+		#define __cCHR254
+		Static __cCHR254 := chr(254)
+	#endif
+
+	#ifndef __cCHR255
+		#define __cCHR255
+		Static __cCHR255 := chr(255)
+	#endif
+	    
 	/*/
         Autor:         Marinaldo de Jesus
         Descricao:     SYMBOL_UNUSED

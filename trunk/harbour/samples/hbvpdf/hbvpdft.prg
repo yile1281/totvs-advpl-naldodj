@@ -1036,7 +1036,7 @@ METHOD OpenHeader( cFile ) CLASS tPDF
 	
 	IF File( cFile )
 		aFile2Array := File2Array( cFile )
-		aEval( aFile2Array , {|e| aAdd( Self:aReport[ HEADER ] , e } )
+		aEval( aFile2Array , {|e| aAdd( Self:aReport[ HEADER ] , e ) } )
 	ELSE
 		aSize( Self:aReport[ HEADER ] , 0 )
 	ENDIF

@@ -65,7 +65,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
 
    oPDF:FontSize(nFontSize)
 
-   oPDF:CloseHeader()
+*   oPDF:CloseHeader()
 
    oPDF:NewPage( "LETTER", "P", 6 )
    oPDF:BookAdd( "Grids & Borders", 1, oPDF:PageNumber(), 0 )

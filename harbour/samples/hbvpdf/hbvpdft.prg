@@ -2138,26 +2138,29 @@ METHOD Execute( cFile ) CLASS tPDF
 RETURN( Self )
 
 METHOD Colorize(cColor,nBase) CLASS tPDF
-	DEFAULT nBase TO 16
+	DEFAULT nBase TO 32
 Return(chr(253)+chr(cton(substr(cColor,1,2),nBase))+chr(cton(substr(cColor,3,2),nBase))+chr(cton(cColor,5,2),nBase))
 
-Method rgbToHex(nR,nG,nB) CLASS tPDF
+Method rgbToHex(nR,nG,nB,nBase) CLASS tPDF
 	Local cR
 	Local cG
-	Local cB	
-	DEFAULT nR TO 0
-	DEFAULT nG TO 0
-	DEFAULT nB TO 0
-	cR := LTrim(Str(nR))
-	cG := LTrim(Str(nG))
-	cB := LTrim(Str(nB))	
-return(cNtoHex(cR)+cNtoHex(cG)+cNtoHex(cB))
+	Local cB
+    Local cBase	
+	DEFAULT nR    TO 0
+	DEFAULT nG    TO 0
+	DEFAULT nB    TO 0
+	DEFAULT nBase TO 32
+	cR    := LTrim(Str(nR))
+	cG    := LTrim(Str(nG))
+	cB    := LTrim(Str(nB))
+    cBase := LTrim(Str(nBase))	
+return(cNtoHex(cR,cBase)+cNtoHex(cG,cBase)+cNtoHex(cB,cBase))
 
-static function cNtoHex(cN)
+static function cNtoHex(cN,cBase)
 	Local cHex
 	Static __otBigN	:= tBigNumber():New()
 	__otBigN:SetValue(cN) 
-	cHex  := PadL(__otBigN:D2H():Int(),2,"0")
+	cHex  := PadL(__otBigN:D2H(cBase):Int(),2,"0")
 return(cHex)
 
 //-------------------------\\

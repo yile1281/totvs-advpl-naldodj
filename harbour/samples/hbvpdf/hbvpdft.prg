@@ -140,14 +140,14 @@ METHOD New( cFile, nLen, lOptimize ) CLASS tPDF
 	::aReport[ PDFLEFT      ] := 10     // left & right
 	::aReport[ PDFBOTTOM    ] := ::aReport[ PAGEY ] / 72 * ::aReport[ LPI ] - 1 // bottom, default "LETTER", "P", 6
 	::aReport[ HANDLE       ] := fcreate( cFile )
-	::aReport[ PAGES        ] := {}
+	::aReport[ PAGES        ] := Array(0)
 	::aReport[ REFS         ] := { 0, 0 }
-	::aReport[ BOOKMARK     ] := {}
-	::aReport[ HEADER       ] := {}
-	::aReport[ FONTS        ] := {}
-	::aReport[ IMAGES       ] := {}
-	::aReport[ PAGEIMAGES   ] := {}
-	::aReport[ PAGEFONTS    ] := {}
+	::aReport[ BOOKMARK     ] := Array(0)
+	::aReport[ HEADER       ] := Array(0)
+	::aReport[ FONTS        ] := Array(0)
+	::aReport[ IMAGES       ] := Array(0)
+	::aReport[ PAGEIMAGES   ] := Array(0)
+	::aReport[ PAGEFONTS    ] := Array(0)
 	
 	cTemp := vpdf_FontsDat()
 	n1    := len( cTemp ) / ( 2 * n2 )
@@ -382,7 +382,7 @@ RETURN self
 
 METHOD BookOpen( ) CLASS tPDF
 
-::aReport[ BOOKMARK ] := {}
+aSize( ::aReport[ BOOKMARK ] , 0 )
 
 RETURN self
 
@@ -735,8 +735,8 @@ DEFAULT _nFontSize   TO ::aReport[ FONTSIZE ]
       ::ClosePage()
    ENDIF
 
-   ::aReport[ PAGEFONTS  ] := {}
-   ::aReport[ PAGEIMAGES ] := {}
+   aSize( ::aReport[ PAGEFONTS  ] , 0 )
+   aSize( ::aReport[ PAGEIMAGES ] , 0 )
 
    ++::aReport[ REPORTPAGE ]
 
@@ -1030,12 +1030,15 @@ RETURN cString + __cCHR254
 
 METHOD OpenHeader( cFile ) CLASS tPDF
 
+	Local aFile2Array
+	
 	DEFAULT cFile TO ""
 	
 	IF File( cFile )
-		Self:aReport[ HEADER ] := File2Array( cFile )
+		aFile2Array := File2Array( cFile )
+		aEval( aFile2Array , {|e| aAdd( Self:aReport[ HEADER ] , e } )
 	ELSE
-		Self:aReport[ HEADER ] := {}
+		aSize( Self:aReport[ HEADER ] , 0 )
 	ENDIF
 
 	Self:aReport[ MARGINS ] := .T.
@@ -1064,7 +1067,7 @@ RETURN self
 
 METHOD CloseHeader() CLASS tPDF
 
-   ::aReport[ HEADER  ] := {}
+   aSize( ::aReport[ HEADER  ] , 0 )
    ::aReport[ MARGINS ] := .f.
    ::aReport[ PDFTOP  ] := 1
 
@@ -1483,7 +1486,7 @@ RETURN self
 
 METHOD ImageInfo( cFile ) CLASS tPDF
 
-local cTemp := upper(substr( cFile, rat(".", cFile) + 1 )), aTemp := {}
+local cTemp := upper(substr( cFile, rat(".", cFile) + 1 )), aTemp := Array(0)
    do case
    case cTemp == "TIF"
       aTemp := ::TIFFInfo( cFile )
@@ -1502,7 +1505,7 @@ local aCount := { 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8 }
 local nTemp, nHandle, cValues, c2, nFieldType, nCount, nPos, nTag, nValues
 local nOffset, cTemp, cIFDNext, nIFD, nFields, cTag, nn
 
-local nWidth := 0, nHeight := 0, nBits := 0, nFrom := 0, nLength := 0, xRes := 0, yRes := 0, aTemp := {}
+local nWidth := 0, nHeight := 0, nBits := 0, nFrom := 0, nLength := 0, xRes := 0, yRes := 0, aTemp := Array(0)
 
    nHandle := fopen( cFile )
 
@@ -1669,7 +1672,7 @@ METHOD JPEGInfo( cFile ) CLASS tPDF
 
 local c255, nAt, nHandle
 local nWidth, nHeight, nBits := 8, nFrom := 0
-local nLength, xRes, yRes, aTemp := {}
+local nLength, xRes, yRes, aTemp := Array(0)
 
    nHandle := fopen( cFile )
 
@@ -2347,7 +2350,7 @@ return fWrite( hFile, cData, len( cData ) )
 static function File2Array( cFile, nLen, hFile )
 LOCAL cData,cType,nDataLen,nBytes
 local nDepth := 0
-local aRay   := {}
+local aRay   := Array(0)
 local lOpen  := ( hFile != nil )
 
 if hFile == NIL        // First Timer

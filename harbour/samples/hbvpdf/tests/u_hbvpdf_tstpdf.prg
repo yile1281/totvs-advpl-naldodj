@@ -226,6 +226,7 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
    oPdf := FreeObj( oPdf )
 
    hbvpdfResources(cTempPath,.T.)
+   fErase( cPDFHeader )
 
 return( .t. )
 

@@ -911,7 +911,7 @@ RETURN ::Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, .f. )
 
 METHOD Text( cString, nTop, nLeft, nLength, nTab, nJustify, cUnits, cColor, lPrint ) CLASS tPDF
 
-	local cDelim := __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR16+__cCHR32+__cCHR138+__cCHR141
+	local cDelim := __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR26+__cCHR32+__cCHR138+__cCHR141
 	local nI, cTemp, cToken, k, nL, nRow, nLines, nLineLen, nStart
 	local lParagraph, nSpace, nNew, nTokenLen, nCRLF, nTokens, nLen
 
@@ -2253,7 +2253,7 @@ local nLen    := len( cString )
 local nStart
 local cRet    := 0
 
-DEFAULT cDelimiter TO __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR16+__cCHR32+__cCHR138+__cCHR141
+DEFAULT cDelimiter TO __cCHR0+__cCHR9+__cCHR10+__cCHR13+__cCHR26+__cCHR32+__cCHR138+__cCHR141
 DEFAULT nAction to 0
 
 // nAction == 0 - numtoken

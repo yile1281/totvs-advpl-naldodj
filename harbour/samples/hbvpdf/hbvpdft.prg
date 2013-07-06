@@ -2151,9 +2151,9 @@ Method rgbToHex(nR,nG,nB) CLASS tPDF
 	cR := LTrim(Str(nR))
 	cG := LTrim(Str(nG))
 	cB := LTrim(Str(nB))	
-return(toHex(cR)+toHex(cG)+toHex(cB))
+return(cNtoHex(cR)+cNtoHex(cG)+cNtoHex(cB))
 
-static function toHex(cN)
+static function cNtoHex(cN)
 	Local cHex
 	Static __otBigN	:= tBigNumber():New()
 	__otBigN:SetValue(cN) 

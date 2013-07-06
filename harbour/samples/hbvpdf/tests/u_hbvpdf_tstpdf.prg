@@ -3,7 +3,7 @@
 USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats $
 
    local nWidth := 200, nTab, nI, nJ, nK, nCol, nRow, aStyle, aFonts
-   local nTop, nLeft, nBottom, nRight, cText, oPdf,aText
+   local nTop, nLeft, nBottom, nRight, cText, oPDF,aText
    local aColor := { ;
    "FF0000", "8B0000", "800000", "FF4500", "D2691E", "B8860B", "FF8C00", "FFA500", "DAA520", "808000", "FFD700", "FFFF00", "ADFF2F", "9ACD32", "7FFF00", "7CFC00", "00FF00", "32CD32", "008000", "006400",;
    "66CDAA", "7FFFD4", "87CEFA", "87CEEB", "F0F8FF", "E0FFFF", "B0C4DE", "B0E0E6", "AFEEEE", "ADD8E6", "8FBC8F", "90EE90", "98FB98", "00FA9A", "00FF7F", "3CB371", "2E8B57", "228B22", "556B2F", "6B8E23",;
@@ -39,191 +39,191 @@ USER FUNCTION tsthbvpdf() //$Id: tstpdf.prg 12734 2009-10-19 23:21:43Z vszakats 
                { "Courier",   .t., .t., .t., .t. }  }
 
 
-   oPdf := tPdf():New( cPDFFile , nWidth, .t. )
-   oPdf:EditOnHeader()
-   oPdf:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 0, 0, "M" , 25 , oPdf:WIDTH() ) // file, row, col, units, height, width
-   oPdf:EditOffHeader()
-   oPdf:SaveHeader( cPDFHeader )
-   oPdf:BookOpen()
+   oPDF := tPdf():New( cPDFFile , nWidth, .t. )
+   oPDF:EditOnHeader()
+   oPDF:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 0, 0, "M" , 25 , oPDF:WIDTH() ) // file, row, col, units, height, width
+   oPDF:EditOffHeader()
+   oPDF:SaveHeader( cPDFHeader )
+   oPDF:BookOpen()
 
    GetText(2,@aText)
 
-   nFontSize	:= oPdf:FontSize(12)
+   nFontSize	:= oPDF:FontSize(12)
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "tPDF", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Change Log", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "tPDF", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Change Log", 2, oPDF:PageNumber(), 0 )
    nTab   := 0
-   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
+   oPDF:SetFont( "Helvetica" , NIL , oPDF:FontSize() )
    For nI := 1 To Len( aText )
 		cText := aText[nI]
 		IF ( "(" $ cText )
-			cText := oPdf:StringB(cText)
+			cText := oPDF:StringB(cText)
 		EndIF
-		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
+		oPDF:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
    Next	nI   
 
-   oPdf:FontSize(nFontSize)
+   oPDF:FontSize(nFontSize)
 
-   oPdf:CloseHeader()
+   oPDF:CloseHeader()
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Grids & Borders", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Simple Grid",     2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Grids & Borders", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Simple Grid",     2, oPDF:PageNumber(), 0 )
 
    for nI := 0 to 792 step 36
-       oPdf:Box( nI, 0, nI, 612, 0.01, , "D" )
+       oPDF:Box( nI, 0, nI, 612, 0.01, , "D" )
    next
    for nI := 0 to 612 step 36
-       oPdf:Box( 0, nI, 792, nI, 0.01, , "D" )
+       oPDF:Box( 0, nI, 792, nI, 0.01, , "D" )
    next
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "10 dots border ", 2, oPdf:PageNumber(), 0 )
-   oPdf:Box( 0, 0, 792, 612, 10, , "D" )
-   nFontSize	:= oPdf:FontSize(12)
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "10 dots border ", 2, oPDF:PageNumber(), 0 )
+   oPDF:Box( 0, 0, 792, 612, 10, , "D" )
+   nFontSize	:= oPDF:FontSize(12)
    nTab   := 0
-   oPdf:SetFont( "Arial" , BOLDITALIC , oPdf:FontSize() )
+   oPDF:SetFont( "Arial" , BOLDITALIC , oPDF:FontSize() )
    For nI := 1 To Len( aText )
 		cText := aText[nI]
 		IF ( "(" $ cText )
-			cText := oPdf:StringB(cText)
+			cText := oPDF:StringB(cText)
 		EndIF
-		oPdf:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
+		oPDF:Text(cText,nI,5,nWidth,nTab,1,"",oPDF:Colorize(oPDF:rgbToHex(75,0,130)))
    Next	nI   
-   oPdf:FontSize(nFontSize)
+   oPDF:FontSize(nFontSize)
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Boxes", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Boxes", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Boxes", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Boxes", 2, oPDF:PageNumber(), 0 )
 
    nRow := 85
    nCol := 85
-   oPdf:Box( nRow     , ( nCol * 2 )     , ( nRow * 3 )     , ( nCol * 4 )     , 1.00,  15, "D" )
-   oPdf:Box( nRow + 10, ( nCol * 2 ) + 10, ( nRow * 3 ) + 10, ( nCol * 4 ) + 10, 0.50,  25, "D" )
-   oPdf:Box( nRow + 20, ( nCol * 2 ) + 20, ( nRow * 3 ) + 20, ( nCol * 4 ) + 20, 0.25,  35, "D" )
-   oPdf:Box( nRow + 30, ( nCol * 2 ) + 30, ( nRow * 3 ) + 30, ( nCol * 4 ) + 30, 0.15,  45, "D" )
-   oPdf:Box( nRow + 40, ( nCol * 2 ) + 40, ( nRow * 3 ) + 40, ( nCol * 4 ) + 40, 0.10,  55, "D" )
-   oPdf:Box( nRow + 50, ( nCol * 2 ) + 50, ( nRow * 3 ) + 50, ( nCol * 4 ) + 50, 0.05,  65, "D" )
-   oPdf:Box( nRow + 60, ( nCol * 2 ) + 60, ( nRow * 3 ) + 60, ( nCol * 4 ) + 60, 0.01,  75, "D" )
-   oPdf:Box( nRow + 70, ( nCol * 2 ) + 70, ( nRow * 3 ) + 70, ( nCol * 4 ) + 70, 0.01,  85, "D" )
-   oPdf:Box( nRow + 80, ( nCol * 2 ) + 80, ( nRow * 3 ) + 80, ( nCol * 4 ) + 80, 0.01,  95, "D" )
-   oPdf:Box( nRow + 90, ( nCol * 2 ) + 90, ( nRow * 3 ) + 90, ( nCol * 4 ) + 90, 0.01, 100, "D" )
+   oPDF:Box( nRow     , ( nCol * 2 )     , ( nRow * 3 )     , ( nCol * 4 )     , 1.00,  15, "D" )
+   oPDF:Box( nRow + 10, ( nCol * 2 ) + 10, ( nRow * 3 ) + 10, ( nCol * 4 ) + 10, 0.50,  25, "D" )
+   oPDF:Box( nRow + 20, ( nCol * 2 ) + 20, ( nRow * 3 ) + 20, ( nCol * 4 ) + 20, 0.25,  35, "D" )
+   oPDF:Box( nRow + 30, ( nCol * 2 ) + 30, ( nRow * 3 ) + 30, ( nCol * 4 ) + 30, 0.15,  45, "D" )
+   oPDF:Box( nRow + 40, ( nCol * 2 ) + 40, ( nRow * 3 ) + 40, ( nCol * 4 ) + 40, 0.10,  55, "D" )
+   oPDF:Box( nRow + 50, ( nCol * 2 ) + 50, ( nRow * 3 ) + 50, ( nCol * 4 ) + 50, 0.05,  65, "D" )
+   oPDF:Box( nRow + 60, ( nCol * 2 ) + 60, ( nRow * 3 ) + 60, ( nCol * 4 ) + 60, 0.01,  75, "D" )
+   oPDF:Box( nRow + 70, ( nCol * 2 ) + 70, ( nRow * 3 ) + 70, ( nCol * 4 ) + 70, 0.01,  85, "D" )
+   oPDF:Box( nRow + 80, ( nCol * 2 ) + 80, ( nRow * 3 ) + 80, ( nCol * 4 ) + 80, 0.01,  95, "D" )
+   oPDF:Box( nRow + 90, ( nCol * 2 ) + 90, ( nRow * 3 ) + 90, ( nCol * 4 ) + 90, 0.01, 100, "D" )
 
    for nI := 1 to 7
       nRow := 150 + nI * 10
       for nJ := 1 to 20
           nCol := nJ * 10 - 3
-          oPdf:Box( nRow, nCol, nRow + 10, nCol + 10, 0.01, nI * 10,"M", oPdf:Colorize(aColor[(nI-1)*20+nJ]) )
+          oPDF:Box( nRow, nCol, nRow + 10, nCol + 10, 0.01, nI * 10,"M", oPDF:Colorize(aColor[(nI-1)*20+nJ]) )
       next
    next
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Color Boxes ", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Color Boxes ", 2, oPDF:PageNumber(), 0 )
    for nI := 1 to 140
        nTop    := ( nI - 1 ) * 2.4
        nLeft   := ( nI - 1 ) * 2.1
-       nBottom := oPdf:PageY() - ( nI - 1 ) * 2.47
-       nRight  := oPdf:PageX() - ( nI - 1 ) * 2.18
-       oPdf:Box1( nTop, nLeft, nBottom, nRight, 10,oPdf:Colorize(aColor[Len(aColor)+1-nI]))
+       nBottom := oPDF:PageY() - ( nI - 1 ) * 2.47
+       nRight  := oPDF:PageX() - ( nI - 1 ) * 2.18
+       oPDF:Box1( nTop, nLeft, nBottom, nRight, 10,oPDF:Colorize(aColor[Len(aColor)+1-nI]))
    next
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Memos", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Different Styles & Colors", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Memos", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Different Styles & Colors", 2, oPDF:PageNumber(), 0 )
    nWidth := 90
    nTab   := 0
    cText  := GetText(1)
 
-   oPdf:Text( cText,   8, 107.95, nWidth, nTab, 5, 'M', oPDF:Colorize(oPDF:rgbToHex(255,215,0)) )
-   oPdf:Text( cText,  40, 107.95, nWidth, nTab, 3, 'M', oPDF:Colorize(oPDF:rgbToHex(160,82,45)) )
-   oPdf:Text( cText,  72, 107.95, nWidth, nTab, 2, 'M', oPDF:Colorize(oPDF:rgbToHex(75,0,130)) )
-   oPdf:Text( cText, 112, 107.95 - nWidth / 2, nWidth, nTab, 1, 'M', oPDF:Colorize(oPDF:rgbToHex(0,139,139)) )
+   oPDF:Text( cText,   8, 107.95, nWidth, nTab, 5, 'M', oPDF:Colorize(oPDF:rgbToHex(255,215,0)) )
+   oPDF:Text( cText,  40, 107.95, nWidth, nTab, 3, 'M', oPDF:Colorize(oPDF:rgbToHex(160,82,45)) )
+   oPDF:Text( cText,  72, 107.95, nWidth, nTab, 2, 'M', oPDF:Colorize(oPDF:rgbToHex(75,0,130)) )
+   oPDF:Text( cText, 112, 107.95 - nWidth / 2, nWidth, nTab, 1, 'M', oPDF:Colorize(oPDF:rgbToHex(0,139,139)) )
 
-   oPdf:Text( cText,  34, 100,    nWidth, nTab, 5, 'R', oPDF:Colorize(oPDF:rgbToHex(219,112,147)) )
-   oPdf:Text( cText,  41, 100,    nWidth, nTab, 3, 'R', oPDF:Colorize(oPDF:rgbToHex(72,61,139)) )
-   oPdf:Text( cText,  48, 100,    nWidth, nTab, 2, 'R', oPDF:Colorize(oPDF:rgbToHex(0,100,0)) )
-   oPdf:Text( cText,  55,  35,    nWidth, nTab, 1, 'R', oPDF:Colorize(oPDF:rgbToHex(105,105,105)) )
+   oPDF:Text( cText,  34, 100,    nWidth, nTab, 5, 'R', oPDF:Colorize(oPDF:rgbToHex(219,112,147)) )
+   oPDF:Text( cText,  41, 100,    nWidth, nTab, 3, 'R', oPDF:Colorize(oPDF:rgbToHex(72,61,139)) )
+   oPDF:Text( cText,  48, 100,    nWidth, nTab, 2, 'R', oPDF:Colorize(oPDF:rgbToHex(0,100,0)) )
+   oPDF:Text( cText,  55,  35,    nWidth, nTab, 1, 'R', oPDF:Colorize(oPDF:rgbToHex(105,105,105)) )
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Fonts", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Different Styles", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Fonts", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Different Styles", 2, oPDF:PageNumber(), 0 )
    nK := 6
    for nI := 1 to len( aFonts )  // Fonts
       ++nk
       for nJ := 1 to 4           // Styles
          if aFonts[ nI ][ nJ + 1 ]
-            oPdf:SetFont( aFonts[ nI ][ 1 ], nJ - 1, oPdf:FontSize() )
-            oPdf:RJust("This is a test for " + aFonts[ nI ][ 1 ] + " " + ;
-                       aStyle[ nJ ], nK++, oPdf:WIDTH(), "R")
+            oPDF:SetFont( aFonts[ nI ][ 1 ], nJ - 1, oPDF:FontSize() )
+            oPDF:RJust("This is a test for " + aFonts[ nI ][ 1 ] + " " + ;
+                       aStyle[ nJ ], nK++, oPDF:WIDTH(), "R")
          endif
       next
-    oPdf:RJust(oPdf:Underline("Underline"), nK++, oPdf:WIDTH(), "R")
-    oPdf:RJust(oPdf:Reverse("Test"), nK, oPdf:WIDTH(), "R")
+    oPDF:RJust(oPDF:Underline("Underline"), nK++, oPDF:WIDTH(), "R")
+    oPDF:RJust(oPDF:Reverse("Test"), nK, oPDF:WIDTH(), "R")
    next
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Pictures", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
-   oPdf:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 0, 0, "M" , 25 , oPdf:WIDTH() ) // file, row, col, units, height, width
-   oPdf:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),0,5,oPdf:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPdf:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,2,5,oPdf:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
-   oPdf:RJust(oPdf:Underline("JPEG"), 0, oPdf:WIDTH()+10, "R")
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Pictures", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
+   oPDF:Image( cTempPath+"BlackTDNBlog_1246_212_r1.JPG", 0, 0, "M" , 25 , oPDF:WIDTH() ) // file, row, col, units, height, width
+   oPDF:Text(OemToAnsi("Subi num pé de melância pra comer batata Frita"),0,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:Text(OemToAnsi("Como o tempo era de manga eu cai da bicicleta") ,2,5,oPDF:WIDTH(),0,1,"",oPDF:Colorize(oPDF:rgbToHex(150,20,60)))
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
-   oPdf:Image( cTempPath+"bannerBlackTDN_160_64.JPG", 0, 0, "M" ) // file, row, col, units, height, width
-   oPdf:RJust(oPdf:Underline("JPEG"), 0, oPdf:WIDTH(), "R")
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
+   oPDF:Image( cTempPath+"bannerBlackTDN_160_64.JPG", 0, 0, "M" ) // file, row, col, units, height, width
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH(), "R")
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
-   oPdf:Image( cTempPath+"BlackTDN_250x250.JPG", 0, 0, "M" , Min(oPdf:WIDTH(),250) , Min(oPdf:WIDTH(),250) ) // file, row, col, units, height, width
-   oPdf:RJust(oPdf:Underline("JPEG"), 0, oPdf:WIDTH()+10, "R")
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
+   oPDF:Image( cTempPath+"BlackTDN_250x250.JPG", 0, 0, "M" , Min(oPDF:WIDTH(),250) , Min(oPDF:WIDTH(),250) ) // file, row, col, units, height, width
+   oPDF:RJust(oPDF:Underline("JPEG"), 0, oPDF:WIDTH()+10, "R")
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "TIFF", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "TIFF", 2, oPDF:PageNumber(), 0 )
    //             file,    row, col, units, height, width
-   oPdf:Image( cTempPath+"hbvpdf_color.tif", 0,   0,   "M" ) 
-   oPdf:RJust( oPdf:Underline("TIFF"), 0, oPdf:WIDTH(), "R")
+   oPDF:Image( cTempPath+"hbvpdf_color.tif", 0,   0,   "M" ) 
+   oPDF:RJust( oPDF:Underline("TIFF"), 0, oPDF:WIDTH(), "R")
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
-   oPdf:Image( cTempPath+"hbvpdf_color.jpg", 0,   0,   "M" ) 
-   oPdf:RJust( oPdf:Underline("JPEG"), 0, oPdf:WIDTH(), "R")
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
+   oPDF:Image( cTempPath+"hbvpdf_color.jpg", 0,   0,   "M" ) 
+   oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH(), "R")
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "JPEG", 2, oPdf:PageNumber(), 0 )
-   oPdf:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPdf:WIDTH(),250) , Min(oPdf:WIDTH(),250))
-   oPdf:RJust( oPdf:Underline("JPEG"), 0, oPdf:WIDTH(), "R")
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "JPEG", 2, oPDF:PageNumber(), 0 )
+   oPDF:Image( cTempPath+"pdf_logo.jpg", 0,   0,   "M"  , Min(oPDF:WIDTH(),250) , Min(oPDF:WIDTH(),250))
+   oPDF:RJust( oPDF:Underline("JPEG"), 0, oPDF:WIDTH(), "R")
 
-   oPdf:OpenHeader(cPDFHeader)
+   oPDF:OpenHeader(cPDFHeader)
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Headers", 1, oPdf:PageNumber(), 0 )
-   oPdf:BookAdd( "Picture Header Page 14", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Headers", 1, oPDF:PageNumber(), 0 )
+   oPDF:BookAdd( "Picture Header Page 14", 2, oPDF:PageNumber(), 0 )
 
-   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
-   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(251,45,5)) + 'Red Sample of header repeating on pages 14-16', 1, 20, "R" )
+   oPDF:SetFont( "Helvetica" , NIL , oPDF:FontSize() )
+   oPDF:AtSay( oPDF:Colorize(oPDF:rgbToHex(251,45,5)) + 'Red Sample of header repeating on pages 14-16', 1, 20, "R" )
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Picture Header Page 15", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Picture Header Page 15", 2, oPDF:PageNumber(), 0 )
 
-   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
-   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(31,102,36)) + 'Green Sample of header repeating on pages  15-16', 1, 20, "R" )
+   oPDF:SetFont( "Helvetica" , NIL , oPDF:FontSize() )
+   oPDF:AtSay( oPDF:Colorize(oPDF:rgbToHex(31,102,36)) + 'Green Sample of header repeating on pages  15-16', 1, 20, "R" )
 
-   oPdf:NewPage( "LETTER", "P", 6 )
-   oPdf:BookAdd( "Picture Header Page 16", 2, oPdf:PageNumber(), 0 )
+   oPDF:NewPage( "LETTER", "P", 6 )
+   oPDF:BookAdd( "Picture Header Page 16", 2, oPDF:PageNumber(), 0 )
 
-   oPdf:SetFont( "Helvetica" , NIL , oPdf:FontSize() )
-   oPdf:AtSay( oPdf:Colorize(oPDF:rgbToHex(44,95,172)) + 'Blue Sample of header repeating on pages  16-16', 1, 20, "R" )
+   oPDF:SetFont( "Helvetica" , NIL , oPDF:FontSize() )
+   oPDF:AtSay( oPDF:Colorize(oPDF:rgbToHex(44,95,172)) + 'Blue Sample of header repeating on pages  16-16', 1, 20, "R" )
 
-   oPdf:Close()
+   oPDF:Close()
 
-   oPdf:Execute( cPDFFile )
+   oPDF:Execute( cPDFFile )
 
-   //oPdf:FilePrint()
+   //oPDF:FilePrint()
 
-   oPdf := FreeObj( oPdf )
+   oPDF := FreeObj( oPDF )
 
    hbvpdfResources(cTempPath,.T.)
    fErase( cPDFHeader )

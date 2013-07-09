@@ -30,6 +30,7 @@ CLASS THBHASH FROM THASH
 	METHOD hPos( uRow , uCol , uKey , nATRow , lID )
 	METHOD hATRow( uRow , lID )
 	METHOD hATCol( uRow , uCol , uKey , nATRow , lID )
+	METHOD hIDATCol( uRow , uCol , uKey , nATRow )
 	METHOD hGetKey( uRow , uCol , uKey , lAtRow , lGetValue , lID )
 	METHOD hGetValue( uRow , uCol , uKey , lAtRow , lID )
 	METHOD hHashIDObjCol( uRow , lID )

@@ -75,7 +75,7 @@ Static Procedure SapuReca(oTHash,cTitle)
 	BEGIN SEQUENCE
 
 		lExecute		:= ( Upper( ProcName(1) ) == "U_SAPURECA" ) .or. ( Upper( ProcName(2) ) == "U_SAPURECA" )
-		IF !( lExecute )
+		IF .NOT.( lExecute )
 			MsgAlert( "Invalid Function Call: " + ProcName() , "By By" )
 			BREAK
 		EndIF
@@ -202,6 +202,7 @@ Static Procedure SapuReca(oTHash,cTitle)
 				bErrorBlock := ErrorBlock({|e|BREAK(e)})
 				BEGIN SEQUENCE
 					oMediaPlayer := TMediaPlayer():New(0,0,0,0,oDlg,"",50,.F.)
+					oTHash:AddNewSession("MEDIA_PLAYER")
 					oTHash:AddNewProperty("MEDIA_PLAYER","oMediaPlayer",@oMediaPlayer)
 				END SEQUENCE
 				ErrorBlock(bErrorBlock)	
@@ -451,8 +452,8 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 		ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_WIDTH")]
 		ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_HEIGHT")]
 
-		n4AShape			:= Sqrt( ouTRect_1:nTop + ouTRect_1:nLeft + ouTRect_1:nWidth + ouTRect_1:nHeight )
-		n4PShape			:= Sqrt( x    + y     + ouTRect_1:nWidth + ouTRect_1:nHeight )
+		n4AShape			:= Sqrt( ouTRect_1:nTop+ouTRect_1:nLeft+ouTRect_1:nWidth+ouTRect_1:nHeight )
+		n4PShape			:= Sqrt( x+y+ouTRect_1:nWidth+ouTRect_1:nHeight )
 
 		n4Diff				:= Abs( n4AShape - n4PShape )
 
@@ -463,7 +464,7 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 			lClicked	:= ( n4Diff >= .4 .and. n4Diff <= 2 )		
 		EndIF
 	
-		IF !( lClicked )
+		IF .NOT.( lClicked )
 			BREAK
 		EndIF
 
@@ -492,7 +493,7 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
             	IF ( __aStonesJump[ nATPos ] == nIndex )
 					IF ( ++nATJump <= 7 )
 				   		lJump := ( __aStonesJump[ nATJump ] == 0 )
-				   		IF !( lJump )
+				   		IF .NOT.( lJump )
 				   			IF ( ++nATJump <= 7 )
 				   				lJump 	:= ( __aStonesJump[ nATJump ] == 0 )
 				   				lJump_2	:= lJump
@@ -506,7 +507,7 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
             	IF ( __aStonesJump[ nATPos ] == nIndex )
 					IF ( --nATJump >= 1 )
 						lJump := ( __aStonesJump[ nATJump ] == 0 )
-						IF !( lJump )
+						IF .NOT.( lJump )
 							IF ( --nATJump >= 1 )
 								lJump 	:= ( __aStonesJump[ nATJump ] == 0 )
 								lJump_2	:= lJump
@@ -518,7 +519,7 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 				EndIF
 			EndIF
 
-			IF !( lJump )
+			IF .NOT.( lJump )
 				MsgInfo( "SapuReca " + cToolTip + " Coach...!" ,  OemToAnsi( "Atenção" ) )
 				BREAK
 			EndIF
@@ -699,7 +700,7 @@ Static Function Play_Wave(nTTimer,cWavFile,oTHash)
 	Local cExt
 	Local cFile
 	Local cDriver
-	Local lPlay_Wave	:= !( GetFinalize(@oTHash) )
+	Local lPlay_Wave	:= .NOT.( GetFinalize(@oTHash) )
 	Local oMediaPlayer
 	IF ( lPlay_Wave )
 		__aTTimer[nTTimer] := .T.
@@ -713,7 +714,7 @@ Static Function Play_Wave(nTTimer,cWavFile,oTHash)
 		EndIF	
 		DEFAULT __cLastWave	:= cWavFile
 		cFile	:= __cLastWave
-		IF !( cFile == cWavFile )
+		IF .NOT.( cFile == cWavFile )
 			__cLastWave := cWavFile
 		EndIF
 		__aTTimer[nTTimer] := .F.
@@ -774,11 +775,11 @@ Static Function GIFFrames(cGIFFile,oTHash)
 
 	SplitPath( cGIFFile , @cDriver , @cDir , @cFile , @cExt )
 
-	IF !lIsDir(cTempPath)
+	IF .NOT.( lIsDir(cTempPath) )
 		MakeDir(cTempPath)
 	EndIF
 
-	IF !( StaticCall( H_GIF89 , LoadGIF , @cGIFFile , @aPictInfo, @aPictures, @aImageInfo , @cTempPath ) )
+	IF .NOT.( StaticCall( H_GIF89 , LoadGIF , @cGIFFile , @aPictInfo, @aPictures, @aImageInfo , @cTempPath ) )
 		cMsg := ( "Unable to Load " + cGIFFile )
 		ConOut( "["+cMsg+"]"  )
 		MsgAlert( cMsg , "By By" )
@@ -816,7 +817,7 @@ Static Procedure RemoveFiles(aShapes,oTHash)
 
 	For nShape := 1 To nShapes
 		cSession			:= aShapes[nShape][nImage_1]
-		IF !Empty( cSession )
+		IF .NOT.( Empty( cSession ) )
 			oShapeHash		:= aShapes[nShape][nFrame_1]
 			IF ( ValType(oShapeHash) == "O" .and. oShapeHash:ClassName() == "THASH" )
 				aPictures	:= oShapeHash:GetPropertyValue(cSession,"aPictures",{})
@@ -824,7 +825,7 @@ Static Procedure RemoveFiles(aShapes,oTHash)
 			EndIF	
 		EndIF	
 		cSession			:= aShapes[nShape][nImage_2]
-		IF !Empty( cSession )
+		IF .NOT.( Empty( cSession ) )
 			oShapeHash		:= aShapes[nShape][nFrame_2]
 			IF ( ValType(oShapeHash) == "O" .and. oShapeHash:ClassName() == "THASH" )
 				aPictures	:= oShapeHash:GetPropertyValue(cSession,"aPictures",{})
@@ -835,7 +836,7 @@ Static Procedure RemoveFiles(aShapes,oTHash)
 	
 	For nShape := 1 To nShapes
 		cSession			:= aShapes[nShape][nImage_1]
-		IF !Empty( cSession )
+		IF .NOT.( Empty( cSession ) )
 			oShapeHash		:= aShapes[nShape][nFrame_1]
 			IF ( ValType(oShapeHash) == "O" .and. oShapeHash:ClassName() == "THASH" )
 				oShapeHash	:= FreeObj( oShapeHash )
@@ -843,7 +844,7 @@ Static Procedure RemoveFiles(aShapes,oTHash)
 			oTHash:RemoveSession( @cSession )
 		EndIF
 		cSession			:= aShapes[nShape][nImage_2]
-		IF !Empty( cSession )
+		IF .NOT.( Empty( cSession ) )
 			oShapeHash		:= aShapes[nShape][nFrame_2]
 			IF ( ValType(oShapeHash) == "O" .and. oShapeHash:ClassName() == "THASH" )
 				oShapeHash	:= FreeObj( oShapeHash )
@@ -864,7 +865,7 @@ Static Function TPlayWAV(nTimer,cWaveFile,oTHash)
 	Local cTime			:= Time()
 	Local cTimeD		:= "00:00:00"
 	Local lPlay 		:= ( __cWAVLastTime == NIL .or. ( ( cTimeD := ElapTime( __cWAVLastTime , cTime ) ) > "00:00:10" ) )
-	IF ( lPlay ) .and. !( GetFinalize(@oTHash) )
+	IF ( lPlay ) .and. .NOT.( GetFinalize(@oTHash) )
 		__cWAVLastTime := cTime
 		lPlay := Play_Wave(@nTimer,@cWaveFile,@oTHash)
 	EndIF	
@@ -877,17 +878,17 @@ Return( lPlay )
 	Descricao:	Acao do Timer para animacao dos GIFS
 */
 Static Function TPlayGIF(nTimer,nAnimeCGIF,cShape,oGIF,aShapes,oTHash,lHide)
-	Local lPlay			:= !( GetFinalize(@oTHash) )  
+	Local lPlay			:= .NOT.( GetFinalize(@oTHash) )  
 	BEGIN SEQUENCE
-		IF !( lPlay )
+		IF .NOT.( lPlay )
 			BREAK
 		EndIF
 		lPlay			:= ( ( aScan( __aTTimer , { |lPlay| lPlay } ) ) == 0 )
-		IF !( lPlay )
+		IF .NOT.( lPlay )
 			BREAK
 		EndIF
 		lPlay			:= ( ( ++nAnimeCGIF % 15 ) == 0 )
-		IF !( lPlay )
+		IF .NOT.( lPlay )
 			BREAK
 		EndIF
 		lPlay			:= PlayGIFC(@nTimer,@cShape,@oGIF,@aShapes,@oTHash,@lHide)
@@ -1800,7 +1801,7 @@ Static Function AddShapes(oTPPanel,oTHash)
 		cProperties	:= aShapes[nShape][nString]
 		oTPPanel:AddShape(cProperties)
 		lVisible	:= aShapes[nShape][nVisible]
-		IF !( lVisible )
+		IF .NOT.( lVisible )
 			oTPPanel:SetVisible(nShape,lVisible)
 		EndIF
 	Next nShape
@@ -1816,7 +1817,7 @@ Return( aShapes )
 Static Function __Dummy(lRecursa)
 	DEFAULT lRecursa := .F.
 	BEGIN SEQUENCE
-		IF !( lRecursa )
+		IF .NOT.( lRecursa )
 			BREAK
 		EndIF
 		SapuReca()

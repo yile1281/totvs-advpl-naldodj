@@ -1,6 +1,6 @@
 /*
 	Funcao:	SapuReca()
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Jogo SapuReca PT11
 */

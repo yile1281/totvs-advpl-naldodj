@@ -49,7 +49,7 @@ Return( .T. )
 
 /*/
 	Funcao:	InitSapuReca
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Inicializa Parametros
 /*/
@@ -127,7 +127,7 @@ Return( oTHash )
 
 /*/
 	Funcao:	ExtractFiles
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Extrai os arquivos do RPO
 /*/
@@ -159,7 +159,7 @@ Return
 
 /*/
 	Funcao:	RemoveFiles
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Exclui os arquivos Temporarios
 /*/

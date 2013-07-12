@@ -16,7 +16,7 @@ User Function SapuReca()
 
 	BEGIN SEQUENCE
 
-		IF !( lExecute )
+		IF .NOT.( lExecute )
 			MsgAlert( "Invalid Function Call: " + ProcName() , "By By" )
 			BREAK
 		EndIF
@@ -142,7 +142,7 @@ Static Procedure ExtractFiles(oTHash,cSession)
 	Local nProperty
 	Local nProperties
 
-	IF !lIsDir(cTempPath)
+	IF .NOT.( lIsDir(cTempPath) )
 		MakeDir(cTempPath)
 	EndIF
 

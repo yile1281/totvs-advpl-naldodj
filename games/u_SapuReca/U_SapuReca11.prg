@@ -11,7 +11,7 @@ Static Procedure SapuReca(oTHash,cTitle)
 	BEGIN SEQUENCE
 
 		lExecute	:= ( Upper( ProcName(1) ) == "U_SAPURECA" )
-		IF !( lExecute )
+		IF .NOT.( lExecute )
 			MsgAlert( "Invalid Function Call: " + ProcName() , "By By" )
 			BREAK
 		EndIF

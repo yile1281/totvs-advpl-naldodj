@@ -21,7 +21,7 @@ User Function SapuReca()
 			BREAK
 		EndIF
 
-		cTitle		:= "Jogo SapuReca :: by Naldo DJ :: v1.0b"
+		cTitle		:= "Jogo SapuReca :: by Naldo DJ :: v1.0b :: http://www.blacktdn.com.br"
 		cRpoVersion	:= GetSrvProfString("RpoVersion","")
 		nVarNameLen	:= SetVarNameLen( 50 )			//Redefino para poder usar Nomes Longos
 		oTHash		:= InitSapuReca()

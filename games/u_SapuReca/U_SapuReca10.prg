@@ -14,7 +14,7 @@ Static __lStopTimers
 /*
 
 	Funcao:	SapuReca()
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Jogo SapuReca PT10
 
@@ -227,7 +227,7 @@ Return
 
 /*
 	Funcao:	StonesJump
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	26/03/2012
 	Uso:	Define as Posicoes para Salto
 */
@@ -247,7 +247,7 @@ Return
 
 /*
 	Funcao:	SetFinalize
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	31/03/2012
 	Uso:	Seta a Finalizacao
 */
@@ -261,7 +261,7 @@ Return(lFinalize)
 
 /*
 	Funcao:	GetFinalize
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	31/03/2012
 	Uso:	Verifica se em processo de Finalizacao
 */
@@ -273,7 +273,7 @@ Return(__lStopTimers.or.oTHash:GetProperty("FINALIZE","Finalize"))
 
 /*
 	Funcao:	Finalize
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Acao do Botao Direito do Mouse
 */
@@ -309,7 +309,7 @@ Return( lRet )
 
 /*
 	Funcao:	TActivate
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Reativacao dos Timers
 */
@@ -328,7 +328,7 @@ Return
 
 /*
 	Funcao:	TDeactivate
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Desativacao dos Timers
 */
@@ -356,7 +356,7 @@ Return
 
 /*
 	Funcao:	rClick
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Acao do Botao Direito do Mouse
 */
@@ -365,7 +365,7 @@ Return( .T. )
 
 /*
 	Funcao:	lClick
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Acao do Botao Esquerdo do Mouse
 */
@@ -389,7 +389,7 @@ Return( .T. )
 
 /*
 	Funcao:	JumpFrog
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Acao
 */
@@ -606,7 +606,7 @@ Return
 
 /*
 	Funcao:	Restart
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Reinicia o Jogo
 */
@@ -679,7 +679,7 @@ Return
 
 /*
 	Funcao:	AddProperty
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Adicionar as propriedades os Shapes
 */
@@ -691,7 +691,7 @@ Return( cProperties )
 
 /*
 	Funcao:	Play_Wave
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Play Wave
 */
@@ -723,7 +723,7 @@ Return( cFile )
 
 /*
 	Funcao:	Stop_Wave
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Stop Play_Wave
 */
@@ -753,7 +753,7 @@ Return( IF( lSleep , Sleep(500) , NIL ) )
 
 /*
 	Funcao:	GIFFrames
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Obtem os Frames dos GIFs Animados
 */
@@ -795,7 +795,7 @@ Return( oTGIFHash )
 
 /*/
 	Funcao:	RemoveFiles
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Exclui os arquivos Temporarios
 /*/
@@ -1031,7 +1031,7 @@ Return( .T. )
 
 /*
 	Funcao:	AddShapes
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Montar os Shapes
 */
@@ -1810,7 +1810,7 @@ Return( aShapes )
 
 /*
 	Funcao:	__Dummy
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	23/03/2012
 	Uso:	Dummy
 */

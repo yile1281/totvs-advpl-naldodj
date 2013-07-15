@@ -93,11 +93,11 @@ Static Procedure SapuReca(oTHash,cTitle)
 		nGIF_Freg		:= Randomize(1,1501)
 		nGIF_flyAlone	:= Randomize(1,1501)
 
-		nShapeM1Top		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_TOP") 	
-		nShapeM1Left	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_LEFT")
-		nShapeM1Image	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_IMAGE")
-		nShapeM1Width	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_WIDTH")
-		nShapeM1Height	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_HEIGHT")
+		nShapeM1Top		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_TOP") 	
+		nShapeM1Left	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_LEFT")
+		nShapeM1Image	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_IMAGE")
+		nShapeM1Width	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_WIDTH")
+		nShapeM1Height	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_HEIGHT")
 	
 		oTRect			:= TRect():New(0,0,497,635)
 
@@ -114,7 +114,7 @@ Static Procedure SapuReca(oTHash,cTitle)
 			ouTRect:nHeight 	:= oTRect:nRight
 			cDlgBackGround		:= oTHash:GetPropertyValue("SapuReca_Files","JOGO_BACKGROUND")
 	
-			@ ouTRect:nTop,ouTRect:nLeft BITMAP oDlgBackGround FILE cDlgBackGround OF oDLG SIZE ouTRect:nWidth,ouTRect:nHeight NOBORDER WHEN .F. PIXEL
+			@ ouTRect:nTop,ouTRect:nLeft BITMAP oDlgBackGround FILE cDlgBackGround OF oDlg SIZE ouTRect:nWidth,ouTRect:nHeight NOBORDER WHEN .F. PIXEL
 			oDlgBackGround:cToolTip	:= cKey
 	
 			ouTRect:nTop		:= oTRect:nTop
@@ -374,13 +374,13 @@ Static Function lClick(x,y,oTPPanel,aShapes,oTHash)
 	Local bAction
 	
 	Local nShape	:= oTPPanel:ShapeAtu
-	Local nATShape	:= aScan( aShapes , { |aShape| ( aShape[ oTHash:GetPropertyValue("SapuReca_Index","SHAPE_ID") ] == nShape ) .and. ( aShape[oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MARK") ] == 1 ) } )
+	Local nATShape	:= aScan( aShapes , { |aShape| ( aShape[ oTHash:GetPropertyValue("SapuReca_Index","ID") ] == nShape ) .and. ( aShape[oTHash:GetPropertyValue("SapuReca_Index","MARK") ] == 1 ) } )
 
 	Local lAction	:= ( nATShape > 0 )
 
 	IF ( lAction )
 
-		bAction		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_BACTION")]
+		bAction		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","BACTION")]
 		Eval( bAction , @x , @y , @oTPPanel , @aShapes , @oTHash )
 
 	EndIF
@@ -447,17 +447,17 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 		nShape				:= oTPPanel:ShapeAtu
 		ouTRect_1			:= uTRect():New(0,0,0,0)
 
-		ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TOP")]
-		ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_LEFT")]
-		ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_WIDTH")]
-		ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_HEIGHT")]
+		ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","TOP")]
+		ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","LEFT")]
+		ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","WIDTH")]
+		ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","HEIGHT")]
 
 		n4AShape			:= Sqrt( ouTRect_1:nTop+ouTRect_1:nLeft+ouTRect_1:nWidth+ouTRect_1:nHeight )
 		n4PShape			:= Sqrt( x+y+ouTRect_1:nWidth+ouTRect_1:nHeight )
 
 		n4Diff				:= Abs( n4AShape - n4PShape )
 
-		cDirection			:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_DIRECTION")]
+		cDirection			:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","DIRECTION")]
 		IF ( cDirection == "D" )
 			lClicked	:= ( n4Diff >= 1 .and. n4Diff <= 2 )
 		ElseIF ( cDirection == "E" )
@@ -476,8 +476,8 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 		oTPPanel:SetVisible(@oTHash:GetProperty("SHAPES",OemToAnsi("Instruções")),.F.)
 		oTPPanel:SetVisible(@oTHash:GetProperty("SHAPES",OemToAnsi("Reiniciar")),.T.)
 
-		cToolTip		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TOOLTIP")]
-		cImageFile		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_IMAGE")]
+		cToolTip		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","TOOLTIP")]
+		cImageFile		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","IMAGE")]
 		
 		cPlayWave		:= Play_Wave(1,oTHash:GetPropertyValue("SapuReca_Waves","SOM_SAPU_RECA"),@oTHash)
 
@@ -485,7 +485,7 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 
 		BEGIN SEQUENCE
 
-			nIndex		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_INDEX")]
+			nIndex		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","INDEX")]
             nATPos		:= aScan( __aStonesJump , nIndex )
             nATJump		:= nATPos
 			
@@ -529,36 +529,36 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 
 			IF ( lJump_1 )
 	
-				cFrame				:= "SHAPE_MOVE1_FRAME"
-				cFSession			:= "SHAPE_MOVE1_IMAGE"
+				cFrame				:= "MOVE1_FRAME"
+				cFSession			:= "MOVE1_IMAGE"
 				
-				cObjGIF				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_IMAGE")]
+				cObjGIF				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_IMAGE")]
 
-				nJump				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_JUMP")]
+				nJump				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_JUMP")]
 	
-				ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_TOP")]
-				ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_LEFT")]
-				ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_WIDTH")]
-				ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_HEIGHT")]
+				ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_TOP")]
+				ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_LEFT")]
+				ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_WIDTH")]
+				ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_HEIGHT")]
 				
 			ElseIF ( lJump_2 )
 	
-				cFrame				:= "SHAPE_MOVE2_FRAME"
-				cFSession			:= "SHAPE_MOVE2_IMAGE"
+				cFrame				:= "MOVE2_FRAME"
+				cFSession			:= "MOVE2_IMAGE"
 				
-				cObjGIF				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_IMAGE")]
+				cObjGIF				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_IMAGE")]
 
-				nJump				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_JUMP")]
+				nJump				:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_JUMP")]
 	
-				ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_TOP")]
-				ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_LEFT")]
-				ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_WIDTH")]
-				ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_HEIGHT")]
+				ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_TOP")]
+				ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_LEFT")]
+				ouTRect_1:nWidth	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_WIDTH")]
+				ouTRect_1:nHeight	:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_HEIGHT")]
 
 			EndIF	
 
-			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_LEFT")] += ( nJump / 2 )
-			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_LEFT")] += ( nJump / 2 )
+			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE1_LEFT")] += ( nJump / 2 )
+			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","MOVE2_LEFT")] += ( nJump / 2 )
 
 			oTPPanel:SetVisible(nShape,.F.)
 
@@ -574,11 +574,11 @@ Static Procedure JumpFrog(x,y,oTPPanel,aShapes,oTHash)
 			oObjGIF:Hide()
 			oObjGIF := oObjGIF:Free()
 
-			ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TOP")]
-			ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_LEFT")]
+			ouTRect_1:nTop		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","TOP")]
+			ouTRect_1:nLeft		:= aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","LEFT")]
 	
 			ouTRect_1:nLeft		+= nJump
-			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","SHAPE_LEFT")] := ouTRect_1:nLeft
+			aShapes[nShape][oTHash:GetPropertyValue("SapuReca_Index","LEFT")] := ouTRect_1:nLeft
 
 			oTPPanel:SetPosition(nShape,ouTRect_1:nLeft,ouTRect_1:nTop)
 			oTPPanel:SetVisible(nShape,.T.)
@@ -807,11 +807,11 @@ Static Procedure RemoveFiles(aShapes,oTHash)
 	Local nShape
 	Local nShapes		:= Len( aShapes )
 	
-	Local nImage_1		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_IMAGE")
-	Local nImage_2		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_IMAGE")
+	Local nImage_1		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_IMAGE")
+	Local nImage_2		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_IMAGE")
 
-	Local nFrame_1		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_FRAME")
-	Local nFrame_2		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_FRAME")
+	Local nFrame_1		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_FRAME")
+	Local nFrame_2		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_FRAME")
 
 	Local oShapeHash
 
@@ -914,8 +914,8 @@ Return(PlayGIF(@nTimer,@cShape,@oObjGIF,@aShapes,@oTHash,.F.,@cFrame,@cFSession)
 	Descricao:	Animacao dos GIFs dos Coadjuvantes
 */
 Static Function PlayGIFC(nTimer,cShape,oObjGIF,aShapes,oTHash,lHide)
-	Local cFrame	:= "SHAPE_MOVE1_FRAME"
-	Local cFSession	:= "SHAPE_MOVE1_IMAGE"
+	Local cFrame	:= "MOVE1_FRAME"
+	Local cFSession	:= "MOVE1_IMAGE"
 Return(PlayGIF(@nTimer,@cShape,@oObjGIF,@aShapes,@oTHash,@lHide,@cFrame,@cFSession))
 
 /*
@@ -935,6 +935,8 @@ Static Function PlayGIF(nTimer,cShape,oObjGIF,aShapes,oTHash,lHide,cFrame,cFSess
 	Local lFinalize
 	Local lNoExit
 
+	Local nFrame			:= 0
+	Local nFrameExit		
 	Local nTotalFrames
 	Local nCurrentFrame
 	
@@ -959,9 +961,11 @@ Static Function PlayGIF(nTimer,cShape,oObjGIF,aShapes,oTHash,lHide,cFrame,cFSess
 
 		aPictures 			:= oTGIFHash:GetProperty(cSession,"aPictures")
 		aImageInfo			:= oTGIFHash:GetProperty(cSession,"aImageInfo")
-		nCurrentFrame		:= 1
+		nCurrentFrame		:= aShapes[oTHash:GetProperty("SHAPES",cShape)][oTHash:GetPropertyValue("SapuReca_Index","CURRENT_FRAME")]
+		nFrameExit			:= aShapes[oTHash:GetProperty("SHAPES",cShape)][oTHash:GetPropertyValue("SapuReca_Index","FRAME_EXIT")]
 		nInterval			:= StaticCall( H_GIF89 , GetFrameDelay , aImageInfo[nCurrentFrame] , ANIMATE_DELAY )
 		nTotalFrames		:= Len( aPictures )
+		nFrameExit			:= ( nTotalFrames / nFrameExit )
 	
 		DEFAULT lHide		:= .F.
 	
@@ -988,7 +992,10 @@ Static Function PlayGIF(nTimer,cShape,oObjGIF,aShapes,oTHash,lHide,cFrame,cFSess
 				EndIF
 				ConOut( "Play GIF : " + "["+StrZero( nTimer , 1 )+"]" + "["+cShape+"]" + "[Frame]["+StrZero(nCurrentFrame,4)+"]" )
 				oObjGIF:cBMPFile	:= aPictures[nCurrentFrame]
-				++nCurrentFrame
+				++nCurrentFrame 
+				IF ( ++nFrame > nFrameExit )
+					Exit
+				EndIF
 			ENDIF
 	
 			IF ( lHide )
@@ -1010,7 +1017,13 @@ Static Function PlayGIF(nTimer,cShape,oObjGIF,aShapes,oTHash,lHide,cFrame,cFSess
 			BREAK
 		EndIF
 
-		oObjGIF:cBMPFile	:= cBMPFile
+		IF ( nCurrentFrame > nTotalFrames )
+			nCurrentFrame	:= 1	
+		EndIF
+		
+		aShapes[oTHash:GetProperty("SHAPES",cShape)][oTHash:GetPropertyValue("SapuReca_Index","CURRENT_FRAME")] := nCurrentFrame
+		
+		oObjGIF:cBMPFile	:= aPictures[nCurrentFrame]
 
 		IF ( lHide )
 			lFinalize 			:= GetFinalize(@oTHash)
@@ -1047,38 +1060,40 @@ Static Function AddShapes(oTPPanel,oTHash)
 	Local nShape
 	Local nShapes		:= 0
 
-	Local nID			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_ID")
-	Local nType			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TYPE")
-	Local nLeft			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_LEFT")
-	Local nTop			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TOP")
-	Local nWidth		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_WIDTH")
-	Local nHeight		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_HEIGHT")
-	Local nImage		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_IMAGE")
-	Local nToolTip		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_TOOLTIP")
-	Local nMove			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE")
-	Local nDeform		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_DEFORM")
-	Local nMark			:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MARK")
-	Local nContainer	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_CONTAINER")
-	Local nVisible		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_VISIBLE")
-	Local nbAction		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_BACTION")
-	Local nDirection	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_DIRECTION")
-	Local nMove1Top		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_TOP")
-	Local nMove1Left	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_LEFT")
-	Local nMove1Width	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_WIDTH")
-	Local nMove1Height	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_HEIGHT")
-	Local nMove2Top		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_TOP")
-	Local nMove2Left	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_LEFT")
-	Local nMove2Width	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_WIDTH")
-	Local nMove2Height	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_HEIGHT")
-	Local nMoveImg1		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_IMAGE")
-	Local nMoveImg2		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_IMAGE")
-	Local nMoveImgF1	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_FRAME")
-	Local nMoveImgF2	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_FRAME")
-	Local nMove1Jump	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE1_JUMP")
-	Local nMove2Jump	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_MOVE2_JUMP")
-	Local nString		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_STRING")
-	Local nSElements	:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_ELEMENTS")
-	Local nIndex		:= oTHash:GetPropertyValue("SapuReca_Index","SHAPE_INDEX")
+	Local nID			:= oTHash:GetPropertyValue("SapuReca_Index","ID")
+	Local nType			:= oTHash:GetPropertyValue("SapuReca_Index","TYPE")
+	Local nLeft			:= oTHash:GetPropertyValue("SapuReca_Index","LEFT")
+	Local nTop			:= oTHash:GetPropertyValue("SapuReca_Index","TOP")
+	Local nWidth		:= oTHash:GetPropertyValue("SapuReca_Index","WIDTH")
+	Local nHeight		:= oTHash:GetPropertyValue("SapuReca_Index","HEIGHT")
+	Local nImage		:= oTHash:GetPropertyValue("SapuReca_Index","IMAGE")
+	Local nToolTip		:= oTHash:GetPropertyValue("SapuReca_Index","TOOLTIP")
+	Local nMove			:= oTHash:GetPropertyValue("SapuReca_Index","MOVE")
+	Local nDeform		:= oTHash:GetPropertyValue("SapuReca_Index","DEFORM")
+	Local nMark			:= oTHash:GetPropertyValue("SapuReca_Index","MARK")
+	Local nContainer	:= oTHash:GetPropertyValue("SapuReca_Index","CONTAINER")
+	Local nVisible		:= oTHash:GetPropertyValue("SapuReca_Index","VISIBLE")
+	Local nbAction		:= oTHash:GetPropertyValue("SapuReca_Index","BACTION")
+	Local nDirection	:= oTHash:GetPropertyValue("SapuReca_Index","DIRECTION")
+	Local nMove1Top		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_TOP")
+	Local nMove1Left	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_LEFT")
+	Local nMove1Width	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_WIDTH")
+	Local nMove1Height	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_HEIGHT")
+	Local nMove2Top		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_TOP")
+	Local nMove2Left	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_LEFT")
+	Local nMove2Width	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_WIDTH")
+	Local nMove2Height	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_HEIGHT")
+	Local nMoveImg1		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_IMAGE")
+	Local nMoveImg2		:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_IMAGE")
+	Local nMoveImgF1	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_FRAME")
+	Local nMoveImgF2	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_FRAME")
+	Local nMove1Jump	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE1_JUMP")
+	Local nMove2Jump	:= oTHash:GetPropertyValue("SapuReca_Index","MOVE2_JUMP")
+	Local nString		:= oTHash:GetPropertyValue("SapuReca_Index","STRING")
+	Local nSElements	:= oTHash:GetPropertyValue("SapuReca_Index","ELEMENTS")
+	Local nIndex		:= oTHash:GetPropertyValue("SapuReca_Index","INDEX")
+	Local nCFrame		:= oTHash:GetPropertyValue("SapuReca_Index","CURRENT_FRAME")
+	Local nEFrame		:= oTHash:GetPropertyValue("SapuReca_Index","FRAME_EXIT")
 
 	oTHash:AddNewSession("SHAPES")
 	
@@ -1117,6 +1132,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1168,6 +1185,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1218,6 +1237,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1268,6 +1289,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1320,6 +1343,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 88
 	aShapes[nShapes][nMove2Jump]	:= 176
 	aShapes[nShapes][nIndex]		:= 3
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1372,6 +1397,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 88
 	aShapes[nShapes][nMove2Jump]	:= 176
 	aShapes[nShapes][nIndex]		:= 2
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1424,6 +1451,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 88
 	aShapes[nShapes][nMove2Jump]	:= 176
 	aShapes[nShapes][nIndex]		:= 1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1476,6 +1505,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= -88
 	aShapes[nShapes][nMove2Jump]	:= -176
 	aShapes[nShapes][nIndex]		:= 6
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1528,6 +1559,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= -88
 	aShapes[nShapes][nMove2Jump]	:= -176
 	aShapes[nShapes][nIndex]		:= 5
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1580,6 +1613,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= -88
 	aShapes[nShapes][nMove2Jump]	:= -176
 	aShapes[nShapes][nIndex]		:= 4
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1631,6 +1666,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1682,6 +1719,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1733,6 +1772,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 4
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])
@@ -1782,6 +1823,8 @@ Static Function AddShapes(oTPPanel,oTHash)
 	aShapes[nShapes][nMove1Jump]	:= 0
 	aShapes[nShapes][nMove2Jump]	:= 0
 	aShapes[nShapes][nIndex]		:= -1
+	aShapes[nShapes][nCFrame]		:= 1
+	aShapes[nShapes][nEFrame]		:= 1
 
 	AddProperty(@cProperties,"id=",aShapes[nShapes][nID])
 	AddProperty(@cProperties,"type=",aShapes[nShapes][nType])

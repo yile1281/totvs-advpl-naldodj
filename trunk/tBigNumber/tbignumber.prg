@@ -863,7 +863,7 @@ Return( __adoNR )
 
 	/*/
 		Funcao:		AddThread
-		Autor:		Marinaldo de Jesus
+		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data:		25/02/2013
 		Descricao:	ADD via JOB
 		Sintaxe:	AddThread( oN1 , oN2 )
@@ -1600,7 +1600,7 @@ Return( __pwoNR )
 
 	/*/
 		Funcao:		PowThread
-		Autor:		Marinaldo de Jesus
+		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data:		25/02/2013
 		Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 		Sintaxe:	PowThread( oN1 , oN2 )
@@ -1794,7 +1794,7 @@ Return( __pwoNR )
 
 		/*/
 			Funcao:		PowJob
-			Autor:		Marinaldo de Jesus
+			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 			Data:		25/02/2013
 			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 			Sintaxe:	hb_threadStart( "PowJob" , oN1 , oN2 , nSetDecimals , nthRootAcc )
@@ -1817,7 +1817,7 @@ Return( __pwoNR )
 
 		/*/
 			Funcao:		U_PowJob
-			Autor:		Marinaldo de Jesus
+			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 			Data:		25/02/2013
 			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 			Sintaxe:	StartJob( "U_POWJOB" , cEnvironment , lWaitRun , cN1 , cN2 , cID , nSetDecimals , nthRootAcc )
@@ -2189,7 +2189,7 @@ Return( othRoot )
 
 	/*/
 		Funcao:		RootThread
-		Autor:		Marinaldo de Jesus
+		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 		Data:		20/03/2013
 		Descricao:	Utilizada no Metodo nthRoot para o Calculo da Raiz via Job
 		Sintaxe:	RootThread( aIPF , aDPF , oRootE , oAccTo )
@@ -2376,7 +2376,7 @@ Return( othRoot )
 
 		/*/
 			Funcao:		RootJob
-			Autor:		Marinaldo de Jesus
+			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
 			Sintaxe:	hb_threadStart( "RootJob" , cRootB , oRootE , oFExit , nSetDecimals , nthRootAcc )
@@ -2400,7 +2400,7 @@ Return( othRoot )
 
 		/*/
 			Funcao:		U_RootJob
-			Autor:		Marinaldo de Jesus
+			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
 			Sintaxe:	StartJob( "U_RootJob" , cEnvironment , lWaitRun , cRootB , cRootE , cFExit , nSetDecimals , nthRootAcc , cID )

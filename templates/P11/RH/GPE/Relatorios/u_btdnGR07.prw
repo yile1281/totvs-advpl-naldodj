@@ -947,11 +947,11 @@ Return( Sleep( N_SLEEP ) )
 #DEFINE STACK_INDEX_ELEMENTS      4 
 
 /*/
-	Funcao: 	ReadStackParameters
-	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-	Data:		19/01/2011
-	Uso:		Retornar informacoes de Variaveis da Pilha de Chamadas
-    Sintaxe:    StaticCall(NDJLIB006,ReadStackParameters,cStack,cParameter,cScope,cModule,aStackParameters)
+	Funcao  : ReadStackParameters
+	Autor   : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data    : 19/01/2011
+	Uso     : Retornar informacoes de Variaveis da Pilha de Chamadas
+    Sintaxe : ReadStackParameters( cStack , cParameter , cScope , cModule , aStackParameters )
 /*/
 Static Function ReadStackParameters( cStack , cParameter , cScope , cModule , aStackParameters )
 
@@ -1006,11 +1006,11 @@ Static Function ReadStackParameters( cStack , cParameter , cScope , cModule , aS
 Return( uValue )
 
 /*/
-	Funcao: 	GetStackParameters
-	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-	Data:		19/01/2011
-	Uso:		Obtem Array com a Pilha de Chamadas que sera usado pela ReadStackParameters
-    Sintaxe:    StaticCall(NDJLIB006,GetStackParameters)
+	Funcao  : GetStackParameters
+	Autor   : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data    : 19/01/2011
+	Uso     : Obtem Array com a Pilha de Chamadas que sera usado pela ReadStackParameters
+    Sintaxe : GetStackParameters()
 /*/
 Static Function GetStackParameters()
 
@@ -1120,11 +1120,11 @@ Static Function GetStackParameters()
 Return( aStackParameters )
 
 /*/
-	Funcao: 	AddStackParameters
-	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-	Data:		19/01/2011
-	Uso:		Carregar os Valores da Pilha de Chamadas
-	Sintaxe:	AddStackParameters( aStackParameters , nStack ,  cStackEnv  )
+	Funcao  : AddStackParameters
+	Autor   : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data    : 19/01/2011
+	Uso     : Carregar os Valores da Pilha de Chamadas
+	Sintaxe : AddStackParameters( aStackParameters , nStack ,  cStackEnv  )
 /*/
 Static Function AddStackParameters( aStackParameters , nStack ,  cStackEnv  )
 
@@ -1251,9 +1251,9 @@ Static Function AddStackParameters( aStackParameters , nStack ,  cStackEnv  )
 	nParameter := Len( aStackParameters[ nStack ][3] )
 
 	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_PARAMETER  ]	:= cParameter
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_SCOPE		]	:= cScope
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_TYPE		]	:= cType
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_VALUE		]	:= uValue
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_SCOPE		 ]	:= cScope
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_TYPE		 ]	:= cType
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_VALUE		 ]	:= uValue
 
 	Set( 4 , cDateFormat )
 

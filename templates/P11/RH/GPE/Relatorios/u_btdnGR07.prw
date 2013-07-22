@@ -141,7 +141,7 @@ User Function GPER040X()
 		EndIF	
 
 		IF .NOT.( Type( "aPVGper040" ) == "A" )
-			APMsgAlert( OemToAnsi( "Ocorreram Problemas durante a Configuração de Impressão. Contacte o Administrador do Sistema" ) , OemToAnsi( "ATENÇÃO" ) )
+			APMsgAlert( OemToAnsi( "Ocorreram Problemas durante a Configuração de Impressão. Contate o Administrador do Sistema" ) , OemToAnsi( "ATENÇÃO" ) )
 			lRet := .F.
 			BREAK
 		EndIF

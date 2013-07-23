@@ -35,7 +35,7 @@
 /*
 
 	Funcao:	Game15()
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Jogo Game15 PT10
 */
@@ -109,7 +109,7 @@ Return
 
 /*
 	Funcao:	rClick
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Acao do Botao Direito do Mouse
 */
@@ -123,7 +123,7 @@ Return( .T. )
 
 /*
 	Funcao:	lClick
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Acao do Botao Esquerdo do Mouse
 */
@@ -164,7 +164,7 @@ Return( lAction )
 
 /*
 	Funcao:	SwapButtons
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Acao do Jogo
 */
@@ -273,7 +273,7 @@ Return( lMatch )
 
 /*
 	Funcao:	Getfyx
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	15/01/2013
 	Uso:	Retorna a Posicao do Eixo y de Acordo com o Eixo x
 */
@@ -282,7 +282,7 @@ Return( ( ( x * ( y - 1 ) ) + 1 ) )
 
 /*
 	Funcao:	HL1AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Algoritmo de Validacao HL1 (Superior Direita->Inferior Esquerda)
 */
@@ -324,7 +324,7 @@ Return( lMatch )
 
 /*
 	Funcao:	HR1AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Algoritmo de Validacao HR1 (Inferior Direita -> Superior Esquerda)
 */
@@ -366,7 +366,7 @@ Return( lMatch )
 
 /*
 	Funcao:	HL2AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Algoritmo de Validacao HL2 (Inferior Esquerda -> Superior Direita)
 */
@@ -408,7 +408,7 @@ Return( lMatch )
 
 /*
 	Funcao:	HR2AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Algoritmo de Validacao HR2 (Superior Direita -> Inferior Esquerda)
 */
@@ -450,7 +450,7 @@ Return( lMatch )
 
 /*
 	Funcao:	VL1AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	19/04/2012
 	Uso:	Algoritmo de Validacao VL1 (Superior Direita->Inferior Esquerda)
 */
@@ -488,7 +488,7 @@ Return( lMatch )
 
 /*
 	Funcao:	VR1AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	19/04/2012
 	Uso:	Algoritmo de Validacao VR1 (Inferior Direita -> Superior Esquerda)
 */
@@ -526,7 +526,7 @@ Return( lMatch )
 
 /*
 	Funcao:	VL2AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	19/04/2012
 	Uso:	Algoritmo de Validacao VL2 (Inferior Esquerda -> Superior Direita)
 */
@@ -569,7 +569,7 @@ Return( lMatch )
 
 /*
 	Funcao:	VR2AlgMatch
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	19/04/2012
 	Uso:	Algoritmo de Validacao VR2 (Superior Direita -> Inferior Esquerda)
 */
@@ -612,7 +612,7 @@ Return( lMatch )
 
 /*
 	Funcao:	Finalize
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Finalizar o Jogo
 */
@@ -643,7 +643,7 @@ Return
 
 /*
 	Funcao:	MsgAbout
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	About
 */
@@ -701,7 +701,7 @@ Return
 
 /*
 	Funcao:	LoadMsgAbout
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Carregar informacoes da Top Table
 */
@@ -1022,7 +1022,7 @@ Return
 
 /*
 	Funcao:	LoadGame
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	(Re)Iniciar o Jogo
 */
@@ -1423,7 +1423,7 @@ Return
 
 /*
 	Funcao:	SaveGame
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Salvar o Estado atual do Jogo
 */
@@ -1484,7 +1484,7 @@ Return
 
 /*
 	Funcao:	RestoreGame
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Restaurar o Estado anterior do Jogo
 */
@@ -1566,7 +1566,7 @@ Return
 
 /*
 	Funcao:	OpenTopTable
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Carregar a Top Table
 */
@@ -1669,7 +1669,7 @@ Return
 
 /*
 	Funcao:	SaveTopTable
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Salvar dados na Top Table
 */
@@ -1767,7 +1767,7 @@ Return
 
 /*
 	Funcao:	G15TimeCalc
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Calcula o Desvio Padrao do Tempo de Jogo
 */
@@ -1779,7 +1779,7 @@ Return( SecsToTime( Round( nDesvPad , 0 ) ) )
 
 /*
 	Funcao:	ShowTopTable
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Mostar informacoes da Top Table
 */
@@ -1864,7 +1864,7 @@ Return
 
 /*
 	Funcao:	BuildLBoxArray
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Carrega informacoes para o ListBox
 */
@@ -1915,7 +1915,7 @@ Return( lBuildOk )
 
 /*
 	Funcao:	LoadTopTable
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Carregar informacoes da Top Table
 */
@@ -2091,7 +2091,7 @@ Return
 
 /*
 	Funcao:	ClearTopTable
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Limpar Resultado da Top Table para usuario Corrente
 */
@@ -2164,7 +2164,7 @@ Return
 
 /*
 	Funcao:	AddProperty
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Adicionar as propriedades os Shapes
 */
@@ -2176,7 +2176,7 @@ Return( cProperties )
 
 /*
 	Funcao:	Compare
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Compara o Conteudo de 2 Variaveis .T. se iguais, .F. se diferente
 */
@@ -2185,7 +2185,7 @@ Return(StaticCall(NDJLIB029,Compare,@x,@y))
 
 /*
 	Funcao:	SaveArray
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Salva Array em Disco
 */
@@ -2194,7 +2194,7 @@ Return(StaticCall(NDJLIB029,SaveArray,@uArray,@cFileName,@nErr))
 
 /*
 	Funcao:	RestArray
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	18/04/2012
 	Uso:	Restaura Array do Disco
 */
@@ -2203,7 +2203,7 @@ Return(StaticCall(NDJLIB029,RestArray,@cFileName,@nErr))
 
 /*
 	Funcao:	DesvPad
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	20/04/2012
 	Uso:	Calcula o Desvio Padrao em um Intervalo de Valores
 */
@@ -2212,7 +2212,7 @@ Return(StaticCall(NDJLIB001,DesvPad,@aValores,@lPolarizado))
 
 /*
 	Funcao:	TimeToSecs
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	20/04/2012
 	Uso:	Transforma a string "HH:MM:SS" em nSegundos
 */
@@ -2221,7 +2221,7 @@ Return(StaticCall(NDJLIB030,TimeToSecs,cTime))
 
 /*
 	Funcao:	SecsToTime
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	20/04/2012
 	Uso:	Transforma nSegundos na string "HH:MM:SS"
 */
@@ -2230,7 +2230,7 @@ Return(StaticCall(NDJLIB030,SecsToTime,@nSecs))
 
 /*
 	Funcao:	Time2NextDay
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	20/04/2012
 	Uso:	Tratar Time e Date no padrao "00:00:00" para Time >= "24:00:00"
 */
@@ -2239,7 +2239,7 @@ Return(StaticCall(NDJLIB030,Time2NextDay,@cTime,@dDate))
 
 /*
 	Funcao:	__Dummy
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Dummy
 */

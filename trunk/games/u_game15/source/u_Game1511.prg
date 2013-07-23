@@ -1,7 +1,7 @@
 #include "protheus.ch"
 /*
 	Funcao:	Game15()
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Jogo Game15 PT11
 */
@@ -25,7 +25,7 @@ Return
 
 /*
 	Funcao:	__Dummy
-	Autor:	Marinaldo de Jesus
+	Autor:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:	16/04/2012
 	Uso:	Dummy
 */

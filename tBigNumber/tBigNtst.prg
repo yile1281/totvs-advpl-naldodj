@@ -156,12 +156,57 @@ User Function tBigNTst()
 	ASSIGN oPrime := tPrime():New() 
 
 	__ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
-	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 
 	__ConOut(fhLog,"")
+	
+#IFNDEF __PROTHEUS__
+	__ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
+	For w := 0 To 10
+		ASSIGN cW	:= hb_ntos(w)
+		otBigW 		:= cW
+		__ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
+		__ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
+		For n := 1 To 50
+			ASSIGN cN	:= hb_ntos(n)
+			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue()) 			
+			__ConOut(fhLog,"otBigW:="+cN ,"RESULT: "+otBigW:ExactValue()) 
+			__ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
+			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())
+			__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())
+			__ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
+			__ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigW-=cN):ExactValue())
+			__ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
+			__ConOut(fhLog,"otBigW*="+cN ,"RESULT: "+(otBigW*=cN):ExactValue())
+			__ConOut(fhLog,"otBigW%="+cN ,"RESULT: "+(otBigW%=cN):ExactValue())
+			__ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
+			__ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigW^=cN):ExactValue())
+			__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())		
+			__ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
+			__ConOut(fhLog,"otBigW--"    ,"RESULT: "+(otBigW--):ExactValue())
+			__ConOut(fhLog,"--otBigW"    ,"RESULT: "+(--otBigW):ExactValue())
+			__ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
+			__ConOut(fhLog,"otBigW>"+cN  ,"RESULT: "+cValToChar(otBigW>cN))
+			__ConOut(fhLog,"otBigW<"+cN  ,"RESULT: "+cValToChar(otBigW<cN))
+			__ConOut(fhLog,"otBigW>="+cN ,"RESULT: "+cValToChar(otBigW>=cN))
+			__ConOut(fhLog,"otBigW<="+cN ,"RESULT: "+cValToChar(otBigW<=cN))
+			__ConOut(fhLog,"otBigW!="+cN ,"RESULT: "+cValToChar(otBigW!=cN))
+			__ConOut(fhLog,"otBigW#"+cN  ,"RESULT: "+cValToChar(otBigW#cN))
+			__ConOut(fhLog,"otBigW<>"+cN ,"RESULT: "+cValToChar(otBigW<>cN))
+		    __ConOut(fhLog,"otBigW+"+cN  ,"RESULT: "+(otBigW+cN):ExactValue())
+			__ConOut(fhLog,"otBigW-"+cN  ,"RESULT: "+(otBigW-cN):ExactValue())
+			__ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigW*cN):ExactValue())
+			__ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigW/cN):ExactValue())
+			__ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigW%cN):ExactValue())
+		Next n
+		__ConOut(fhLog,"---------------------------------------------------------")
+	Next w
+	__ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
+#ENDIF
+
+	__ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 
 	For n := 1 To 1000
-		ASSIGN cN			:= hb_ntos(n)
+		ASSIGN cN		:= hb_ntos(n)
 		ASSIGN aPFact	:= otBigN:SetValue(cN):PFactors()
 		For x := 1 To Len( aPFact )
 			ASSIGN cW	:= aPFact[x][2]

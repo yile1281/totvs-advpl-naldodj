@@ -5,8 +5,8 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			 500
-#DEFINE ROOT_ACC_SET	 499
+#DEFINE ACC_SET			 1000
+#DEFINE ROOT_ACC_SET	  999
 #DEFINE ACC_ALOG		 ACC_SET
 
 #DEFINE __SLEEP 0
@@ -166,7 +166,7 @@ User Function tBigNTst()
 		otBigW 		:= cW
 		__ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
 		__ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
-		For n := 1 To 50
+		For n := 1 To 10
 			ASSIGN cN	:= hb_ntos(n)
 			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue()) 			
 			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())
@@ -683,8 +683,6 @@ User Function tBigNTst()
 		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		otBigN:SetValue(otBigN:SQRT())
-		ASSIGN cW	:= otBigN:GetValue()
-		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
 		ASSIGN cW	:= otBigN:GetValue()
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
 		__ConOut(fhLog,"---------------------------------------------------------")

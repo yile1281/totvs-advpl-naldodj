@@ -16,7 +16,7 @@ Group tBigNumber
       FoldersCount=2
       Folder Fontes
          VSSPath=Fontes
-         FilesCount=4
+         FilesCount=6
          File \svn\totvs-advpl-naldodj\tBigNumber\tBigNtst.prg
              Type=T
          End
@@ -27,6 +27,12 @@ Group tBigNumber
              Type=T
          End
          File \svn\totvs-advpl-naldodj\tBigNumber\tfRead.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\__ptPITthD.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\__pteTthD.prg
              Type=T
          End
       End

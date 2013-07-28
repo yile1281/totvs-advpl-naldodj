@@ -5,12 +5,12 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			 35
-#DEFINE ROOT_ACC_SET	 34
+#DEFINE ACC_SET			 500
+#DEFINE ROOT_ACC_SET	 499
 #DEFINE ACC_ALOG		 ACC_SET
 
 #DEFINE __SLEEP 0
-
+                                   
 #DEFINE N_TEST 10
 
 #IFDEF __HARBOUR__

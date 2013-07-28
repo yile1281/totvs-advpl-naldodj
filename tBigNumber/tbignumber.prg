@@ -201,7 +201,7 @@ CLASS tBigNumber
 	OPERATOR "**" ARG uBigN INLINE (self:Pow(uBigN))
 	OPERATOR "^=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
 	
-	OPERATOR ":=" ARG uBigN INLINE (self:Clone(uBigN))
+	OPERATOR ":=" ARG uBigN INLINE (self:SetValue(uBigN))
 	OPERATOR "="  ARG uBigN INLINE (self:SetValue(uBigN))
 
 #ENDIF

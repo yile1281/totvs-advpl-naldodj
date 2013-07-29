@@ -11,7 +11,7 @@
 
 #DEFINE __SLEEP 0
                                    
-#DEFINE N_TEST 10
+#DEFINE N_TEST 15
 
 #IFDEF __HARBOUR__
 Function Main()
@@ -199,22 +199,39 @@ User Function tBigNTst()
 			__ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigW*cN):ExactValue())
 			__ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigW/cN):ExactValue())
 			__ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigW%cN):ExactValue())
+			__ConOut(fhLog,"---------------------------------------------------------")
             otBigN := otBigW
-			__ConOut(fhLog,"otBigN:=otBigW" ,"RESULT: "+otBigN:ExactValue())
-			__ConOut(fhLog,"otBigW"         ,"RESULT: "+otBigW:ExactValue())
-			__ConOut(fhLog,"otBigW==otBigN" ,"RESULT: "+cValToChar(otBigW==otBigN))
-			__ConOut(fhLog,"otBigW>otBigN"  ,"RESULT: "+cValToChar(otBigW>otBigN))
-			__ConOut(fhLog,"otBigW<otBigN"  ,"RESULT: "+cValToChar(otBigW<otBigN))
-			__ConOut(fhLog,"otBigW>=otBigN" ,"RESULT: "+cValToChar(otBigW>=otBigN))
-			__ConOut(fhLog,"otBigW<=otBigN" ,"RESULT: "+cValToChar(otBigW<=otBigN))
-			__ConOut(fhLog,"otBigW!=otBigN" ,"RESULT: "+cValToChar(otBigW!=otBigN))
-			__ConOut(fhLog,"otBigW#otBigN"  ,"RESULT: "+cValToChar(otBigW#otBigN))
-			__ConOut(fhLog,"otBigW<>otBigN" ,"RESULT: "+cValToChar(otBigW<>otBigN))
-		    __ConOut(fhLog,"otBigW+otBigN"  ,"RESULT: "+(otBigW+otBigN):ExactValue())
-			__ConOut(fhLog,"otBigW-otBigN"  ,"RESULT: "+(otBigW-otBigN):ExactValue())
-			__ConOut(fhLog,"otBigW*otBigN"  ,"RESULT: "+(otBigW*otBigN):ExactValue())
-			__ConOut(fhLog,"otBigW/otBigN"  ,"RESULT: "+(otBigW/otBigN):ExactValue())
-			__ConOut(fhLog,"otBigW%otBigN"  ,"RESULT: "+(otBigW%otBigN):ExactValue())			
+			__ConOut(fhLog,"otBigN:=otBigW"   ,"RESULT: "+otBigN:ExactValue())
+			__ConOut(fhLog,"otBigN"           ,"RESULT: "+otBigW:ExactValue())
+			__ConOut(fhLog,"otBigW"           ,"RESULT: "+otBigW:ExactValue())
+			__ConOut(fhLog,"otBigW==otBigN"   ,"RESULT: "+cValToChar(otBigW==otBigN))
+			__ConOut(fhLog,"otBigW>otBigN"    ,"RESULT: "+cValToChar(otBigW>otBigN))
+			__ConOut(fhLog,"otBigW<otBigN"    ,"RESULT: "+cValToChar(otBigW<otBigN))
+			__ConOut(fhLog,"otBigW>=otBigN"   ,"RESULT: "+cValToChar(otBigW>=otBigN))
+			__ConOut(fhLog,"otBigW<=otBigN"   ,"RESULT: "+cValToChar(otBigW<=otBigN))
+			__ConOut(fhLog,"otBigW!=otBigN"   ,"RESULT: "+cValToChar(otBigW!=otBigN))
+			__ConOut(fhLog,"otBigW#otBigN"    ,"RESULT: "+cValToChar(otBigW#otBigN))
+			__ConOut(fhLog,"otBigW<>otBigN"   ,"RESULT: "+cValToChar(otBigW<>otBigN))
+		    __ConOut(fhLog,"otBigW+otBigN"    ,"RESULT: "+(otBigW+otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW-otBigN"    ,"RESULT: "+(otBigW-otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW*otBigN"    ,"RESULT: "+(otBigW*otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW/otBigN"    ,"RESULT: "+(otBigW/otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW%otBigN"    ,"RESULT: "+(otBigW%otBigN):ExactValue())	
+			__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue()) 			
+			__ConOut(fhLog,"otBigW+=otBigN++" ,"RESULT: "+(otBigW+=otBigN++):ExactValue())
+			__ConOut(fhLog,"otBigW+=++otBigN" ,"RESULT: "+(otBigW+=++otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW-=otBigN"   ,"RESULT: "+(otBigW-=otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW*=otBigN"   ,"RESULT: "+(otBigW*=otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
+			otBigN := cW
+			__ConOut(fhLog,"otBigN:="+cW ,"RESULT: "+otBigN:ExactValue())
+			__ConOut(fhLog,"otBigN=="+cW ,"RESULT: "+cValToChar(otBigN==cW))
+			__ConOut(fhLog,"otBigW^=otBigN"   ,"RESULT: "+(otBigW^=otBigN):ExactValue())
+			__ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
+			__ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
+			__ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
+			__ConOut(fhLog,"---------------------------------------------------------")
 		Next n
 		__ConOut(fhLog,"---------------------------------------------------------")
 	Next w
@@ -241,7 +258,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -263,7 +280,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog," ------------ Teste Prime 1 -------------- END ")
 
-	__tbnSleep()
+*	__tbnSleep()
 	
 	__ConOut(fhLog,"")
 
@@ -282,7 +299,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -308,7 +325,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -337,7 +354,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -366,7 +383,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -393,7 +410,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -421,7 +438,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -445,7 +462,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 	
@@ -469,7 +486,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -491,7 +508,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -513,7 +530,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -552,7 +569,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -587,7 +604,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -605,7 +622,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigN:Div(cX):ExactValue())
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next x
-		__tbnSleep()
+	*	__tbnSleep()
 	Next n	
 
 	__ConOut(fhLog,"")
@@ -614,7 +631,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -643,7 +660,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -667,7 +684,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog," BEGIN ------------ Teste FI 0 -------------- ")
 	//http://www.javascripter.net/math/calculators/eulertotientfunction.htm
@@ -684,7 +701,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog," ------------ Teste FI  0 -------------- END ")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 *	otBigN:SysSQRT(999999999999999)
 	otBigN:SysSQRT(0)
@@ -745,7 +762,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -768,7 +785,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -789,7 +806,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next w
-		__tbnSleep()
+	*	__tbnSleep()
 	Next x
 
 	__ConOut(fhLog,"")
@@ -798,7 +815,7 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -819,7 +836,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next w
-		__tbnSleep()
+	*	__tbnSleep()
 	Next x
 
 	__ConOut(fhLog,"")
@@ -940,7 +957,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -962,7 +979,7 @@ User Function tBigNTst()
 			EndIF
 			__ConOut(fhLog,"---------------------------------------------------------")
 		Next n
-		__tbnSleep()
+	*	__tbnSleep()
 	Next w
 
 	__ConOut(fhLog,"")
@@ -971,7 +988,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 
 	__ConOut(fhLog,"")
 
@@ -989,7 +1006,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
 		EndIF
 		__ConOut(fhLog,"---------------------------------------------------------")
-		__tbnSleep()
+	*	__tbnSleep()
 	Next w
 
 	__ConOut(fhLog,"")
@@ -998,7 +1015,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
     
 	otBigN:SetDecimals(nSetDec)
 	otBigN:nthRootAcc(nAccRoot)
@@ -1030,7 +1047,7 @@ User Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	__tbnSleep()
+*	__tbnSleep()
 	
 	__ConOut(fhLog,"")
 
@@ -1067,6 +1084,7 @@ User Function tBigNTst()
 	
 Return(NIL)
 
+/*
 Static Procedure __tbnSleep(nSleep)
 	PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __SLEEP
 	#IFDEF __PROTHEUS__
@@ -1076,6 +1094,7 @@ Static Procedure __tbnSleep(nSleep)
 		hb_gcAll()
 	#ENDIF	
 Return
+*/
 
 Static Procedure __ConOut(fhLog,e,d)
 

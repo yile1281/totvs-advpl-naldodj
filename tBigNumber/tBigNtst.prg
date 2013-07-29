@@ -92,6 +92,10 @@ User Function tBigNTst()
 	otBigN:nthRootAcc(ROOT_ACC_SET)
 	otBigN:SysSQRT(0)
 
+	otBigW:SetDecimals(ACC_SET)
+	otBigW:nthRootAcc(ROOT_ACC_SET)
+	otBigW:SysSQRT(0)
+	
 	Set(_SET_DECIMALS , ACC_SET)
 
 #IFDEF __HARBOUR__	
@@ -685,6 +689,9 @@ User Function tBigNTst()
 *	otBigN:SysSQRT(999999999999999)
 	otBigN:SysSQRT(0)
 
+*	otBigW:SysSQRT(999999999999999)
+	otBigW:SysSQRT(0)
+	
 	__ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste SQRT 1 -------------- ")
@@ -707,6 +714,7 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 
 *	otBigN:SysSQRT(0)
+*	otBigW:SysSQRT(0)
 
 	__ConOut(fhLog,"")
 
@@ -824,8 +832,11 @@ User Function tBigNTst()
 	
 	nSetDec 	:= otBigN:SetDecimals(ACC_ALOG)
 	nAccLog		:= otBigN:SetDecimals()
+	otBigN:SetDecimals(ACC_ALOG)
+	otBigW:SetDecimals(ACC_ALOG)
 	laLog		:= ( nAccLog >= 500 )
 	nAccRoot	:= otBigN:nthRootAcc(ACC_ALOG-1)
+	otBigW:nthRootAcc(ACC_ALOG-1)
 
 	__ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
 	
@@ -844,7 +855,6 @@ User Function tBigNTst()
 		__ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:SetValue(cX):aLog2():GetValue())
 	EndIF
 	__ConOut(fhLog,"")
-	
 	
 	ASSIGN cX	:= otBigW:SetValue("1215"):Log10():GetValue()
 	__ConOut(fhLog,'1215:tBigNumber():Log10()',"RESULT: "+cX)
@@ -992,7 +1002,9 @@ User Function tBigNTst()
     
 	otBigN:SetDecimals(nSetDec)
 	otBigN:nthRootAcc(nAccRoot)
-
+	otBigW:SetDecimals(nSetDec)
+	otBigW:nthRootAcc(nAccRoot)
+	
 	__ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
 	
 	__ConOut(fhLog,"")

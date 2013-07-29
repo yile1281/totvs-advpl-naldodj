@@ -57,7 +57,7 @@ THREAD Static __nSetDecimals
 
 /*
 	Class		: tBigNumber
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Instancia um novo objeto do tipo BigNumber
 	Sintaxe		: tBigNumber():New(uBigN) -> self
@@ -210,7 +210,7 @@ End Class
 
 /*
 	Função		: tBigNumber():New
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Instancia um novo Objeto tBigNumber
 	Sintaxe		: tBigNumber():New(uBigN,nBase) -> self
@@ -222,7 +222,7 @@ End Class
 
 /*
 	Method		: New
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: CONSTRUCTOR
 	Sintaxe		: tBigNumber():New(uBigN,nBase) -> self
@@ -238,7 +238,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		DEFAULT __cEnvSrv := GetEnvServer()
 	#ENDIF
 
-	IF __lSet == NIL
+	IF __lSet==NIL
 		__lSet := .F.
 		self:SetDecimals()
 		self:nthRootAcc()
@@ -247,7 +247,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 
 	self:SetValue(@uBigN,@nBase)
 
-	IF __ltbN == NIL
+	IF __ltbN==NIL
 		__ltbN := .F.
 		__o0  	:= tBigNumber():New("0",@nBase)
 		__o1  	:= tBigNumber():New("1",@nBase)
@@ -261,7 +261,7 @@ Return(self)
 
 /*
 	Method		: Clone
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 27/03/2013
 	Descricao	: Clone
 	Sintaxe		: tBigNumber():Clone() -> oClone
@@ -271,7 +271,7 @@ Return(tBigNumber():New(self))
 
 /*
 	Method		: ClassName
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: ClassName
 	Sintaxe		: tBigNumber():ClassName() -> cClassName
@@ -281,7 +281,7 @@ Return("TBIGNUMBER")
 
 /*
 	Method:		SetDecimals
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		04/02/2013
 	Descricao:	Setar o Numero de Casas Decimais
 	Sintaxe:	tBigNumber():SetDecimals(nSet) -> nLastSet
@@ -290,11 +290,11 @@ Method SetDecimals(nSet) CLASS tBigNumber
 
 	Local nLastSet 			:= __nSetDecimals
 
-	DEFAULT __nSetDecimals	:= IF(nSet == NIL,32,nSet)
+	DEFAULT __nSetDecimals	:= IF(nSet==NIL,32,nSet)
 	DEFAULT nSet			:= __nSetDecimals
 	DEFAULT nLastSet		:= nSet
 
-	IF nSet > MAX_DECIMAL_PRECISION
+	IF nSet>MAX_DECIMAL_PRECISION
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
@@ -304,7 +304,7 @@ Return(nLastSet)
 
 /*
 	Method:		nthRootAcc
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		04/02/2013
 	Descricao:	Setar a Precisao para nthRoot
 	Sintaxe:	tBigNumber():nthRootAcc(nSet) -> nLastSet
@@ -313,11 +313,11 @@ Method nthRootAcc(nSet) CLASS tBigNumber
 
 	Local nLastSet 			:= __nthRootAcc
 
-	DEFAULT __nthRootAcc	:= IF(nSet == NIL,6,nSet)
+	DEFAULT __nthRootAcc	:= IF(nSet==NIL,6,nSet)
 	DEFAULT nSet			:= __nthRootAcc
 	DEFAULT nLastSet		:= nSet
 
-	IF nSet > MAX_DECIMAL_PRECISION
+	IF nSet>MAX_DECIMAL_PRECISION
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
@@ -327,7 +327,7 @@ Return(nLastSet)
 
 /*
 	Method		: SetValue
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: SetValue
 	Sintaxe		: tBigNumber():SetValue(uBigN,nBase,cRDiv,lLRmvZ) -> self
@@ -346,7 +346,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 		Private This
 	#ENDIF	
 
-	IF cType == "O"
+	IF cType=="O"
 	
 		DEFAULT cRDiv	:= uBigN:cRDiv
 
@@ -382,7 +382,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 			
 		#ENDIF
 	
-	ElseIF cType == "A"
+	ElseIF cType=="A"
 
 		DEFAULT cRDiv		:= uBigN[3][2]
 		
@@ -409,13 +409,13 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 		
 		#ENDIF
 	
-	ElseIF cType == "C"
+	ElseIF cType=="C"
 
 	    While " " $ uBigN
 	    	uBigN	:= StrTran(uBigN," ","")	
 	    End While
 
-	    self:lNeg := SubStr(uBigN,1,1) == "-"
+	    self:lNeg := SubStr(uBigN,1,1)=="-"
 
 		IF self:lNeg
 			uBigN		:= SubStr(uBigN,2)
@@ -429,21 +429,21 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 		DEFAULT nBase := self:nBase
 
 		self:cInt := "0"
-		IF self:nBase == 10
+		IF self:nBase==10
 			self:cDec := "0"
 		Else
 			self:cDec := ""
 		EndIF
 
 		DO CASE
-		CASE (nFP == 0)
+		CASE nFP==0
 			self:cInt := SubStr(uBigN,1)
-			IF self:nBase == 10
+			IF self:nBase==10
 				self:cDec := "0"
 			Else
 				self:cDec := ""
 			EndIF	
-		CASE (nFP == 1)
+		CASE nFP==1
 		    self:cInt	:= "0"
 		    self:cDec	:= SubStr(uBigN,nFP+1)
 		OTHERWISE
@@ -451,13 +451,13 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 		    self:cDec	:= SubStr(uBigN,nFP+1)
 		ENDCASE
 		
-		IF self:nBase <> 10
-			IF self:cDec == "0"
+		IF self:nBase<>10
+			IF self:cDec=="0"
 				self:cDec := ""
 			EndIF
 		EndIF
 
-		IF self:cInt == "0" .and. self:cDec == "0"
+		IF self:cInt=="0" .and. self:cDec=="0"
 			self:lNeg	:= .F.
 			self:cSig	:= ""
 		EndIF
@@ -473,16 +473,16 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 	EndIF
 	self:cRDiv	:= cRDiv
 
-	DEFAULT lLRmvZ	:= IF(self:nBase == 10,.T.,.F.)
+	DEFAULT lLRmvZ	:= IF(self:nBase==10,.T.,.F.)
     IF lLRmvZ
-		While self:nInt > 1 .and. SubStr(self:cInt,1,1) == "0"
+		While self:nInt>1 .and. SubStr(self:cInt,1,1)=="0"
 			self:cInt := SubStr(self:cInt,2)
 			--self:nInt
 		End While
 	EndIF
 
 	DEFAULT nAcc := __nSetDecimals
-	IF self:nDec > nAcc
+	IF self:nDec>nAcc
 		self:nDec	:= nAcc
 		self:cDec	:= SubStr(self:cDec,1,self:nDec)
 	EndIF
@@ -493,7 +493,7 @@ Return(self)
 
 /*
 	Method		: GetValue
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: GetValue
 	Sintaxe		: tBigNumber():GetValue(lAbs,lObj) -> uNR
@@ -518,7 +518,7 @@ Return(uNR)
 
 /*
 	Method		: ExactValue
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: ExactValue
 	Sintaxe		: tBigNumber():ExactValue(lAbs) -> uNR
@@ -550,7 +550,7 @@ Return(uNR)
 
 /*
 	Method		: Abs
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Retorna o Valor Absoluto de um Numero
 	Sintaxe		: tBigNumber():Abs() -> uNR
@@ -560,7 +560,7 @@ Return(self:GetValue(.T.,@lObj))
 
 /*
 	Method		: Int
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Retorna a Parte Inteira de um Numero
 	Sintaxe		: tBigNumber():Int(lObj,lSig) -> uNR
@@ -579,7 +579,7 @@ Return(uNR)
 
 /*
 	Method		:	Dec
-	Autor		:	Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		:	Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		:	04/02/2013
 	Descricao	:	Retorna a Parte Decimal de um Numero
 	Sintaxe		:	tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
@@ -595,7 +595,7 @@ Method Dec(lObj,lSig,lNotZ) CLASS tBigNumber
 	DEFAULT lNotZ := .F.
 	IF lNotZ
 		nDec	  := self:nDec
-		While SubStr(cDec,-1) == "0"
+		While SubStr(cDec,-1)=="0"
 			cDec  := SubStr(cDec,1,--nDec)
 		End While
 	EndIF
@@ -612,7 +612,7 @@ Return(uNR)
 
 /*
 	Method		: eq
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Compara se o valor corrente eh igual ao passado como parametro
 	Sintaxe		: tBigNumber():eq(uBigN) -> leq
@@ -630,13 +630,13 @@ Method eq(uBigN) CLASS tBigNumber
 	__eqoN1:SetValue(__eqoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
 	__eqoN2:SetValue(__eqoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
 
-	leq	:= __eqoN1:GetValue(.T.) == __eqoN2:GetValue(.T.) .and. __eqoN1:lNeg == __eqoN2:lNeg
+	leq	:= __eqoN1:GetValue(.T.)==__eqoN2:GetValue(.T.) .and. __eqoN1:lNeg==__eqoN2:lNeg
 
 Return(leq)
 
 /*
 	Method		: ne
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Verifica se o valor corrente eh igual ao valor passado como parametro
 	Sintaxe		: tBigNumber():ne(uBigN) -> .NOT.(leq)
@@ -646,7 +646,7 @@ Return(.NOT.(self:eq(@uBigN)))
 
 /*
 	Method		: gt
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Verifica se o valor corrente eh maior que o valor passado como parametro
 	Sintaxe		: tBigNumber():gt(uBigN) -> lgt
@@ -672,21 +672,21 @@ Method gt(uBigN) CLASS tBigNumber
 
 	IF __gtoN1:lNeg .or. __gtoN2:lNeg
 		IF __gtoN1:lNeg .and. __gtoN2:lNeg
-			lgt := cN1 < cN2
+			lgt := cN1<cN2
 		ElseIF __gtoN1:lNeg .and. .NOT.(__gtoN2:lNeg)
 			lgt := .F.
 		ElseIF .NOT.(__gtoN1:lNeg) .and. __gtoN2:lNeg
 			lgt := .T.
 		EndIF
 	Else
-		lgt := cN1 > cN2
+		lgt := cN1>cN2
 	EndIF	
 
 Return(lgt)
 
 /*
 	Method		: lt
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Verifica se o valor corrente eh menor que o valor passado como parametro
 	Sintaxe		: tBigNumber():lt(uBigN) -> llt
@@ -712,21 +712,21 @@ Method lt(uBigN) CLASS tBigNumber
 
 	IF __ltoN1:lNeg .or. __ltoN2:lNeg
 		IF __ltoN1:lNeg .and. __ltoN2:lNeg
-			llt := cN1 > cN2
+			llt := cN1>cN2
 		ElseIF __ltoN1:lNeg .and. .NOT.(__ltoN2:lNeg)
 			llt := .T.
 		ElseIF .NOT.(__ltoN1:lNeg) .and. __ltoN2:lNeg
 			llt := .F.
 		EndIF
 	Else
-		llt := cN1 < cN2
+		llt := cN1<cN2
 	EndIF	
 
 Return(llt)
 
 /*
 	Method		: gte
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Verifica se o valor corrente eh maior ou igual ao valor passado como parametro
 	Sintaxe		: tBigNumber():gte(uBigN) -> lgte
@@ -736,7 +736,7 @@ Return(self:gt(@uBigN) .or. self:eq(@uBigN))
 
 /*
 	Method		: lte
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Verifica se o valor corrente eh menor ou igual ao valor passado como parametro
 	Sintaxe		: tBigNumber():lte(uBigN) -> lte
@@ -746,7 +746,7 @@ Return(self:lt(@uBigN) .or. self:eq(@uBigN))
 
 /*
 	Method		: Max
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Retorna o maior valor entre o valor corrente e o valor passado como parametro
 	Sintaxe		: tBigNumber():Max(uBigN) -> uNR
@@ -769,7 +769,7 @@ Return(uNR)
 
 /*
 	Method		: Min
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Retorna o menor valor entre o valor corrente e o valor passado como parametro
 	Sintaxe		: tBigNumber():Min(uBigN) -> uNR
@@ -792,7 +792,7 @@ Return(uNR)
 
 /*
 	Method		: Add
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Soma
 	Sintaxe		: tBigNumber():Add(uBigN) -> oBigNR
@@ -829,10 +829,10 @@ Method Add(uBigN) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __adoN1:nBase == 10 .and. __adoN1:nSize <= 14 .and. __adoN2:nSize <= 14
+		IF __adoN1:nBase==10 .and. __adoN1:nSize<=14 .and. __adoN2:nSize<=14
 			n1	:= Val(__adoN1:ExactValue())
 			n2	:= Val(__adoN2:ExactValue())
-			IF n1 <= 999999999.9999 .and. __adoN1:nDec <= 4 .and. n2 <= 999999999.9999 .and. __adoN2:nDec <= 4
+			IF n1<=999999999.9999 .and. __adoN1:nDec<=4 .and. n2<=999999999.9999 .and. __adoN2:nDec<=4
 				cNT	:= hb_ntos(n1+n2)
 				__adoNR:SetValue(cNT)
 				BREAK
@@ -852,7 +852,7 @@ Method Add(uBigN) CLASS tBigNumber
 	
 		IF lNeg
 			lAdd	:= .F.
-			lInv	:=  cN1 < cN2
+			lInv	:=  cN1<cN2
 			lNeg	:= (__adoN1:lNeg .and. .NOT.(lInv)) .or. (__adoN2:lNeg .and. lInv)
 			IF lInv
 				cNT	:= cN1
@@ -866,7 +866,7 @@ Method Add(uBigN) CLASS tBigNumber
 	
 		IF lAdd
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD) >= 2
+		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
 			        __adoNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
 		        Else
 		        	__adoNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
@@ -908,7 +908,7 @@ Return(__adoNR)
 
 	/*/
 		Funcao:		AddThread
-		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data:		25/02/2013
 		Descricao:	ADD via JOB
 		Sintaxe:	AddThread(oN1,oN2)
@@ -947,7 +947,7 @@ Return(__adoNR)
 	
 		BEGIN SEQUENCE
 
-			lAdd1	:= (y > 0)
+			lAdd1	:= (y>0)
 			
 			IF (lAdd1)
 				cT1 := SubStr(cN1,1,y)
@@ -1011,7 +1011,7 @@ Return(__adoNR)
 		        	aAdd(aThreads,nID)
 		        #ENDIF //__HARBOUR__
 
-				IF z == y .or. Mod(z,5) == 0
+				IF z==y .or. Mod(z,5)==0
 					
 					#IFDEF __HARBOUR__
 					
@@ -1039,7 +1039,7 @@ Return(__adoNR)
 				
 									cGlbV	:= GetGlbValue(aNR[nID][4])
 									
-									IF .NOT.(cGlbV == "")
+									IF .NOT.(cGlbV=="")
 					
 										aNR[nID][1] := .T.
 										aNR[nID][5] := cGlbV
@@ -1048,7 +1048,7 @@ Return(__adoNR)
 				
 										ClearGlbValue(aNR[nID][4])
 				
-										lExit	:= ++nNR == nIDs
+										lExit	:= ++nNR==nIDs
 				                                                                      	
 										IF lExit
 											Exit
@@ -1058,7 +1058,7 @@ Return(__adoNR)
 				
 								Else
 				
-									lExit := ++nNR == nIDs
+									lExit := ++nNR==nIDs
 				
 									IF lExit
 										Exit
@@ -1085,10 +1085,10 @@ Return(__adoNR)
 			For x := y To 1 STEP -1
 				z 	:= x-1
 				cT1	:= aNR[x][5]
-				IF z > 0 .and. Len(cT1) > MAX_LENGHT_ADD_THREAD
+				IF z>0 .and. Len(cT1)>MAX_LENGHT_ADD_THREAD
 					cT2 := SubStr(cT1,1,1)
 					cT1	:= SubStr(cT1,2)
-					IF cT2 <> "0"
+					IF cT2<>"0"
 						w   		:= Len(aNR[z][5])
 						cT2			:= Add(aNR[z][5],PadL(cT2,w,"0"),w,nBase)
 						aNR[z][5]	:= IF(SubStr(cT2,1,1)=="0",SubStr(cT2,2),cT2)
@@ -1121,7 +1121,7 @@ Return(__adoNR)
 
 /*
 	Method		: Sub
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Soma
 	Sintaxe		: tBigNumber():Sub(uBigN) -> oBigNR
@@ -1158,10 +1158,10 @@ Method Sub(uBigN) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __sboN1:nBase == 10 .and. __sboN1:nSize <= 14 .and. __sboN2:nSize <= 14
+		IF __sboN1:nBase==10 .and. __sboN1:nSize<=14 .and. __sboN2:nSize<=14
 			n1	:= Val(__sboN1:ExactValue())
 			n2	:= Val(__sboN2:ExactValue())
-			IF n1 <= 999999999.9999 .and. __sboN1:nDec <= 4 .and. n2 <= 999999999.9999 .and. __sboN2:nDec <= 4
+			IF n1<=999999999.9999 .and. __sboN1:nDec<=4 .and. n2<=999999999.9999 .and. __sboN2:nDec<=4
 				cNT	:= hb_ntos(n1-n2)
 				__sboNR:SetValue(cNT)
 				BREAK
@@ -1183,7 +1183,7 @@ Method Sub(uBigN) CLASS tBigNumber
 			lSub	:= .F.
 			lNeg	:= __sboN1:lNeg
 		Else
-			lInv	:= cN1 < cN2
+			lInv	:= cN1<cN2
 			lNeg	:= __sboN1:lNeg .or. lInv
 			IF lInv
 				cNT	:= cN1
@@ -1201,7 +1201,7 @@ Method Sub(uBigN) CLASS tBigNumber
 	    	#ENDIF
 	    Else
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD) >= 2
+		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
 			        __sboNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
 		        Else
 		        	__sboNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
@@ -1235,7 +1235,7 @@ Return(__sboNR)
 
 /*
 	Method		: Mult
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Multiplicacao (Mais rapida, usa a multiplicacao nativa)
 	Sintaxe		: tBigNumber():Mult(uBigN,leMult) -> oBigNR
@@ -1272,10 +1272,10 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF __mtoN1:nBase == 10 .and. __mtoN1:nSize <= 9 .and. __mtoN2:nSize <= 9
+		IF __mtoN1:nBase==10 .and. __mtoN1:nSize<=9 .and. __mtoN2:nSize<=9
 			n1	:= Val(__mtoN1:ExactValue())
 			n2	:= Val(__mtoN2:ExactValue())
-			IF n1 <= 2999999.90 .and. __mtoN1:nDec <= 2 .and. n2 <= 2999999.90 .and. __mtoN2:nDec <= 2
+			IF n1<=2999999.90 .and. __mtoN1:nDec<=2 .and. n2<=2999999.90 .and. __mtoN2:nDec<=2
 				cNT	:= hb_ntos(n1*n2)
 				__mtoNR:SetValue(cNT)
 				BREAK
@@ -1331,7 +1331,7 @@ Return(__mtoNR)
 
 /*
 	Method		: Div
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Divisao
 	Sintaxe		: tBigNumber():Div(uBigN,lFloat) -> oBigNR
@@ -1425,7 +1425,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 					__dvoRDiv:SetValue(__dvoRDiv:cRDiv,NIL,NIL,.F.)
 					__dvoRDiv:SetValue(__dvoRDiv:ExactValue(.T.))
 
-					IF __dvoRDiv:eq(__o0) .or. nDec >= nAcc
+					IF __dvoRDiv:eq(__o0) .or. nDec>=nAcc
 						Exit
 					EndIF
 		
@@ -1466,7 +1466,7 @@ Return(__dvoNR)
 
 /*
 	Method		: Mod
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 05/03/2013
 	Descricao	: Resto da Divisao
 	Sintaxe		: tBigNumber():Mod(uBigN) -> uNR
@@ -1485,7 +1485,7 @@ Return(uNR)
 
 /*
 	Method		: Pow
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 05/03/2013
 	Descricao	: Caltulo de Potencia
 	Sintaxe		: tBigNumber():Pow(uBigN) -> oBigNR
@@ -1637,7 +1637,7 @@ Return(__pwoNR)
 
 	/*/
 		Funcao:		PowThread
-		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data:		25/02/2013
 		Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 		Sintaxe:	PowThread(oN1,oN2)
@@ -1766,7 +1766,7 @@ Return(__pwoNR)
 			
 								cGlbV	:= GetGlbValue(aNR[nID][3])
 								
-								IF .NOT.(cGlbV == "")
+								IF .NOT.(cGlbV=="")
 				
 									aNR[nID][4]	:= .T.
 									aNR[nID][5]	:= cGlbV
@@ -1775,7 +1775,7 @@ Return(__pwoNR)
 			
 									ClearGlbValue(aNR[nID][3])
 			
-									lExit	:= ++nNR == nIDs
+									lExit	:= ++nNR==nIDs
 			                                                                      	
 									IF lExit
 										Exit
@@ -1785,7 +1785,7 @@ Return(__pwoNR)
 			
 							Else
 			
-								lExit := ++nNR == nIDs
+								lExit := ++nNR==nIDs
 			
 								IF lExit
 									Exit
@@ -1831,7 +1831,7 @@ Return(__pwoNR)
 
 		/*/
 			Funcao:		PowJob
-			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 			Data:		25/02/2013
 			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 			Sintaxe:	hb_threadStart("PowJob",oN1,oN2,nSetDecimals,nthRootAcc)
@@ -1854,7 +1854,7 @@ Return(__pwoNR)
 
 		/*/
 			Funcao:		U_PowJob
-			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 			Data:		25/02/2013
 			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
 			Sintaxe:	StartJob("U_POWJOB",cEnvironment,lWaitRun,cN1,cN2,cID,nSetDecimals,nthRootAcc)
@@ -1885,7 +1885,7 @@ Return(__pwoNR)
 
 /*
 	Method		: e
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
 	Sintaxe		: tBigNumber():e(lForce) -> oeTthD
@@ -1944,7 +1944,7 @@ Return(oeTthD)
 
 /*
 	Method:		Exp
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		06/02/2013
 	Descricao:	Potencia do Numero de Neper e^cN
 	Sintaxe:	tBigNumber():Exp(lForce) -> oBigNR
@@ -1956,7 +1956,7 @@ Return(oBigNR)
 
 /*
 	Method:		PI
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		04/02/2013
 	Descricao:	Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
 	Sintaxe:	tBigNumber():PI(lForce) -> oPITthD
@@ -1988,7 +1988,7 @@ Return(oPITthD)
 
 /*
 	Method:		GCD
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		23/02/2013
 	Descricao:	Retorna o GCD/MDC
 	Sintaxe:	tBigNumber():GCD(uBigN) -> oGCD
@@ -2021,7 +2021,7 @@ Return(oGCD)
 
 /*
 	Method:		LCM
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		23/02/2013
 	Descricao:	Retorna o LCM/MMC
 	Sintaxe:	tBigNumber():LCM(uBigN) -> oLCM
@@ -2060,7 +2060,7 @@ Return(oLCM)
 /*
 
 	Method:		nthRoot
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		05/03/2013
 	Descricao:	Radiciação 
 	Sintaxe:	tBigNumber():nthRoot(uBigN) -> othRoot
@@ -2180,7 +2180,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		nPFs 	:= Len(aIPF)
 
-		IF nPFs > 0
+		IF nPFs>0
 			#IFDEF __ROOTMT__
 				othRoot:SetValue(RootThread(@aIPF,@aDPF,@oRootE,@oFExit))
 			#ELSE
@@ -2197,7 +2197,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 				Next nPF
 				IF .NOT.(Empty(aDPF))
 					nPFs		:= Len(aDPF)
-					IF nPFs > 0
+					IF nPFs>0
 						othRootD:SetValue(__o1)
 						For nPF := 1 To nPFs
 							IF oRootE:eq(aDPF[nPF][2])
@@ -2226,7 +2226,7 @@ Return(othRoot)
 
 	/*/
 		Funcao:		RootThread
-		Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data:		20/03/2013
 		Descricao:	Utilizada no Metodo nthRoot para o Calculo da Raiz via Job
 		Sintaxe:	RootThread(aIPF,aDPF,oRootE,oAccTo)
@@ -2355,7 +2355,7 @@ Return(othRoot)
 
 						cGlbV	:= GetGlbValue(aNR[nID][3])
 
-						IF .NOT.(cGlbV == "")
+						IF .NOT.(cGlbV=="")
 
 							aNR[nID][4]	:= .T.
 							aNR[nID][5]	:= cGlbV
@@ -2364,7 +2364,7 @@ Return(othRoot)
 	
 							ClearGlbValue(aNR[nID][3])
 	
-							lExit	:= ++nNR == nIDs
+							lExit	:= ++nNR==nIDs
 	                                                                      	
 							IF lExit
 								Exit
@@ -2374,7 +2374,7 @@ Return(othRoot)
 
 					Else
 
-						lExit := ++nNR == nIDs
+						lExit := ++nNR==nIDs
 	
 						IF lExit
 							Exit
@@ -2398,7 +2398,7 @@ Return(othRoot)
 
 		For nID := 1 To nIDs
 			othTRoot:SetValue(aNR[nID][5])
-			IF aNR[nID][2] == "I"
+			IF aNR[nID][2]=="I"
 				othIRoot:SetValue(othIRoot:Mult(othTRoot:Pow(aNR[nID][6])))
 			Else
 				othDRoot:SetValue(othDRoot:Mult(othTRoot:Pow(aNR[nID][6])))
@@ -2413,7 +2413,7 @@ Return(othRoot)
 
 		/*/
 			Funcao:		RootJob
-			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
 			Sintaxe:	hb_threadStart("RootJob",cRootB,oRootE,oFExit,nSetDecimals,nthRootAcc)
@@ -2437,7 +2437,7 @@ Return(othRoot)
 
 		/*/
 			Funcao:		U_RootJob
-			Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 			Data:		20/03/2013
 			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
 			Sintaxe:	StartJob("U_RootJob",cEnvironment,lWaitRun,cRootB,cRootE,cFExit,nSetDecimals,nthRootAcc,cID)
@@ -2469,7 +2469,7 @@ Return(othRoot)
 
 /*
 	Method:		SQRT
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		06/03/2013
 	Descricao:	Retorna a Raiz Quadrada (radix quadratum -> O Lado do Quadrado) do Numero passado como parametro
 	Sintaxe:	tBigNumber():SQRT() -> oSQRT
@@ -2504,7 +2504,7 @@ Return(oSQRT)
 
 /*
 	Method:		SysSQRT
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		06/03/2013
 	Descricao:	Define o valor maximo para calculo da SQRT considerando a funcao padrao
 	Sintaxe:	tBigNumber():SysSQRT(uSet) -> oSysSQRT
@@ -2512,27 +2512,24 @@ Return(oSQRT)
 Method SysSQRT(uSet) CLASS tBigNumber
 
 	Local cType
-	Local oSysSQRT		:= tBigNumber():New()
 
-	THREAD Static __uSysSQRT
+	THREAD Static __oSysSQRT
 
-	DEFAULT __uSysSQRT	:= oSysSQRT
-	DEFAULT uSet 		:= __uSysSQRT
-
-	__uSysSQRT			:= uSet
-	cType				:= ValType(__uSysSQRT)
-
-	oSysSQRT:SetValue(IF(cType $ "C|O",__uSysSQRT,IF(cType == "N",hb_ntos(__uSysSQRT),"0")))
-
-	IF oSysSQRT:gt(MAX_SYS_SQRT)
-		oSysSQRT:SetValue(MAX_SYS_SQRT)
+	DEFAULT __oSysSQRT	:= tBigNumber():New()
+	
+	cType := ValType(uSet)
+	IF ( cType $ "C|N|O" )
+		__oSysSQRT:SetValue(IF(cType$"C|O",uSet,IF(cType=="N",hb_ntos(uSet),"0")))
+		IF __oSysSQRT:gt(MAX_SYS_SQRT)
+			__oSysSQRT:SetValue(MAX_SYS_SQRT)
+		EndIF
 	EndIF
-
-Return(oSysSQRT)
+	
+Return(__oSysSQRT)
 
 /*
 	Method		: Log
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o logaritmo na Base N DEFAULT 10
 	Sintaxe		: tBigNumber():Log(Log(uBigNB) -> oBigNR
@@ -2603,7 +2600,7 @@ Return(oBigNR)
 
 /*
 	Method		: Log2
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o logaritmo Base 2
 	Sintaxe		: tBigNumber():Log2() -> oBigNR
@@ -2614,7 +2611,7 @@ Return(self:Log(ob2))
 
 /*
 	Method		: Log10
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o logaritmo Base 10
 	Sintaxe		: tBigNumber():Log10() -> oBigNR
@@ -2625,7 +2622,7 @@ Return(self:Log(ob10))
 
 /*
 	Method		: Ln
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Logaritmo Natural
 	Sintaxe		: tBigNumber():Ln() -> oBigNR
@@ -2635,7 +2632,7 @@ Return(self:Log(__o1:Exp()))
 
 /*
 	Method		: aLog
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o Antilogaritmo 
 	Sintaxe		: tBigNumber():aLog(Log(uBigNB) -> oBigNR
@@ -2646,7 +2643,7 @@ Return(oaLog:Pow(self))
 
 /*
 	Method		: aLog2
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o Antilogaritmo Base 2
 	Sintaxe		: tBigNumber():aLog2() -> oBigNR
@@ -2657,7 +2654,7 @@ Return(self:aLog(ob2))
 
 /*
 	Method		: aLog10
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o Antilogaritmo Base 10
 	Sintaxe		: tBigNumber():aLog10() -> oBigNR
@@ -2668,7 +2665,7 @@ Return(self:aLog(ob10))
 
 /*
 	Method		: aLn
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 20/02/2013
 	Descricao	: Retorna o AntiLogaritmo Natural
 	Sintaxe		: tBigNumber():aLn() -> oBigNR
@@ -2678,7 +2675,7 @@ Return(self:aLog(__o1:Exp()))
 
 /*
 	Method:		MathC
-	Autor:		Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data:		05/03/2013
 	Descricao:	Operacoes Matematicas
 	Sintaxe:	tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
@@ -2688,7 +2685,7 @@ Return(MathO(@uBigN1,@cOperator,@uBigN2,.F.))
 
 /*
 	Method		: MathN
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Operacoes Matematicas
 	Sintaxe		: tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
@@ -2698,7 +2695,7 @@ Return(MathO(@uBigN1,@cOperator,@uBigN2,.T.))
 
 /*
 	Method		: Rnd
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Redefine a Precisao de Numero em PF
 	Sintaxe		: tBigNumber():Rnd(nAcc) -> oBigNR
@@ -2730,7 +2727,7 @@ Method Rnd(nAcc) CLASS tBigNumber
 				cAdd := "0"
 			EndIF	
 		EndIF
-		IF .NOT.(cAdd == "0")
+		IF .NOT.(cAdd=="0")
 			self:SetValue(self:Add(cAdd))
 		EndIF
 		self:SetValue(self:cInt+"."+SubStr(self:cDec,1,nAcc),NIL,self:cRDiv)
@@ -2740,7 +2737,7 @@ Return(self)
 
 /*
 	Method		: NoRnd
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Redefine a Precisao de Numero em PF
 	Sintaxe		: tBigNumber():NoRnd(nAcc) -> oBigNR
@@ -2750,7 +2747,7 @@ Return(Self:Truncate(nAcc))
 
 /*
 	Method		: Truncate
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Redefine a Precisao de Numero em PF
 	Sintaxe		: tBigNumber():Truncate(nAcc) -> oBigNR
@@ -2770,7 +2767,7 @@ Return(self)
 
 /*
 	Method		: Normalize
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Normaliza os Dados
 	Sintaxe		: tBigNumber():Normalize(uBigN0,uBigN1,uBigN2) -> oBigN0
@@ -2811,7 +2808,7 @@ Return(__NoN0)
 
 /*
 	Method		: D2H
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 07/02/2013
 	Descricao	: Converte Decimal para Hexa
 	Sintaxe		: tBigNumber():D2H(cHexB) -> cHexN
@@ -2842,7 +2839,7 @@ Method D2H(cHexB) CLASS tBigNumber
 		cHexN	:= SubStr(cHexC,nAT,1)+cHexN
 	End While
 
-	IF cHexN == ""
+	IF cHexN==""
 		cHexN := "0"		
 	EndIF
 
@@ -2857,7 +2854,7 @@ Method D2H(cHexB) CLASS tBigNumber
 		cHexN	:= SubStr(cHexC,nAT,1)+cHexN
 	End While
 
-	IF cHexN == ""
+	IF cHexN==""
 		cHexN := "0"		
 	EndIF
 
@@ -2869,7 +2866,7 @@ Return(oHexN)
 
 /*
 	Method		: H2D
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 07/02/2013
 	Descricao	: Converte Hexa para Decimal
 	Sintaxe		: tBigNumber():H2D() -> otNR
@@ -2897,7 +2894,7 @@ Method H2D() CLASS tBigNumber
 	otH:SetValue(cHexB)
 	otLN:SetValue(hb_ntos(nLn))
 
-	While nI > 0
+	While nI>0
 		otNI:SetValue(hb_ntos(--nI))
 	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1))) 
         otPw:SetValue(otLN:Sub(otNI))
@@ -2915,7 +2912,7 @@ Method H2D() CLASS tBigNumber
 
 	otLN:SetValue(hb_ntos(nLn))
 
-	While nI > 0
+	While nI>0
 		otNI:SetValue(hb_ntos(--nI))
 	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
         otPw:SetValue(otLN:Sub(otNI))
@@ -2933,7 +2930,7 @@ Return(otNR)
 
 /*
 	Method		: H2B
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 07/02/2013
 	Descricao	: Converte Hex para Bin
 	Sintaxe		: tBigNumber():H2B(cHexN) -> cBin
@@ -3003,13 +3000,13 @@ Method H2B() CLASS tBigNumber
 			BREAK
 		EndIF
 
-		l16	:= (cHexB == "16")
+		l16	:= cHexB=="16"
 
-		While ++nI <= nLn
+		While ++nI<=nLn
 			cChr	:= SubStr(cHexN,nI,1)
-			nAT		:= aScan(aH2B,{|aE| (aE[ 1 ] == cChr)})
-			IF nAT > 0
-				cBin += IF(l16,SubStr(aH2B[ nAT ][ 2 ],2),aH2B[ nAT ][ 2 ])
+			nAT		:= aScan(aH2B,{|aE|(aE[1]==cChr)})
+			IF nAT>0
+				cBin += IF(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
 			EndIF
 		End While
 
@@ -3020,11 +3017,11 @@ Method H2B() CLASS tBigNumber
 		cHexN   := self:cDec
 		nLn		:= Len(cHexN)
 		
-		While ++nI <= nLn
+		While ++nI<=nLn
 			cChr	:= SubStr(cHexN,nI,1)
-			nAT		:= aScan(aH2B,{|aE| (aE[ 1 ] == cChr)})
-			IF nAT > 0
-				cBin += IF(l16,SubStr(aH2B[ nAT ][ 2 ],2),aH2B[ nAT ][ 2 ])
+			nAT		:= aScan(aH2B,{|aE|(aE[1]==cChr)})
+			IF nAT>0
+				cBin += IF(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
 			EndIF
 		End While
 
@@ -3038,7 +3035,7 @@ Return(oBin)
 
 /*
 	Method		: B2H
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 07/02/2013
 	Descricao	: Converte Bin para Hex
 	Sintaxe		: tBigNumber():B2H(cHexB) -> cHexN
@@ -3106,13 +3103,13 @@ Method B2H(cHexB) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		l16 := (cHexB == "16")
+		l16 := cHexB=="16"
 
-		While nI <= nLn
+		While nI<=nLn
 			cChr	:= SubStr(cBin,nI,IF(l16,4,5))
-			nAT		:= aScan(aH2B,{|aE| (IF(l16,SubStr(aE[ 2 ],2),aE[ 2 ]) == cChr)})
-			IF nAT > 0
-				cHexN += aH2B[ nAT ][ 1 ]
+			nAT		:= aScan(aH2B,{|aE|(IF(l16,SubStr(aE[2],2),aE[2])==cChr)})
+			IF nAT>0
+				cHexN += aH2B[nAT][1]
 			EndIF
 			nI += IF(l16,4,5)
 		End While
@@ -3124,11 +3121,11 @@ Method B2H(cHexB) CLASS tBigNumber
 		nLn		:= Len(cBin)
 		cHexN	:= ""
 
-		While nI <= nLn
+		While nI<=nLn
 			cChr	:= SubStr(cBin,nI,IF(l16,4,5))
-			nAT		:= aScan(aH2B,{|aE| (IF(l16,SubStr(aE[ 2 ],2),aE[ 2 ]) == cChr)})
-			IF nAT > 0
-				cHexN += aH2B[ nAT ][ 1 ]
+			nAT		:= aScan(aH2B,{|aE|(IF(l16,SubStr(aE[2],2),aE[2])==cChr)})
+			IF nAT>0
+				cHexN += aH2B[nAT][1]
 			EndIF
 			nI += IF(l16,4,5)
 		End While
@@ -3143,7 +3140,7 @@ Return(oHexN)
 
 /*
 	Method		: D2B
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 23/03/2013
 	Descricao	: Converte Dec para Bin
 	Sintaxe		: tBigNumber():D2B(cHexB) -> cBin
@@ -3155,7 +3152,7 @@ Return(oBin)
 
 /*
 	Method		: B2D
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 23/03/2013
 	Descricao	: Converte Bin para Dec
 	Sintaxe		: tBigNumber():B2D(cBin,cHexB) -> oBigNR
@@ -3167,7 +3164,7 @@ Return(oDec)
 
 /*
 	Method		: Randomize
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: Randomize BigN Integer
 	Sintaxe		: tBigNumber():Randomize(uB,uE,nExit) -> oR
@@ -3230,7 +3227,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 				cR	+= hb_ntos(nR)
 				nT	:= nS
 				IF lI
-					While nT > 0
+					While nT>0
 						nR := -(__Random(1,nS))
 						oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 						IF oR:gte(oE)
@@ -3239,7 +3236,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 						nT += nR
 					End While
 				Else
-					While nT > 0
+					While nT>0
 						nR	:= __Random(1,nS)
 						oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 						IF oR:gte(oE)
@@ -3261,7 +3258,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 				cR	+= hb_ntos(nR)
 				nT	:= nS
 				IF lI
-					While  nT > 0
+					While  nT>0
 						nR := -(__Random(1,nS))
 						oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 						IF oR:gte(oE)
@@ -3270,7 +3267,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 						nT += nR
 					End While
 				Else
-					While nT > 0
+					While nT>0
 						nR	:= __Random(1,nS)
 						oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 						IF oR:gte(oE)
@@ -3281,10 +3278,10 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 				EndIF
 				lI := .NOT.(lI)
 				nT := 0
-				IF aScan(aE,{|n| ++nT,n == __Random(1,nExit)}) > 0
+				IF aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
 					Exit
 				EndIF
-				IF nT <= RANDOM_MAX_EXIT
+				IF nT<=RANDOM_MAX_EXIT
 					aAdd(aE,__Random(1,nExit))
 				EndIF
 			End While
@@ -3315,7 +3312,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 			cR	+= hb_ntos(nR)
 			nT	:= nS
 			IF lI
-				While nT > 0
+				While nT>0
 					nR := -(__Random(1,nS))
 					oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 					IF oR:gte(oE)
@@ -3324,7 +3321,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 					nT += nR
 				End While
 			Else
-				While nT > 0
+				While nT>0
 					nR	:= __Random(1,nS)
 					oR:SetValue(oR:Add(SubStr(cR,1,nR)))
 					IF oR:gte(oE)
@@ -3335,10 +3332,10 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 			EndIF
 			lI := .NOT.(lI)
 			nT := 0
-			IF aScan(aE,{|n| ++nT,n == __Random(1,nExit)}) > 0
+			IF aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
 				Exit
 			EndIF
-			IF nT <= RANDOM_MAX_EXIT
+			IF nT<=RANDOM_MAX_EXIT
 				aAdd(aE,__Random(1,nExit))
 			EndIF
 		End While
@@ -3375,7 +3372,7 @@ Return(oR)
 
 /*
 	Funcao		: __Random
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: Define a chamada para a funcao Random Padrao
 	Sintaxe		: __Random(nB,nE)
@@ -3384,11 +3381,11 @@ Static Function __Random(nB,nE)
 
 	Local nR
 
-	IF nB == 0
+	IF nB==0
 		nB := 1
 	EndIF
 
-	IF nB == nE
+	IF nB==nE
 		++nE		
 	EndIF
 
@@ -3402,7 +3399,7 @@ Return(nR)
 
 /*
 	Method		: millerRabin
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: Miller-Rabin Method (Primality test)
 	Sintaxe		: tBigNumber():millerRabin(uI) -> lPrime
@@ -3450,7 +3447,7 @@ Return(lPrime)
 
 /*
 	Function	: mrPass
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: Miller-Rabin Pass (Primality test)
 	Sintaxe		: mrPass(uA,uS,uD,uN)
@@ -3492,7 +3489,7 @@ Return(lmrP)
 
 /*
 	Method		: FI
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 10/03/2013
 	Descricao	: Euler's totient function
 	Sintaxe		: tBigNumber():FI() -> oT
@@ -3502,12 +3499,12 @@ Return(lmrP)
 	int fi(int n) 
      {
        int result = n; 
-       for(int i=2;i*i <= n;i++) 
+       for(int i=2;i*i<=n;i++) 
        {
-         if (n % i == 0) result -= result/i; 
-         while (n % i == 0) n /= i; 
+         if (n % i==0) result -= result/i; 
+         while (n % i==0) n /= i; 
       } 
-       if (n > 1) result -= result/n; 
+       if (n>1) result -= result/n; 
        return result; 
     } 
 	
@@ -3536,7 +3533,7 @@ Return(oT)
 
 /*
 	Method		: PFactors
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 19/03/2013
 	Descricao	: Fatores Primos
 	Sintaxe		: tBigNumber():PFactors -> aPFactors
@@ -3564,13 +3561,13 @@ Method PFactors() CLASS tBigNumber
 	While otP:NextPrime(cP)
 		cP := LTrim(otP:cPrime)
 		oP:SetValue(cP)
-		IF oP:gte(oN) .or. IF(lPrime,lPrime := otP:IsPrime(oN:cInt),lPrime .or. (++nC > 1 .and. oN:gte(otP:cLPrime)))
+		IF oP:gte(oN) .or. IF(lPrime,lPrime := otP:IsPrime(oN:cInt),lPrime .or. (++nC>1 .and. oN:gte(otP:cLPrime)))
 			aAdd(aPFactors,{oN:cInt,"1"})
 			EXIT
 		EndIF
 		While oN:Mod(oP):eq(__o0)
-			nP := aScan(aPFactors,{|e| e[1] == cP})
-			IF nP == 0
+			nP := aScan(aPFactors,{|e|e[1]==cP})
+			IF nP==0
 				aAdd(aPFactors,{cP,"1"})
 			Else
 				oT:SetValue(aPFactors[nP][2])
@@ -3589,7 +3586,7 @@ Return(aPFactors)
 
 /*
 	Funcao		: eMult
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
 	Sintaxe		: eMult(cN1,cN2,nAcc) -> oNR
@@ -3628,7 +3625,7 @@ Static Function eMult(cN1,cN2,nAcc)
 	End While
 
 	ocT	:= __o0:Clone()
-	While nI > 0
+	While nI>0
 		ocT:SetValue(ocT:Add(aE[nI][1]))
 		IF ocT:lte(oN1)
 			aE[nI][3] := .T. 
@@ -3654,7 +3651,7 @@ Return(oNR)
 	
 /*
 	Funcao		: Div
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
 	Sintaxe		: Div(cN,cD,nAcc,lFloat) -> cNR
@@ -3694,7 +3691,7 @@ Static Function Div(cN,cD,nAcc,lFloat)
 		EndIF
 	End While
 
-	While nI > 0
+	While nI>0
 		oRDiv:SetValue(oRDiv:Add(aE[nI][2]))
 		IF oRDiv:lte(oN)
 			aE[nI][3] := .T.
@@ -3719,7 +3716,7 @@ Static Function Div(cN,cD,nAcc,lFloat)
 	cRDiv	:= oRDiv:ExactValue(.T.)
 	oNR:SetValue(oNR,NIL,cRDiv)
 	DEFAULT lFloat := .T.
-	IF .NOT.(lFloat) .and. .NOT.(cRDiv == "0") .and. SubStr(cRDiv,-1) == "0"
+	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
 		cRDiv		:= SubStr(cRDiv,1,Len(cRDiv) -1)
 		oNR:SetValue(oNR,NIL,cRDiv)
 		IF Empty(cRDiv)
@@ -3734,7 +3731,7 @@ Return(oNR)
 
 /*
 	Funcao		: nthRoot
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 10/02/2013
 	Descricao	: Metodo Newton-Raphson
 	Sintaxe		: nthRoot(oRootB,oRootE,oAccTo,nAcc) -> othRoot
@@ -3790,16 +3787,16 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
 		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,@__nthRootAcc)
 		othRootT:SetValue(othRoot)
-		IF ++nIDEx > NTHROOT_EXIT
+		IF ++nIDEx>NTHROOT_EXIT
 			nIDEx := 1
 		EndIF
 		__anthExit[nIDEx] := oAccNo:Clone()
 		nExit	:= 0
 		nScan	:= 0
-		While ((nScan := aScan(__anthExit,{|uExit| oAccNo:eq(uExit)},++nScan)) > 0)
+		While ((nScan := aScan(__anthExit,{|uExit|oAccNo:eq(uExit)},++nScan))>0)
 			++nExit
 		End While
-		lExit	:= (nExit > 1)
+		lExit	:= (nExit>1)
 		IF lExit
 			Exit
 		EndIF
@@ -3840,7 +3837,7 @@ return(x)
 
 	/*
 		Funcao		: Add
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Adicao
 		Sintaxe		: Add(cN1,cN2,n,nBase) -> cNR
@@ -3860,13 +3857,13 @@ return(x)
 		#ENDIF	
 		DEFAULT nBase	:= 10
 
-		While n > 0
+		While n>0
 			(a)->(dbGoTo(n))
 			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				(c)->FN += ((a)->FN+(b)->FN)
-				IF (c)->FN >= nBase
+				IF (c)->FN>=nBase
 					(c)->FN	-= nBase
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
@@ -3884,25 +3881,25 @@ return(x)
 
 		#IFDEF __ADDMT__
 		
-			IF Select(a) > 0
+			IF Select(a)>0
 				(a)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(b) > 0
+			IF Select(b)>0
 				(b)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(c) > 0
+			IF Select(c)>0
 				(c)->(dbCloseArea())
 			EndIF	
 			
 			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile| MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
+				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
 			#ELSE
 				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile| dbDrop(cFile)})
+					aEval(__aFiles,{|cFile|dbDrop(cFile)})
 				#ELSE
-					aEval(__aFiles,{|cFile| fErase(cFile)})
+					aEval(__aFiles,{|cFile|fErase(cFile)})
 				#ENDIF
 			#ENDIF
 
@@ -3914,7 +3911,7 @@ return(x)
 	
 	/*
 		Funcao		: Sub
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
 		Sintaxe		: Sub(cN1,cN2,n,nBase) -> cNR
@@ -3935,13 +3932,13 @@ return(x)
 
 		DEFAULT nBase	:= 10
 	
-		While n > 0
+		While n>0
 			(a)->(dbGoTo(n))
 			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				(c)->FN += (a)->FN-(b)->FN
-				IF (c)->FN < 0
+				IF (c)->FN<0
 					(c)->FN += nBase
 					(c)->(dbUnLock())
 					(c)->(dbGoTo(k+1))
@@ -3959,25 +3956,25 @@ return(x)
 
 		#IFDEF __SUBMT__
 		
-			IF Select(a) > 0
+			IF Select(a)>0
 				(a)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(b) > 0
+			IF Select(b)>0
 				(b)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(c) > 0
+			IF Select(c)>0
 				(c)->(dbCloseArea())
 			EndIF	
 			
 			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile| MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
+				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
 			#ELSE
 				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile| dbDrop(cFile)})
+					aEval(__aFiles,{|cFile|dbDrop(cFile)})
 				#ELSE
-					aEval(__aFiles,{|cFile| fErase(cFile)})
+					aEval(__aFiles,{|cFile|fErase(cFile)})
 				#ENDIF
 			#ENDIF
 
@@ -3989,7 +3986,7 @@ return(x)
 	
 	/*
 		Funcao		: Mult
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
 		Sintaxe		: Mult(cN1,cN2,n,nBase) -> cNR
@@ -4019,17 +4016,17 @@ return(x)
 
 		DEFAULT nBase	:= 10
 	
-		While i <= n
+		While i<=n
 			s := 1
 			j := i
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				While s <= i
+				While s<=i
 					(a)->(dbGoTo(s++))
 					(b)->(dbGoTo(j--))
 					(c)->FN += ((a)->FN*(b)->FN)
 				End While
-				IF (c)->FN >= nBase
+				IF (c)->FN>=nBase
 					x		:= k+1
 					w		:= Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
@@ -4047,17 +4044,17 @@ return(x)
 			i++
 		End While
 	
-		While l <= n
+		While l<=n
 			s := n
 			j := l
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				While s >= l
+				While s>=l
 					(a)->(dbGoTo(s--))
 					(b)->(dbGoTo(j++))
 					(c)->FN	+= ((a)->FN*(b)->FN)
 				End While
-				IF (c)->FN >= nBase
+				IF (c)->FN>=nBase
 					x		:= k+1
 					w		:= Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
@@ -4072,7 +4069,7 @@ return(x)
 				(c)->(dbUnLock())
 			EndIF
 			k++
-			IF k >= y
+			IF k>=y
 				Exit
 			EndIF
 			l++
@@ -4082,25 +4079,25 @@ return(x)
 		
 		#IFDEF __MULTMT__
 		
-			IF Select(a) > 0
+			IF Select(a)>0
 				(a)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(b) > 0
+			IF Select(b)>0
 				(b)->(dbCloseArea())
 			EndIF	
 			
-			IF Select(c) > 0
+			IF Select(c)>0
 				(c)->(dbCloseArea())
 			EndIF	
 			
 			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile| MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
+				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
 			#ELSE
 				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile| dbDrop(cFile)})
+					aEval(__aFiles,{|cFile|dbDrop(cFile)})
 				#ELSE
-					aEval(__aFiles,{|cFile| fErase(cFile)})
+					aEval(__aFiles,{|cFile|fErase(cFile)})
 				#ENDIF
 			#ENDIF
 
@@ -4112,7 +4109,7 @@ return(x)
 
 	/*
 		Funcao		: aNumber
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Array OF Numbers
 		Sintaxe		: aNumber(c,n) -> a
@@ -4127,7 +4124,7 @@ return(x)
 			FIELD FN
 		#ENDIF	
 	
-		While ++y <= n
+		While ++y<=n
 			(a)->(dbAppend(.T.))
 			(a)->FN	:= Val(SubStr(c,y,1))
 			(a)->(dbUnLock())
@@ -4137,7 +4134,7 @@ return(x)
 	
 	/*
 		Funcao		: GetcN
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Montar a String de Retorno
 		Sintaxe		: GetcN(a,x) -> s
@@ -4151,22 +4148,22 @@ return(x)
 			FIELD FN
 		#ENDIF	
 	
-		While y >= 1
+		While y>=1
 			(a)->(dbGoTo(y))
-			While y >= 1 .and. (a)->FN == 0
+			While y>=1 .and. (a)->FN==0
 				(a)->(dbGoTo(--y))
 			End While
-			While y >= 1
+			While y>=1
 				(a)->(dbGoTo(y--))
 				s	+= hb_ntos((a)->FN)
 			End While
 		End While
 	
-		IF s == ""
+		IF s==""
 			s := "0"	
 		EndIF
 	
-		IF Len(s) < n
+		IF Len(s)<n
 			s := PadL(s,n,"0")
 		EndIF
 	
@@ -4190,7 +4187,7 @@ return(x)
 		cLDriver		:= __LocalDriver
 		__LocalDriver	:= cRDD
 	#ENDIF
-		IF Select(cAlias) == 0
+		IF Select(cAlias)==0
 	#IFNDEF __HARBOUR__
 			cFile := CriaTrab(aStru,.T.,".dbf")
 			dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
@@ -4256,7 +4253,7 @@ return(x)
 
 	/*
 		Funcao		: Add
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Adicao
 		Sintaxe		: Add(cN1,cN2,n,nBase) -> cNR
@@ -4271,9 +4268,9 @@ return(x)
 		
 		DEFAULT nBase	:= 10
 
-		While n > 0
+		While n>0
 			c[k] += a[n]+b[n]
-			IF c[k] >= nBase
+			IF c[k]>=nBase
 				c[k+1]	+= 1
 				c[k]	-= nBase
 			EndIF
@@ -4285,7 +4282,7 @@ return(x)
 	
 	/*
 		Funcao		: Sub
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
 		Sintaxe		: Sub(cN1,cN2,n,nBase) -> cNR
@@ -4300,9 +4297,9 @@ return(x)
 	
 		DEFAULT nBase	:= 10
 	
-		While n > 0
+		While n>0
 			c[k] += a[n]-b[n]
-			IF c[k] < 0
+			IF c[k]<0
 				c[k+1]	-= 1
 				c[k]	+= nBase
 			EndIF
@@ -4314,7 +4311,7 @@ return(x)
 	
 	/*
 		Funcao		: Mult
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Multiplicacao de Inteiros
 		Sintaxe		: Mult(cN1,cN2,n,nBase) -> cNR
@@ -4337,13 +4334,13 @@ return(x)
 	
 		DEFAULT nBase	:= 10
 	
-		While i <= n
+		While i<=n
 			s := 1
 			j := i
-			While s <= i
+			While s<=i
 				c[k]	+= a[s++]*b[j--]
 			End While
-			IF c[k] >= nBase
+			IF c[k]>=nBase
 				x		:= k+1
 				c[x]	:= Int(c[k]/nBase)
 				c[k]	-= c[x]*nBase
@@ -4352,19 +4349,19 @@ return(x)
 			i++
 		End While
 	
-		While l <= n
+		While l<=n
 			s := n
 			j := l
-			While s >= l
+			While s>=l
 				c[k]	+= a[s--]*b[j++]
 			End While
-			IF c[k] >= nBase
+			IF c[k]>=nBase
 				x		:= k+1
 				c[x]	:= Int(c[k]/nBase)
 				c[k]	-= c[x]*nBase
 			EndIF
 			k++
-			IF k >= y
+			IF k>=y
 				Exit
 			EndIF
 			l++
@@ -4374,7 +4371,7 @@ return(x)
 	
 	/*
 		Funcao		: aNumber
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Array OF Numbers
 		Sintaxe		: aNumber(c,n) -> a
@@ -4385,15 +4382,15 @@ return(x)
 	
 		Local y	:= 0
 	
-		While ++y <= n
-			a[ y ] := Val(SubStr(c,y,1))
+		While ++y<=n
+			a[y] := Val(SubStr(c,y,1))
 		End While
 	
 	Return(a)
 	
 	/*
 		Funcao		: GetcN
-		Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Montar a String de Retorno
 		Sintaxe		: GetcN(a,x) -> s
@@ -4403,21 +4400,21 @@ return(x)
 		Local s	:= ""
 		Local y	:= n
 	
-		While y >= 1
-			While y >= 1 .and. a[y] == 0
+		While y>=1
+			While y>=1 .and. a[y]==0
 				y--
 			End While
-			While y >= 1
+			While y>=1
 				s	+= hb_ntos(a[y])
 				y--
 			End While
 		End While
 	
-		IF s == ""
+		IF s==""
 			s := "0"	
 		EndIF
 	
-		IF Len(s) < n
+		IF Len(s)<n
 			s := PadL(s,n,"0")
 		EndIF
 	
@@ -4427,7 +4424,7 @@ return(x)
 
 /*
 	Funcao		: Invert
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Inverte o Numero
 	Sintaxe		: Invert(c,n) -> s
@@ -4437,7 +4434,7 @@ Static Function Invert(c,n)
 	Local s := ""
 	Local y	:= n	
 
-	While y > 0
+	While y>0
 		s += SubStr(c,y--,1)
 	End While
 
@@ -4445,7 +4442,7 @@ Return(s)
 
 /*
 	Funcao		: MathO
-	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Operacoes matematicas
 	Sintaxe		: MathO(uBigN1,cOperator,uBigN2,lRetObject)

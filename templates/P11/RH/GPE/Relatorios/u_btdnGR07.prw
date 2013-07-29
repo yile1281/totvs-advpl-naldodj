@@ -1251,9 +1251,9 @@ Static Function AddStackParameters( aStackParameters , nStack ,  cStackEnv  )
 	nParameter := Len( aStackParameters[ nStack ][3] )
 
 	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_PARAMETER  ]	:= cParameter
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_SCOPE		 ]	:= cScope
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_TYPE		 ]	:= cType
-	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_VALUE		 ]	:= uValue
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_SCOPE		]	:= cScope
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_TYPE		]	:= cType
+	aStackParameters[ nStack ][3][ nParameter ][ STACK_INDEX_VALUE		]	:= uValue
 
 	Set( 4 , cDateFormat )
 

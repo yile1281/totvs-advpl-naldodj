@@ -321,7 +321,7 @@ Method nthRootAcc(nSet) CLASS tBigNumber
 	    nSet := MAX_DECIMAL_PRECISION
 	EndIF
 
-	__nthRootAcc	:= Min(self:SetDecimals() - 1,nSet)
+	__nthRootAcc	:= Min(self:SetDecimals()-1,nSet)
 
 Return(nLastSet)
 
@@ -445,10 +445,10 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 			EndIF	
 		CASE (nFP == 1)
 		    self:cInt	:= "0"
-		    self:cDec	:= SubStr(uBigN,nFP + 1)
+		    self:cDec	:= SubStr(uBigN,nFP+1)
 		OTHERWISE
-		    self:cInt	:= SubStr(uBigN,1,nFP - 1)
-		    self:cDec	:= SubStr(uBigN,nFP + 1)
+		    self:cInt	:= SubStr(uBigN,1,nFP-1)
+		    self:cDec	:= SubStr(uBigN,nFP+1)
 		ENDCASE
 		
 		IF self:nBase <> 10
@@ -464,7 +464,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 
 	    self:nInt	:= Len(self:cInt)
 	    self:nDec	:= Len(self:cDec)
-	    self:nSize	:= (self:nInt + self:nDec)
+	    self:nSize	:= (self:nInt+self:nDec)
 
 	EndIF
 
@@ -487,7 +487,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc) CLASS tBigNumber
 		self:cDec	:= SubStr(self:cDec,1,self:nDec)
 	EndIF
 
-    self:nSize	:= (self:nInt + self:nDec)
+    self:nSize	:= (self:nInt+self:nDec)
 
 Return(self)
 
@@ -866,7 +866,7 @@ Method Add(uBigN) CLASS tBigNumber
 	
 		IF lAdd
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize / MAX_LENGHT_ADD_THREAD) >= 2
+		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD) >= 2
 			        __adoNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
 		        Else
 		        	__adoNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
@@ -885,7 +885,7 @@ Method Add(uBigN) CLASS tBigNumber
 	    cNT	:= __adoNR:cInt
 	    
 	    cDec	:= SubStr(cNT,-nDec)
-	    cInt	:= SubStr(cNT, 1,Len(cNT) - nDec)
+	    cInt	:= SubStr(cNT, 1,Len(cNT)-nDec)
 	
 	    cNT	:= cInt
 	    cNT	+= "."
@@ -1005,7 +1005,7 @@ Return(__adoNR)
 		        	hb_threadJoin(aNR[nID][4],@aNR[nID][5])
 		        	aAdd(aThreads,aNR[nID][4])
 				#ELSE //__PROTHEUS__
-		        	aNR[nID][4]	:= ("__ADD__" + "ThAdd__" + cThread + "__ID__" + hb_ntos(nID))
+		        	aNR[nID][4]	:= ("__ADD__"+"ThAdd__"+cThread+"__ID__"+hb_ntos(nID))
 		        	PutGlbValue(aNR[nID][4],"")
 		        	StartJob("U_ThAdd",__cEnvSrv,.F.,aNR[nID][2],aNR[nID][3],Len(aNR[nID][2]),nBase,aNR[nID][4])
 		        	aAdd(aThreads,nID)
@@ -1083,7 +1083,7 @@ Return(__adoNR)
 			Next x
 
 			For x := y To 1 STEP -1
-				z 	:= x - 1
+				z 	:= x-1
 				cT1	:= aNR[x][5]
 				IF z > 0 .and. Len(cT1) > MAX_LENGHT_ADD_THREAD
 					cT2 := SubStr(cT1,1,1)
@@ -1108,9 +1108,9 @@ Return(__adoNR)
 
 	#IFDEF __PROTHEUS__
 		User Function ThAdd(cN1,cN2,nSize,nBase,cID)
-			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC][" + cN1 + " + " + cN2 + "]")
+			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC]["+cN1+"+"+cN2+"]")
 				PutGlbValue(cID,Add(@cN1,@cN2,@nSize,@nBase))
-			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END][" + cN1 + " + " + cN2 + "]")
+			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END]["+cN1+"+"+cN2+"]")
 		Return(.T.)
 	#ELSE
 		Function ThAdd(cN1,cN2,nSize,nBase)
@@ -1201,7 +1201,7 @@ Method Sub(uBigN) CLASS tBigNumber
 	    	#ENDIF
 	    Else
 			#IFDEF __ADDMT__
-		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize / MAX_LENGHT_ADD_THREAD) >= 2
+		        IF nSize > MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD) >= 2
 			        __sboNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
 		        Else
 		        	__sboNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
@@ -1214,7 +1214,7 @@ Method Sub(uBigN) CLASS tBigNumber
 	    cNT	:= __sboNR:cInt
 	    
 	    cDec	:= SubStr(cNT,-nDec)
-	    cInt	:= SubStr(cNT, 1,Len(cNT) - nDec)
+	    cInt	:= SubStr(cNT, 1,Len(cNT)-nDec)
 	    
 	    cNT	:= cInt
 	    cNT	+= "."
@@ -1282,7 +1282,7 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 			EndIF
 		EndIF	
 
-	    nDec	:= __mtoN1:nDec * 2
+	    nDec	:= __mtoN1:nDec*2
 	    nSize	:= __mtoN1:nSize
 	
 	    lNeg1 	:= __mtoN1:lNeg
@@ -1306,7 +1306,7 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	    cNT	:= __mtoNR:cInt
 	    
 	    cDec	:= SubStr(cNT,-nDec)
-	    cInt	:= SubStr(cNT, 1,Len(cNT) - nDec)
+	    cInt	:= SubStr(cNT, 1,Len(cNT)-nDec)
 	    
 	    cNT	:= cInt
 	    cNT	+= "."
@@ -1724,7 +1724,7 @@ Return(__pwoNR)
 					#ELSE //__PROTHEUS__
 			        	aNR[nID][1]	:= oCN1:GetValue()
 		        		aNR[nID][2]	:= oM10:GetValue()
-			        	aNR[nID][3]	:= ("__POW__" + "ThreadID__" + cThread + "__ID__" + hb_ntos(nID))
+			        	aNR[nID][3]	:= ("__POW__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
 			        	PutGlbValue(aNR[nID][3],"")
 			        	StartJob("U_POWJOB",__cEnvSrv,.F.,aNR[nID][1],aNR[nID][2],aNR[nID][3],__nSetDecimals,__nthRootAcc)
 			        #ENDIF //__HARBOUR__
@@ -1869,11 +1869,11 @@ Return(__pwoNR)
 			__nthRootAcc	:= nthRootAcc
 			__nSetDecimals	:= nSetDecimals
 		
-			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][CALC][" + cN1 + " ^ " + cN2 + "]")
+			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][CALC]["+cN1+" ^ "+cN2+"]")
 		
 			cNR			:= oN1:Pow(oN2):GetValue()
 		
-			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][RESULT][" + cNR + "]")
+			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][RESULT]["+cNR+"]")
 		
 			PutGlbValue(cID,cNR)
 		
@@ -1889,7 +1889,7 @@ Return(__pwoNR)
 	Data		: 06/02/2013
 	Descricao	: Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
 	Sintaxe		: tBigNumber():e(lForce) -> oeTthD
-	(((n + 1) ^ (n + 1)) / (n ^ n)) - ( (n ^ n) / ((n - 1)  ^ (n - 1)))
+	(((n+1) ^ (n+1))/(n ^ n))-( (n ^ n)/((n-1)  ^ (n-1)))
 */
 Method e(lForce) CLASS tBigNumber
 
@@ -2127,7 +2127,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		EndIF
 
 		cFExit	:= "0."
-		cFExit	+= Replicate("0",(__nthRootAcc - 1))
+		cFExit	+= Replicate("0",(__nthRootAcc-1))
 		cFExit	+= "1"
 			
 		oFExit	:= tBigNumber():New()
@@ -2136,7 +2136,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		IF oRootB:Dec(.T.):gt(__o0)
 			
-			oRootD	:= tBigNumber():New("1" + Replicate("0",Len(oRootB:Dec(NIL,NIL,.T.))))
+			oRootD	:= tBigNumber():New("1"+Replicate("0",Len(oRootB:Dec(NIL,NIL,.T.))))
 			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
 			
 			#IFDEF __HARBOUR__
@@ -2267,7 +2267,7 @@ Return(othRoot)
 
 	#ENDIF	//__HARBOUR__
 
-		nIDs		:= (nIPFs + nDPFs)
+		nIDs		:= (nIPFs+nDPFs)
 		aNR			:= Array(nIDs,6)
 		nID			:= 0
 
@@ -2278,7 +2278,7 @@ Return(othRoot)
 	        #IFDEF __HARBOUR__
 				aNR[nID][3]	:= nID
 			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ("__ROOT__I__" + "ThreadID__" + cThread + "__ID__" + hb_ntos(nID))
+		        aNR[nID][3]	:= ("__ROOT__I__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
 	        #ENDIF //__HARBOUR__
 			IF oRootE:eq(aIPF[nIPF][2])
 				aNR[nID][4] := .T.
@@ -2297,7 +2297,7 @@ Return(othRoot)
 	        #IFDEF __HARBOUR__
 				aNR[nID][3]	:= nID
 			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ("__ROOT__D__" + "ThreadID__" + cThread + "__ID__" + hb_ntos(nID))
+		        aNR[nID][3]	:= ("__ROOT__D__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
 	        #ENDIF //__HARBOUR__
 			IF oRootE:eq(aDPF[nDPF][2])
 				aNR[nID][4] := .T.
@@ -2457,7 +2457,7 @@ Return(othRoot)
 
 			cNR				:= nthRoot(@oRootB,@oRootE,@oFExit,@nSetDecimals):GetValue()
 
-			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT][" + cNR + "]")
+			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT]["+cNR+"]")
 
 			PutGlbValue(cID,cNR)
 
@@ -2554,7 +2554,7 @@ Method Log(uBigNB) CLASS tBigNumber
 	
 	Local uSysSQRT	:= self:SysSQRT(MAX_SYS_SQRT)
 
-	DEFAULT uBigNB	:= __o10:Clone()
+	DEFAULT uBigNB	:= self:e()
 
 	oT:SetValue(uBigNB)
 
@@ -2713,7 +2713,7 @@ Method Rnd(nAcc) CLASS tBigNumber
 	DEFAULT nAcc := Min(self:nDec,__nSetDecimals)
 
 	IF .NOT.(oDec:eq(__o0))
-		oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc + 1,1))
+		oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc+1,1))
 		IF oAcc:gte(__o5)
 			oDec:SetValue(__o10)
 			cAdd := "0."
@@ -2733,7 +2733,7 @@ Method Rnd(nAcc) CLASS tBigNumber
 		IF .NOT.(cAdd == "0")
 			self:SetValue(self:Add(cAdd))
 		EndIF
-		self:SetValue(self:cInt + "." + SubStr(self:cDec,1,nAcc),NIL,self:cRDiv)
+		self:SetValue(self:cInt+"."+SubStr(self:cDec,1,nAcc),NIL,self:cRDiv)
 	EndIF
 
 Return(self)
@@ -2763,7 +2763,7 @@ Method Truncate(nAcc) CLASS tBigNumber
 
 	IF .NOT.(oDec:eq(__o0))
 		oDec:SetValue(SubStr(oDec:ExactValue(),1,nAcc))
-		self:SetValue(self:cInt + "." + oDec:cInt)
+		self:SetValue(self:cInt+"."+oDec:cInt)
 	EndIF
 
 Return(self)
@@ -2805,7 +2805,7 @@ Method Normalize(uBigN0,uBigN1,uBigN2) CLASS tBigNumber
 	__NoN0:nInt		:= nPadL
 	__NoN0:cDec		:= cDec
 	__NoN0:nDec		:= nPadR
-	__NoN0:nSize	:= (nPadL + nPadR)
+	__NoN0:nSize	:= (nPadL+nPadR)
 
 Return(__NoN0)
 
@@ -2838,8 +2838,8 @@ Method D2H(cHexB) CLASS tBigNumber
 	
 	While otN:gt(__o0)
 		otN:SetValue(otN:Div(otH,.F.))
-		nAT		:= Val(otN:cRDiv) + 1
-		cHexN	:= SubStr(cHexC,nAT,1) + cHexN
+		nAT		:= Val(otN:cRDiv)+1
+		cHexN	:= SubStr(cHexC,nAT,1)+cHexN
 	End While
 
 	IF cHexN == ""
@@ -2853,8 +2853,8 @@ Method D2H(cHexB) CLASS tBigNumber
 
 	While otN:gt(__o0)
 		otN:SetValue(otN:Div(otH,.F.))
-		nAT		:= Val(otN:cRDiv) + 1
-		cHexN	:= SubStr(cHexC,nAT,1) + cHexN
+		nAT		:= Val(otN:cRDiv)+1
+		cHexN	:= SubStr(cHexC,nAT,1)+cHexN
 	End While
 
 	IF cHexN == ""
@@ -2899,7 +2899,7 @@ Method H2D() CLASS tBigNumber
 
 	While nI > 0
 		otNI:SetValue(hb_ntos(--nI))
-	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI + 1,1),cHexC) - 1))) 
+	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1))) 
         otPw:SetValue(otLN:Sub(otNI))
         otPw:SetValue(otPw:Sub(__o1))
 		otPw:SetValue(otH:Pow(otPw))
@@ -2917,7 +2917,7 @@ Method H2D() CLASS tBigNumber
 
 	While nI > 0
 		otNI:SetValue(hb_ntos(--nI))
-	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI + 1,1),cHexC) - 1)))
+	    otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
         otPw:SetValue(otLN:Sub(otNI))
         otPw:SetValue(otPw:Sub(__o1))
 		otPw:SetValue(otH:Pow(otPw))
@@ -3216,7 +3216,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 		IF oB:gt(oM)
 	
 			nE	:= Val(oM:ExactValue())
-			nB	:= Int(nE / 2)
+			nB	:= Int(nE/2)
 			nR	:= __Random(nB,nE)
 			cR	:= hb_ntos(nR)
 			
@@ -3504,10 +3504,10 @@ Return(lmrP)
        int result = n; 
        for(int i=2;i*i <= n;i++) 
        {
-         if (n % i == 0) result -= result / i; 
+         if (n % i == 0) result -= result/i; 
          while (n % i == 0) n /= i; 
       } 
-       if (n > 1) result -= result / n; 
+       if (n > 1) result -= result/n; 
        return result; 
     } 
 	
@@ -3593,7 +3593,7 @@ Return(aPFactors)
 	Data		: 04/02/2013
 	Descricao	: Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
 	Sintaxe		: eMult(cN1,cN2,nAcc) -> oNR
-	Obs.		: Interessante + lenta... Utiliza Soma e Subtracao para obter o resultado
+	Obs.		: Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
 Static Function eMult(cN1,cN2,nAcc)
 
@@ -3738,7 +3738,7 @@ Return(oNR)
 	Data		: 10/02/2013
 	Descricao	: Metodo Newton-Raphson
 	Sintaxe		: nthRoot(oRootB,oRootE,oAccTo,nAcc) -> othRoot
-	Obs.		: othRoot = ((1/oRootE) * (((oRootE-1)*othRootT) + (oRootB / (othRootT**(oRootE-1)))))
+	Obs.		: othRoot = ((1/oRootE)*(((oRootE-1)*othRootT)+(oRootB/(othRootT**(oRootE-1)))))
 	Ref.:		: http://www.swap.com.br/blog/?p=570 em 10/02/2013
 */
 Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
@@ -3849,7 +3849,7 @@ return(x)
 	
 		Local a			:= aNumber(cN1,n,"ADD_A")
 		Local b 		:= aNumber(cN2,n,"ADD_B")
-		Local y 		:= n + 1
+		Local y 		:= n+1
 		Local c 		:= aNumber(Replicate("0",y),y,"ADD_C")
 		Local k 		:= 1
 
@@ -3940,7 +3940,7 @@ return(x)
 			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				(c)->FN += (a)->FN - (b)->FN
+				(c)->FN += (a)->FN-(b)->FN
 				IF (c)->FN < 0
 					(c)->FN += nBase
 					(c)->(dbUnLock())
@@ -3999,7 +3999,7 @@ return(x)
 		
 		Local a			:= aNumber(Invert(cN1,n),n,"MULT_A")
 		Local b			:= aNumber(Invert(cN2,n),n,"MULT_B")
-		Local y			:= n + n
+		Local y			:= n+n
 		Local c			:= aNumber(Replicate("0",y),y,"MULT_C")
 	
 		Local i 		:= 1
@@ -4031,12 +4031,12 @@ return(x)
 				End While
 				IF (c)->FN >= nBase
 					x		:= k+1
-					w		:= Int((c)->FN / nBase)
+					w		:= Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN	:= w
 						(c)->(dbUnLock())
-						w := (c)->FN * nBase
+						w := (c)->FN*nBase
 						(c)->(dbGoTo(k))
 						(c)->FN	-= w
 					EndIF	
@@ -4059,12 +4059,12 @@ return(x)
 				End While
 				IF (c)->FN >= nBase
 					x		:= k+1
-					w		:= Int((c)->FN / nBase)
+					w		:= Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN := w
 						(c)->(dbUnLock())
-						w := (c)->FN * nBase
+						w := (c)->FN*nBase
 						(c)->(dbGoTo(k))
 						(c)->FN -= w
 					EndIF	
@@ -4265,14 +4265,14 @@ return(x)
 	
 		Local a			:= aNumber(cN1,n)
 		Local b 		:= aNumber(cN2,n)
-		Local y 		:= n + 1
+		Local y 		:= n+1
 		Local c 		:= aFill(Array(y),0)
 		Local k 		:= 1
 		
 		DEFAULT nBase	:= 10
 
 		While n > 0
-			c[k] += a[n] + b[n]
+			c[k] += a[n]+b[n]
 			IF c[k] >= nBase
 				c[k+1]	+= 1
 				c[k]	-= nBase
@@ -4301,7 +4301,7 @@ return(x)
 		DEFAULT nBase	:= 10
 	
 		While n > 0
-			c[k] += a[n] - b[n]
+			c[k] += a[n]-b[n]
 			IF c[k] < 0
 				c[k+1]	-= 1
 				c[k]	+= nBase
@@ -4324,7 +4324,7 @@ return(x)
 	
 		Local a			:= aNumber(Invert(cN1,n),n)
 		Local b			:= aNumber(Invert(cN2,n),n)
-		Local y			:= n + n
+		Local y			:= n+n
 		Local c			:= afill(Array(y),0)
 	
 		Local i 		:= 1
@@ -4341,12 +4341,12 @@ return(x)
 			s := 1
 			j := i
 			While s <= i
-				c[k]	+= a[s++] * b[j--]
+				c[k]	+= a[s++]*b[j--]
 			End While
 			IF c[k] >= nBase
 				x		:= k+1
-				c[x]	:= Int(c[k] / nBase)
-				c[k]	-= c[x] * nBase
+				c[x]	:= Int(c[k]/nBase)
+				c[k]	-= c[x]*nBase
 			EndIF
 			k++
 			i++
@@ -4356,12 +4356,12 @@ return(x)
 			s := n
 			j := l
 			While s >= l
-				c[k]	+= a[s--] * b[j++]
+				c[k]	+= a[s--]*b[j++]
 			End While
 			IF c[k] >= nBase
 				x		:= k+1
-				c[x]	:= Int(c[k] / nBase)
-				c[k]	-= c[x] * nBase
+				c[x]	:= Int(c[k]/nBase)
+				c[k]	-= c[x]*nBase
 			EndIF
 			k++
 			IF k >= y

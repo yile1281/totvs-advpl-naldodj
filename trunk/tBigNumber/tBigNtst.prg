@@ -967,9 +967,12 @@ User Function tBigNTst()
 
 	//Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
-	For w := 2 TO N_TEST
+	For w := 0 TO N_TEST
 		ASSIGN cW := hb_ntos(w)
 		otBigW:SetValue(cW)
+		__ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
+		__ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():GetValue()) 
+		__ConOut(fhLog,"---------------------------------------------------------")
 		For n := 0 TO INT( MAX( N_TEST , 5 ) / 5 )
 			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cX	:= otBigW:SetValue(cW):Log(cN):GetValue()

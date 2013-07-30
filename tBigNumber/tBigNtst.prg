@@ -11,7 +11,7 @@
 
 #DEFINE __SLEEP 0
                                    
-#DEFINE N_TEST 15
+#DEFINE N_TEST 10
 
 #IFDEF __HARBOUR__
 Function Main()
@@ -108,7 +108,7 @@ User Function tBigNTst()
 	otBigW:nthRootAcc(ROOT_ACC_SET)
 	otBigW:SysSQRT(0)
 	
-	Set(_SET_DECIMALS , ACC_SET)
+*	Set(_SET_DECIMALS , ACC_SET)
 
 #IFDEF __HARBOUR__	
 	CLS

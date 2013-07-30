@@ -107,14 +107,10 @@ User Function tBigNTst()
 	otBigW:SetDecimals(ACC_SET)
 	otBigW:nthRootAcc(ROOT_ACC_SET)
 	otBigW:SysSQRT(0)
-	
-*	Set(_SET_DECIMALS , ACC_SET)
 
 #IFDEF __HARBOUR__	
 	CLS
 #ENDIF	
-
-	ASSIGN nSetDec := Set(_SET_DECIMALS , ACC_SET)
 
 	__ConOut(fhLog,"---------------------------------------------------------")
 
@@ -921,10 +917,9 @@ User Function tBigNTst()
 	__ConOut(fhLog,"")
 	
 	nSetDec 	:= otBigN:SetDecimals(ACC_ALOG)
-	nAccLog		:= otBigN:SetDecimals()
-	otBigN:SetDecimals(ACC_ALOG)
-	otBigW:SetDecimals(ACC_ALOG)
+	nAccLog		:= otBigN:SetDecimals(ACC_ALOG)
 	laLog		:= ( nAccLog >= 500 )
+	otBigW:SetDecimals(ACC_ALOG)
 	nAccRoot	:= otBigN:nthRootAcc(ACC_ALOG-1)
 	otBigW:nthRootAcc(ACC_ALOG-1)
 
@@ -1155,8 +1150,6 @@ User Function tBigNTst()
 	__ConOut(fhLog,"---------------------------------------------------------")
 
 	fClose(fhLog)
-
-	Set(_SET_DECIMALS, nSetDec)
 	
 Return(NIL)
 

@@ -107,6 +107,8 @@ User Function tBigNTst()
 	otBigW:SetDecimals(ACC_SET)
 	otBigW:nthRootAcc(ROOT_ACC_SET)
 	otBigW:SysSQRT(0)
+	
+	Set(_SET_DECIMALS,8)
 
 #IFDEF __HARBOUR__	
 	CLS

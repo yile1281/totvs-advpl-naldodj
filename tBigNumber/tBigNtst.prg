@@ -14,6 +14,8 @@
 #DEFINE N_TEST 10
 
 #IFDEF __HARBOUR__
+#include "inkey.ch"
+#include "setcurs.ch"
 Function Main()
 	#IFDEF __HARBOUR__
 	    #IFDEF __ALT_D__	// Compile with -b
@@ -92,6 +94,10 @@ User Function tBigNTst()
 
 #IFDEF __HARBOUR__
 	MEMVAR __CRLF
+	MEMVAR __cSep
+	Private __cSep	:= Replicate("-",MaxCol())
+#ELSE
+	Private __cSep	:= "---------------------------------------------------------"
 #ENDIF	
 
 	Private __CRLF	AS CHARACTER VALUE CRLF
@@ -100,6 +106,12 @@ User Function tBigNTst()
 	fClose(fhLog)
 	ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
 
+#IFDEF __HARBOUR__
+	SetColor( "w+/n" )
+	SetCursor( SC_NONE )
+	BuildScreen(fhLog)
+#ENDIF
+	
 	otBigN:SetDecimals(ACC_SET)
 	otBigN:nthRootAcc(ROOT_ACC_SET)
 	otBigN:SysSQRT(0)
@@ -110,11 +122,7 @@ User Function tBigNTst()
 	
 	Set(_SET_DECIMALS,8)
 
-#IFDEF __HARBOUR__	
-	CLS
-#ENDIF	
-
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 
 	__ConOut(fhLog,"START ")
 	__ConOut(fhLog,"DATE        : " , dStartDate)
@@ -158,9 +166,9 @@ User Function tBigNTst()
 		__ConOut(fhLog,"MULTTHREAD  : " , "False")
 	#endif
 
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 	__ConOut(fhLog,"")
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 
 	__ConOut(fhLog,"")
 
@@ -208,7 +216,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigW*cN):ExactValue())
 			__ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigW/cN):ExactValue())
 			__ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigW%cN):ExactValue())
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
             otBigN := otBigW
 			__ConOut(fhLog,"otBigN:=otBigW"   ,"RESULT: "+otBigN:ExactValue())
 			__ConOut(fhLog,"otBigN"           ,"RESULT: "+otBigW:ExactValue())
@@ -240,9 +248,9 @@ User Function tBigNTst()
 			__ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
 			__ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
 			__ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next n
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next w
 	__ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
 #ENDIF
@@ -265,7 +273,7 @@ User Function tBigNTst()
 				__ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFact[x][1])
 			End While
 		Next x	
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next n
 
 	__ConOut(fhLog,"")
@@ -306,7 +314,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
 		__ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
 		__ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next n
 	
 	__ConOut(fhLog,"")
@@ -329,7 +337,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
 			ASSIGN cW	:= otBigN:LCM(cN):GetValue()
 			__ConOut(fhLog,cX+':tBigNumber():LCM('+cN+')',"RESULT: "+cW)
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next n
 	Next x
 	
@@ -359,7 +367,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
 		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('16'):Int()
 		__ConOut(fhLog,cN+':tBigNumber():B2H(16)',"RESULT: "+cHex)
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -388,7 +396,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
 		ASSIGN cHex	:= otBBin:SetValue(cN):B2H('32'):Int()
 		__ConOut(fhLog,cN+':tBigNumber():B2H(32)',"RESULT: "+cHex)
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -424,7 +432,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -456,7 +464,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 	
 	__ConOut(fhLog,"")
@@ -484,7 +492,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:add("-9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -512,7 +520,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -538,7 +546,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -564,7 +572,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -607,7 +615,7 @@ User Function tBigNTst()
 		ASSIGN cN	:= otBigW:ExactValue()
 		otBigW:SetValue(otBigW:Mult("1.5",.T.))
 		__ConOut(fhLog,cN+':tBigNumber():Mult(1.5,.T.)',"RESULT: "+otBigW:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -646,7 +654,7 @@ User Function tBigNTst()
 		otBigW:SetValue(otBigW:Mult("3.555"))
 #ENDIF
 		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+otBigW:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -675,7 +683,7 @@ User Function tBigNTst()
 			otBigN:SetValue(cN)
 			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigN:Div(cX):ExactValue())
 #ENDIF			
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next x
 	*	__tbnSleep()
 	Next n	
@@ -710,7 +718,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Div("1.5"))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -738,7 +746,7 @@ User Function tBigNTst()
 		otBigN:SetValue(otBigN:Div(o3))
 #ENDIF		
 		__ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+otBigN:ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -757,7 +765,7 @@ User Function tBigNTst()
 	For n := 1 To N_TEST
 		ASSIGN cN := hb_ntos(n)
 		__ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next n
 	
 	__ConOut(fhLog,"")
@@ -784,7 +792,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigN:SQRT():GetValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -812,7 +820,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
 		ASSIGN cW	:= otBigN:Rnd(ACC_SET):GetValue()
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -839,7 +847,7 @@ User Function tBigNTst()
 		__ConOut(fhLog,'Exp('+cN+')',"RESULT: " + hb_ntos(Exp(n)))
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:Exp():ExactValue())
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	Next x
 
 	__ConOut(fhLog,"")
@@ -871,7 +879,7 @@ User Function tBigNTst()
 			otBigN:SetValue(otBigN:Pow(cW))
 #ENDIF			
 			__ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next w
 	*	__tbnSleep()
 	Next x
@@ -905,7 +913,7 @@ User Function tBigNTst()
 			otBigN:SetValue(otBigN:Pow(cW))
 #ENDIF
 			__ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next w
 	*	__tbnSleep()
 	Next x
@@ -1042,7 +1050,7 @@ User Function tBigNTst()
 		otBigW:SetValue(cW)
 		__ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
 		__ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():GetValue()) 
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 		For n := 0 TO INT( MAX( N_TEST , 5 ) / 5 )
 			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cX	:= otBigW:SetValue(cW):Log(cN):GetValue()
@@ -1050,7 +1058,7 @@ User Function tBigNTst()
 			IF ( laLog )
 				__ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):GetValue())
 			EndIF
-			__ConOut(fhLog,"---------------------------------------------------------")
+			__ConOut(fhLog,__cSep)
 		Next n
 	*	__tbnSleep()
 	Next w
@@ -1078,7 +1086,7 @@ User Function tBigNTst()
 		IF ( laLog )
 			__ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():GetValue())
 		EndIF
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	*	__tbnSleep()
 	Next w
 
@@ -1111,7 +1119,7 @@ User Function tBigNTst()
 		ASSIGN lMR	:= IF( lPn , lPn , otBigN:SetValue(cN):millerRabin(o2) )
 		__ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
 		__ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
-		__ConOut(fhLog,"---------------------------------------------------------")
+		__ConOut(fhLog,__cSep)
 	End While
 
 	__ConOut(fhLog,"")
@@ -1124,9 +1132,9 @@ User Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 	__ConOut(fhLog,"")
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 
 	__ConOut(fhLog,"END ")
 
@@ -1149,7 +1157,7 @@ User Function tBigNTst()
 	#ENDIF
 #ENDIF
 
-	__ConOut(fhLog,"---------------------------------------------------------")
+	__ConOut(fhLog,__cSep)
 
 	fClose(fhLog)
 	
@@ -1162,7 +1170,7 @@ Static Procedure __tbnSleep(nSleep)
 		Sleep(nSleep*1000)
 	#ELSE
 		hb_idleSleep(nSleep)
-		hb_gcAll()
+		*hb_gcAll()
 	#ENDIF	
 Return
 */
@@ -1178,7 +1186,12 @@ Static Procedure __ConOut(fhLog,e,d)
 	Local x		AS UNDEFINED
 	Local y		AS UNDEFINED
 
-#IFDEF __HARBOUR__	
+#IFDEF __HARBOUR__
+    Static __nRow	
+	Static __nCol
+	Static __nMaxRow
+	Static __nMaxCol
+	Static __nProgress
 	MEMVAR __CRLF
 #ENDIF	
 
@@ -1199,7 +1212,21 @@ Static Procedure __ConOut(fhLog,e,d)
 
 	ASSIGN p := x + IF(ld , " " + y , "")
 	
+#IFDEF __HARBOUR__
+	DEFAULT __nProgress := 0
+	DEFAULT __nMaxRow	:= MaxRow()
+	DEFAULT __nMaxCol	:= MaxCol()
+	DEFAULT __nCol		:= ((__nMaxCol+1)/2)
+	Progress(@__nProgress,2,@__nCol)
+	DEFAULT __nRow := 0
+	IF ++__nRow >= __nMaxRow
+		@ 14, 0 CLEAR TO __nMaxRow,__nMaxCol
+		__nRow := 14
+	EndIF
+	DispOutAt(__nRow,0,p,'w+/n')
+#ELSE	
 	? p
+#ENDIF	
 
 	IF ((ld) .and. (nATd>0))
 		fWrite(fhLog,x+__CRLF)
@@ -1239,4 +1266,28 @@ Return(lHarbour)
 			s := ""
    		ENDSWITCH
 	Return(s)
+	PROCEDURE Progress(nProgress,nDrow,nDcol)
+		IF nProgress > 3 .OR. nProgress < 0
+			nProgress := 0
+		ENDIF
+		DispOutAt( nDrow, nDcol, "[ ]" )
+		DO CASE
+		CASE nProgress == 0
+			DispOutAt( nDrow, nDcol+1, "-" )
+		CASE nProgress == 1
+			DispOutAt( nDrow, nDcol+1, "\" )
+		CASE nProgress == 2
+			DispOutAt( nDrow, nDcol+1, "|" )
+		CASE nProgress == 3
+			DispOutAt( nDrow, nDcol+1, "/" )
+		ENDCASE
+		nProgress++
+		IF nProgress == 4
+		nProgress := 0
+		ENDIF
+	RETURN
+	Function BuildScreen(fhLog)
+		CLEAR SCREEN
+		__ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",maxcol()+1))
+   Return( NIL )
 #ENDIF 

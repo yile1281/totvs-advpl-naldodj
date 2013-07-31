@@ -79,7 +79,7 @@ CLASS tBigNumber
 	DATA nInt
 	DATA nSize
 	
-	Method Normalize(uBigN0,uBigN1,uBigN2)
+	Method Normalize(uBigN1,uBigN2)
 
 #IFNDEF __PROTHEUS__
 	EXPORTED:
@@ -108,8 +108,8 @@ CLASS tBigNumber
 	Method gte(uBigN)
 	Method lte(uBigN)
 	
-	Method Max(uBigN)
-	Method Min(uBigN)
+	Method Max(uBigN,lObj)
+	Method Min(uBigN,lObj)
 	
 	Method Add(uBigN)	//TODO: Implementar Adicao Binaria e Hexa
 	Method Sub(uBigN)	//TODO: Implementar Subtracao Binaria e Hexa
@@ -217,7 +217,7 @@ End Class
 */
 #IFDEF __PROTHEUS__
 	User Function tBigNumber(uBigN,nBase)
-	Return(tBigNumber():New(@uBigN,@nBase))
+	Return(tBigNumber():New(uBigN,nBase))
 #ENDIF
 
 /*
@@ -245,15 +245,15 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__lSet := .T.
 	EndIF	
 
-	self:SetValue(@uBigN,@nBase)
+	self:SetValue(uBigN,nBase)
 
 	IF __ltbN==NIL
 		__ltbN := .F.
-		__o0  	:= tBigNumber():New("0",@nBase)
-		__o1  	:= tBigNumber():New("1",@nBase)
-		__o2  	:= tBigNumber():New("2",@nBase)
-		__o5	:= tBigNumber():New("5",@nBase)
-		__o10	:= tBigNumber():New("10",@nBase)		 	
+		__o0  	:= tBigNumber():New("0",nBase)
+		__o1  	:= tBigNumber():New("1",nBase)
+		__o2  	:= tBigNumber():New("2",nBase)
+		__o5	:= tBigNumber():New("5",nBase)
+		__o10	:= tBigNumber():New("10",nBase)		 	
 		__ltbN := .T.
 	EndIF
 
@@ -556,7 +556,7 @@ Return(uNR)
 	Sintaxe		: tBigNumber():Abs() -> uNR
 */
 Method Abs(lObj) CLASS tBigNumber
-Return(self:GetValue(.T.,@lObj))
+Return(self:GetValue(.T.,lObj))
 
 /*
 	Method		: Int
@@ -572,8 +572,6 @@ Method Int(lObj,lSig) CLASS tBigNumber
 	uNR	:= IF(lSig,self:cSig,"")+self:cInt
 	IF lObj
 		uNR	:= tBigNumber():New(uNR)
-	Else
-		uNR	:= uNR
 	EndIF
 Return(uNR)
 
@@ -627,8 +625,8 @@ Method eq(uBigN) CLASS tBigNumber
 	DEFAULT __eqoN1 := tBigNumber():New()
 	DEFAULT __eqoN2 := tBigNumber():New()
 
-	__eqoN1:SetValue(__eqoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__eqoN2:SetValue(__eqoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__eqoN1:SetValue(__eqoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__eqoN2:SetValue(__eqoN2:Normalize(uBigN,__eqoN1),NIL,NIL,.F.)
 
 	leq	:= __eqoN1:GetValue(.T.)==__eqoN2:GetValue(.T.) .and. __eqoN1:lNeg==__eqoN2:lNeg
 
@@ -642,7 +640,7 @@ Return(leq)
 	Sintaxe		: tBigNumber():ne(uBigN) -> .NOT.(leq)
 */
 Method ne(uBigN) CLASS tBigNumber
-Return(.NOT.(self:eq(@uBigN)))
+Return(.NOT.(self:eq(uBigN)))
 
 /*
 	Method		: gt
@@ -664,8 +662,8 @@ Method gt(uBigN) CLASS tBigNumber
 	DEFAULT __gtoN1 := tBigNumber():New()	
 	DEFAULT __gtoN2 := tBigNumber():New()
 
-	__gtoN1:SetValue(__gtoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__gtoN2:SetValue(__gtoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__gtoN1:SetValue(__gtoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__gtoN2:SetValue(__gtoN2:Normalize(uBigN,__gtoN1),NIL,NIL,.F.)
 
 	cN1	:= __gtoN1:GetValue(.T.)
 	cN2	:= __gtoN2:GetValue(.T.)
@@ -704,8 +702,8 @@ Method lt(uBigN) CLASS tBigNumber
 	DEFAULT __ltoN1 := tBigNumber():New()	
 	DEFAULT __ltoN2 := tBigNumber():New()
 
-	__ltoN1:SetValue(__ltoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__ltoN2:SetValue(__ltoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__ltoN1:SetValue(__ltoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__ltoN2:SetValue(__ltoN2:Normalize(uBigN,__ltoN1),NIL,NIL,.F.)
 
 	cN1	:= __ltoN1:GetValue(.T.)
 	cN2	:= __ltoN2:GetValue(.T.)
@@ -732,7 +730,7 @@ Return(llt)
 	Sintaxe		: tBigNumber():gte(uBigN) -> lgte
 */
 Method gte(uBigN) CLASS tBigNumber
-Return(self:gt(@uBigN) .or. self:eq(@uBigN))
+Return(self:gt(uBigN).or.self:eq(uBigN))
 
 /*
 	Method		: lte
@@ -742,7 +740,7 @@ Return(self:gt(@uBigN) .or. self:eq(@uBigN))
 	Sintaxe		: tBigNumber():lte(uBigN) -> lte
 */
 Method lte(uBigN) CLASS tBigNumber
-Return(self:lt(@uBigN) .or. self:eq(@uBigN))
+Return(self:lt(uBigN).or.self:eq(uBigN))
 
 /*
 	Method		: Max
@@ -751,18 +749,23 @@ Return(self:lt(@uBigN) .or. self:eq(@uBigN))
 	Descricao	: Retorna o maior valor entre o valor corrente e o valor passado como parametro
 	Sintaxe		: tBigNumber():Max(uBigN) -> uNR
 */
-Method Max(uBigN) CLASS tBigNumber
+Method Max(uBigN,lObj) CLASS tBigNumber
 	
 	Local lgte
 
 	Local uNR
 
-	lgte	:= self:gte(@uBigN)
+	lgte	:= self:gte(uBigN)
 
 	IF lgte
-		uNR	:= self
+		uNR	:= self:Clone()
 	Else
-		uNR	:= uBigN
+		DEFAULT lObj := .T.
+		IF lObj .and. .NOT.(ValType(uBigN)=="O")
+			uNR	:= tBigNumber():New(uBigN)
+		Else
+			uNR	:= uBigN:Clone()
+		EndIF	
 	EndIF
 
 Return(uNR)
@@ -774,18 +777,23 @@ Return(uNR)
 	Descricao	: Retorna o menor valor entre o valor corrente e o valor passado como parametro
 	Sintaxe		: tBigNumber():Min(uBigN) -> uNR
 */
-Method Min(uBigN) CLASS tBigNumber
+Method Min(uBigN,lObj) CLASS tBigNumber
 	
 	Local llte
 
 	Local uNR
 
-	llte	:= self:lte(@uBigN)
+	llte	:= self:lte(uBigN)
 
 	IF llte
-		uNR	:= self
+		uNR	:= self:Clone()
 	Else
-		uNR	:= uBigN
+		DEFAULT lObj := .T.
+		IF lObj .and. .NOT.(ValType(uBigN)=="O")
+			uNR	:= tBigNumber():New(uBigN)
+		Else
+			uNR	:= uBigN:Clone()
+		EndIF
 	EndIF
 
 Return(uNR)
@@ -824,8 +832,8 @@ Method Add(uBigN) CLASS tBigNumber
 	DEFAULT __adoN1 := tBigNumber():New()
 	DEFAULT __adoN2 := tBigNumber():New()
 
-	__adoN1:SetValue(__adoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__adoN2:SetValue(__adoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__adoN1:SetValue(__adoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__adoN2:SetValue(__adoN2:Normalize(uBigN,__adoN1),NIL,NIL,.F.)
 
 	BEGIN SEQUENCE
 
@@ -867,18 +875,18 @@ Method Add(uBigN) CLASS tBigNumber
 		IF lAdd
 			#IFDEF __ADDMT__
 		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
-			        __adoNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+			        __adoNR:SetValue(AddThread(cN1,cN2,nSize),NIL,NIL,.F.)
 		        Else
-		        	__adoNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+		        	__adoNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
 		        EndIF
 			#ELSE
-				__adoNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
 			#ENDIF
 		Else
 			#IFDEF __SUBMT__
-				__adoNR:SetValue(Sub(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
 			#ELSE
-				__adoNR:SetValue(Sub(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
 			#ENDIF
 		EndIF
 	
@@ -1109,12 +1117,12 @@ Return(__adoNR)
 	#IFDEF __PROTHEUS__
 		User Function ThAdd(cN1,cN2,nSize,nBase,cID)
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC]["+cN1+"+"+cN2+"]")
-				PutGlbValue(cID,Add(@cN1,@cN2,@nSize,@nBase))
+				PutGlbValue(cID,Add(cN1,cN2,nSize,nBase))
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END]["+cN1+"+"+cN2+"]")
 		Return(.T.)
 	#ELSE
 		Function ThAdd(cN1,cN2,nSize,nBase)
-		Return(Add(@cN1,@cN2,@nSize,@nBase))
+		Return(Add(cN1,cN2,nSize,nBase))
 	#ENDIF
 
 #ENDIF
@@ -1153,8 +1161,8 @@ Method Sub(uBigN) CLASS tBigNumber
 	DEFAULT __sboN1 := tBigNumber():New()
 	DEFAULT __sboN2 := tBigNumber():New()
 
-	__sboN1:SetValue(__sboN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__sboN2:SetValue(__sboN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__sboN1:SetValue(__sboN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__sboN2:SetValue(__sboN2:Normalize(uBigN,__sboN1),NIL,NIL,.F.)
 
 	BEGIN SEQUENCE
 
@@ -1195,19 +1203,19 @@ Method Sub(uBigN) CLASS tBigNumber
 	
 	    IF lSub
 			#IFDEF __SUBMT__
-				__sboNR:SetValue(Sub(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+				__sboNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
 	    	#ELSE
-				__sboNR:SetValue(Sub(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+				__sboNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
 	    	#ENDIF
 	    Else
 			#IFDEF __ADDMT__
 		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
-			        __sboNR:SetValue(AddThread(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+			        __sboNR:SetValue(AddThread(cN1,cN2,nSize),NIL,NIL,.F.)
 		        Else
-		        	__sboNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+		        	__sboNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
 		        EndIF
 	    	#ELSE
-				__sboNR:SetValue(Add(@cN1,@cN2,@nSize),NIL,NIL,.F.)    		
+				__sboNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)    		
 	    	#ENDIF
 	    EndIF
 	
@@ -1267,8 +1275,8 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	DEFAULT __mtoN1 := tBigNumber():New()
 	DEFAULT __mtoN2 := tBigNumber():New()
 
-	__mtoN1:SetValue(__mtoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-	__mtoN2:SetValue(__mtoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+	__mtoN1:SetValue(__mtoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+	__mtoN2:SetValue(__mtoN2:Normalize(uBigN,__mtoN1),NIL,NIL,.F.)
 
 	BEGIN SEQUENCE
 
@@ -1298,9 +1306,9 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	    DEFAULT leMult := .F.
 	
 	    IF leMult
-			__mtoNR:SetValue(eMult(@cN1,@cN2),NIL,NIL,.F.)    		
+			__mtoNR:SetValue(eMult(cN1,cN2),NIL,NIL,.F.)    		
 	    Else
-			__mtoNR:SetValue(Mult(@cN1,@cN2,@nSize),NIL,NIL,.F.)
+			__mtoNR:SetValue(Mult(cN1,cN2,nSize),NIL,NIL,.F.)
 	    EndIF	
 	
 	    cNT	:= __mtoNR:cInt
@@ -1370,8 +1378,8 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		DEFAULT __dvoN1 	:= tBigNumber():New()
 		DEFAULT __dvoN2 	:= tBigNumber():New()
 	
-		__dvoN1:SetValue(__dvoN1:Normalize(self,self,uBigN),NIL,NIL,.F.)
-		__dvoN2:SetValue(__dvoN2:Normalize(uBigN,uBigN,self),NIL,NIL,.F.)
+		__dvoN1:SetValue(__dvoN1:Normalize(self,uBigN),NIL,NIL,.F.)
+		__dvoN2:SetValue(__dvoN2:Normalize(uBigN,__dvoN1),NIL,NIL,.F.)
 	
 	    lNeg1 	:= __dvoN1:lNeg
 	    lNeg2	:= __dvoN2:lNeg	
@@ -1385,7 +1393,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		__dvoNR:SetValue(Div(@cN1,@cN2,@nAcc,@lFloat))
+		__dvoNR:SetValue(Div(cN1,cN2,nAcc,lFloat))
 	
 		__dvoRDiv:SetValue(__dvoNR:cRDiv,NIL,NIL,.F.)
 	
@@ -1408,8 +1416,8 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		
 				While __dvoRDiv:gte(__dvoN2)
 					
-					__dvoRDiv:SetValue(__dvoRDiv:Normalize(@__dvoRDiv,@__dvoRDiv,@__dvoN2),NIL,NIL,.F.)
-					__dvoN2:SetValue(__dvoN2:Normalize(@__dvoN2,@__dvoN2,@__dvoRDiv),NIL,NIL,.F.)
+					__dvoRDiv:SetValue(__dvoRDiv:Normalize(__dvoRDiv,__dvoN2),NIL,NIL,.F.)
+					__dvoN2:SetValue(__dvoN2:Normalize(__dvoN2,__dvoRDiv),NIL,NIL,.F.)
 		
 		    		cN1	:= __dvoRDiv:cInt
 		    		cN1	+= __dvoRDiv:cDec
@@ -1417,7 +1425,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		    		cN2	:= __dvoN2:cInt
 		    		cN2	+= __dvoN2:cDec
 
-					__dvoRDiv:SetValue(Div(@cN1,@cN2,@nAcc,@lFloat))
+					__dvoRDiv:SetValue(Div(cN1,cN2,nAcc,lFloat))
 
 					cDec	+= __dvoRDiv:ExactValue(.T.)
 					nDec	:= Len(cDec)
@@ -1469,19 +1477,12 @@ Return(__dvoNR)
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 05/03/2013
 	Descricao	: Resto da Divisao
-	Sintaxe		: tBigNumber():Mod(uBigN) -> uNR
+	Sintaxe		: tBigNumber():Mod(uBigN) -> oMod
 */
 Method Mod(uBigN) CLASS tBigNumber
-	
-	Local oBigNR := tBigNumber():New()
-	
-	Local uNR
-
-	oBigNR:SetValue(self:Div(@uBigN,.F.))
-
-    uNR	:= oBigNR:SetValue(oBigNR:cRDiv,NIL,NIL,.F.)
-
-Return(uNR)
+	Local oMod	 := tBigNumber():New(self:Div(uBigN,.F.))
+    oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
+Return(oMod)
 
 /*
 	Method		: Pow
@@ -1492,6 +1493,8 @@ Return(uNR)
 */
 Method Pow(uBigN) CLASS tBigNumber
 
+	Local oSelf	:= self:Clone()
+	
 	Local cM10
 	
 	Local cPowB
@@ -1524,12 +1527,12 @@ Method Pow(uBigN) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF self:eq(__o0) .and. __pwoNP:eq(__o0)
+		IF oSelf:eq(__o0) .and. __pwoNP:eq(__o0)
 			__pwoNR:SetValue(__o1)
 			BREAK
 		EndIF
 
-		IF self:eq(__o0)
+		IF oSelf:eq(__o0)
 			__pwoNR:SetValue(__o0)
 			BREAK
 		EndIF
@@ -1539,7 +1542,7 @@ Method Pow(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		__pwoNR:SetValue(self)
+		__pwoNR:SetValue(oSelf)
 
 		IF __pwoNR:eq(__o1)
 			__pwoNR:SetValue(__o1)
@@ -1596,8 +1599,8 @@ Method Pow(uBigN) CLASS tBigNumber
 				#ENDIF
 			EndIF
 
-			__pwoA:SetValue(__pwoA:Normalize(__pwoA,__pwoA,__pwoB),NIL,NIL,.F.)
-			__pwoB:SetValue(__pwoB:Normalize(__pwoB,__pwoB,__pwoA),NIL,NIL,.F.)
+			__pwoA:SetValue(__pwoA:Normalize(__pwoA,__pwoB),NIL,NIL,.F.)
+			__pwoB:SetValue(__pwoB:Normalize(__pwoB,__pwoA),NIL,NIL,.F.)
 
 			__pwoNP:SetValue(__pwoA)
 
@@ -1615,7 +1618,7 @@ Method Pow(uBigN) CLASS tBigNumber
 			__pwoNT:SetValue(__o0)
 			__pwoNP:SetValue(__pwoNP:Sub(__o1))
 			While __pwoNT:lt(__pwoNP)
-				__pwoNR:SetValue(__pwoNR:Mult(self))
+				__pwoNR:SetValue(__pwoNR:Mult(oSelf))
 				__pwoNT:SetValue(__pwoNT:Add(__o1))
 			End While
 
@@ -1950,7 +1953,7 @@ Return(oeTthD)
 	Sintaxe:	tBigNumber():Exp(lForce) -> oBigNR
 */
 Method Exp(lForce) CLASS tBigNumber
-	Local oBigNe := self:e(@lForce)
+	Local oBigNe := self:e(lForce)
 	Local oBigNR := oBigNe:Pow(self)
 Return(oBigNR)
 
@@ -2132,7 +2135,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			
 		oFExit	:= tBigNumber():New()
 
-		oFExit:SetValue(cFExit,NIL,NIL,NIL,@__nthRootAcc)
+		oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
 
 		IF oRootB:Dec(.T.):gt(__o0)
 			
@@ -2182,7 +2185,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		IF nPFs>0
 			#IFDEF __ROOTMT__
-				othRoot:SetValue(RootThread(@aIPF,@aDPF,@oRootE,@oFExit))
+				othRoot:SetValue(RootThread(aIPF,aDPF,oRootE,oFExit))
 			#ELSE
 				othRoot:SetValue(__o1)
 				othRootD	:= tBigNumber():New()
@@ -2192,7 +2195,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 						othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
 					Else
 						oRootT:SetValue(aIPF[nPF][1])
-						othRoot:SetValue(othRoot:Mult(nthRoot(@oRootT,@oRootE,@oFExit,@nAcc):Pow(aIPF[nPF][2])))
+						othRoot:SetValue(othRoot:Mult(nthRoot(oRootT,oRootE,oFExit,nAcc):Pow(aIPF[nPF][2])))
 					EndIF	
 				Next nPF
 				IF .NOT.(Empty(aDPF))
@@ -2204,7 +2207,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 								othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
 							Else
 								oRootT:SetValue(aDPF[nPF][1])
-								othRootD:SetValue(othRootD:Mult(nthRoot(@oRootT,@oRootE,@oFExit,@nAcc):Pow(aDPF[nPF][2])))
+								othRootD:SetValue(othRootD:Mult(nthRoot(oRootT,oRootE,oFExit,nAcc):Pow(aDPF[nPF][2])))
 							EndIF
 						Next nPF
 						IF othRootD:gt(__o0)
@@ -2216,7 +2219,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		othRoot:SetValue(nthRoot(@oRootB,@oRootE,@oFExit,@nAcc))
+		othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit,nAcc))
 
 	END SEQUENCE
 
@@ -2426,7 +2429,7 @@ Return(othRoot)
 			__nthRootAcc	:= nthRootAcc
 			__nSetDecimals	:= nSetDecimals
 			
-			oNR:SetValue(nthRoot(@oRootB,@oRootE,@oFExit,@nSetDecimals))
+			oNR:SetValue(nthRoot(oRootB,oRootE,oFExit,nSetDecimals))
 
 		Return(oNR)
 
@@ -2455,7 +2458,7 @@ Return(othRoot)
 
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]")
 
-			cNR				:= nthRoot(@oRootB,@oRootE,@oFExit,@nSetDecimals):GetValue()
+			cNR				:= nthRoot(oRootB,oRootE,oFExit,nSetDecimals):GetValue()
 
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT]["+cNR+"]")
 
@@ -2681,7 +2684,7 @@ Return(self:aLog(__o1:Exp()))
 	Sintaxe:	tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
 */
 Method MathC(uBigN1,cOperator,uBigN2) CLASS tBigNumber
-Return(MathO(@uBigN1,@cOperator,@uBigN2,.F.))
+Return(MathO(uBigN1,cOperator,uBigN2,.F.))
 
 /*
 	Method		: MathN
@@ -2691,30 +2694,31 @@ Return(MathO(@uBigN1,@cOperator,@uBigN2,.F.))
 	Sintaxe		: tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
 */
 Method MathN(uBigN1,cOperator,uBigN2) CLASS tBigNumber
-Return(MathO(@uBigN1,@cOperator,@uBigN2,.T.))
+Return(MathO(uBigN1,cOperator,uBigN2,.T.))
 
 /*
 	Method		: Rnd
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Redefine a Precisao de Numero em PF
-	Sintaxe		: tBigNumber():Rnd(nAcc) -> oBigNR
+	Sintaxe		: tBigNumber():Rnd(nAcc) -> oRND
 */
 Method Rnd(nAcc) CLASS tBigNumber
 
-	Local cAdd
-	
-	Local oAcc
-	Local oDec := tBigNumber():New(self:cDec)
+	Local oRnd := self:Clone()
+	Local oDec := tBigNumber():New(oRnd:cDec)
 
-	DEFAULT nAcc := Min(self:nDec,__nSetDecimals)
+	Local cAdd
+	Local oAcc
+
+	DEFAULT nAcc := Min(oRnd:nDec,__nSetDecimals)
 
 	IF .NOT.(oDec:eq(__o0))
 		oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc+1,1))
 		IF oAcc:gte(__o5)
 			oDec:SetValue(__o10)
 			cAdd := "0."
-			cAdd += Replicate("0",@nAcc)
+			cAdd += Replicate("0",nAcc)
 			cAdd += oDec:Sub(oAcc):cInt
 		Else
 			oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc,1))
@@ -2728,12 +2732,12 @@ Method Rnd(nAcc) CLASS tBigNumber
 			EndIF	
 		EndIF
 		IF .NOT.(cAdd=="0")
-			self:SetValue(self:Add(cAdd))
+			oRnd:SetValue(oRnd:Add(cAdd))
 		EndIF
-		self:SetValue(self:cInt+"."+SubStr(self:cDec,1,nAcc),NIL,self:cRDiv)
+		oRnd:SetValue(oRnd:cInt+"."+SubStr(oRnd:cDec,1,nAcc),NIL,oRnd:cRDiv)
 	EndIF
 
-Return(self)
+Return(oRnd)
 
 /*
 	Method		: NoRnd
@@ -2750,29 +2754,30 @@ Return(Self:Truncate(nAcc))
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 06/02/2013
 	Descricao	: Redefine a Precisao de Numero em PF
-	Sintaxe		: tBigNumber():Truncate(nAcc) -> oBigNR
+	Sintaxe		: tBigNumber():Truncate(nAcc) -> oTrc
 */
 Method Truncate(nAcc) CLASS tBigNumber
 
-	Local oDec := tBigNumber():New(self:cDec)
+	Local oTrc	:= self:Clone()
+	Local oDec	:= tBigNumber():New(oTrc:cDec)
 
-	DEFAULT nAcc := Min(self:nDec,__nSetDecimals)
+	DEFAULT nAcc := Min(oTrc:nDec,__nSetDecimals)
 
 	IF .NOT.(oDec:eq(__o0))
 		oDec:SetValue(SubStr(oDec:ExactValue(),1,nAcc))
-		self:SetValue(self:cInt+"."+oDec:cInt)
+		oTrc:SetValue(oTrc:cInt+"."+oDec:cInt)
 	EndIF
 
-Return(self)
+Return(oTrc)
 
 /*
 	Method		: Normalize
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Normaliza os Dados
-	Sintaxe		: tBigNumber():Normalize(uBigN0,uBigN1,uBigN2) -> oBigN0
+	Sintaxe		: tBigNumber():Normalize(uBigN1,uBigN2) -> __NoN1
 */
-Method Normalize(uBigN0,uBigN1,uBigN2) CLASS tBigNumber
+Method Normalize(uBigN1,uBigN2) CLASS tBigNumber
 
 	Local cInt
 	Local cDec
@@ -2780,31 +2785,28 @@ Method Normalize(uBigN0,uBigN1,uBigN2) CLASS tBigNumber
 	Local nPadL
 	Local nPadR
 
-	THREAD Static __NoN0
 	THREAD Static __NoN1
 	THREAD Static __NoN2
 
-	DEFAULT __NoN0 := tBigNumber():New()
 	DEFAULT __NoN1 := tBigNumber():New()
 	DEFAULT __NoN2 := tBigNumber():New()
 
-	__NoN0:SetValue(uBigN0)
 	__NoN1:SetValue(uBigN1)
 	__NoN2:SetValue(uBigN2)
 
 	nPadL	:= Max(__NoN1:nInt,__NoN2:nInt)
 	nPadR	:= Max(__NoN1:nDec,__NoN2:nDec)
 
-    cInt	:= PadL(__NoN0:cInt,nPadL,"0")
-    cDec	:= PadR(__NoN0:cDec,nPadR,"0")
+    cInt	:= PadL(__NoN1:cInt,nPadL,"0")
+    cDec	:= PadR(__NoN1:cDec,nPadR,"0")
 
-	__NoN0:cInt		:= cInt
-	__NoN0:nInt		:= nPadL
-	__NoN0:cDec		:= cDec
-	__NoN0:nDec		:= nPadR
-	__NoN0:nSize	:= (nPadL+nPadR)
+	__NoN1:cInt		:= cInt
+	__NoN1:nInt		:= nPadL
+	__NoN1:cDec		:= cDec
+	__NoN1:nDec		:= nPadR
+	__NoN1:nSize	:= (nPadL+nPadR)
 
-Return(__NoN0)
+Return(__NoN1)
 
 /*
 	Method		: D2H
@@ -3146,7 +3148,7 @@ Return(oHexN)
 	Sintaxe		: tBigNumber():D2B(cHexB) -> cBin
 */
 Method D2B(cHexB) CLASS tBigNumber
-	Local oHex	:= self:D2H(@cHexB)
+	Local oHex	:= self:D2H(cHexB)
 	Local oBin	:= oHex:H2B()
 Return(oBin)
 
@@ -3158,7 +3160,7 @@ Return(oBin)
 	Sintaxe		: tBigNumber():B2D(cBin,cHexB) -> oBigNR
 */
 Method B2D(cHexB) CLASS tBigNumber
-	Local oHex	:= self:B2H(@cHexB) 
+	Local oHex	:= self:B2H(cHexB) 
 	Local oDec	:= oHex:H2D()
 Return(oDec)
 
@@ -3511,12 +3513,13 @@ Return(lmrP)
 */
 Method FI() CLASS tBigNumber
 
-	Local oT	:= tBigNumber():New(self:Int(.T.))
+	Local oC	:= self:Clone()
+	Local oT	:= tBigNumber():New(oC:Int(.T.))
 
 	Local oI	:= __o2:Clone()
 	Local oN	:= oT:Clone()
 
-	While oI:Mult(oI):lte(self)
+	While oI:Mult(oI):lte(oC)
 		IF oN:Mod(oI):eq(__o0)
 			oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
 		EndIF
@@ -3602,7 +3605,7 @@ Static Function eMult(cN1,cN2,nAcc)
 	Local oPd
 	Local ocT
 	
-	Local oN1		:= tBigNumber():New(@cN1)
+	Local oN1		:= tBigNumber():New(cN1)
 
 	Local oNR
 	
@@ -3785,7 +3788,7 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 			Exit
 		EndIF
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
-		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,@__nthRootAcc)
+		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,__nthRootAcc)
 		othRootT:SetValue(othRoot)
 		IF ++nIDEx>NTHROOT_EXIT
 			nIDEx := 1
@@ -3877,7 +3880,7 @@ return(x)
 			--n
 		End While
 
-		cNR	:= GetcN(@c,@y)
+		cNR	:= GetcN(c,y)
 
 		#IFDEF __ADDMT__
 		
@@ -3952,7 +3955,7 @@ return(x)
 			--n
 		End While
 		
-		cNR	:= GetcN(@c,@y)
+		cNR	:= GetcN(c,y)
 
 		#IFDEF __SUBMT__
 		
@@ -4075,7 +4078,7 @@ return(x)
 			l++
 		End While
 		
-		cNR	:= GetcN(@c,@k)
+		cNR	:= GetcN(c,k)
 		
 		#IFDEF __MULTMT__
 		
@@ -4278,7 +4281,7 @@ return(x)
 			--n
 		End While
 
-	Return(GetcN(@c,@y))
+	Return(GetcN(c,y))
 	
 	/*
 		Funcao		: Sub
@@ -4307,7 +4310,7 @@ return(x)
 			--n
 		End While
 
-	Return(GetcN(@c,@y))
+	Return(GetcN(c,y))
 	
 	/*
 		Funcao		: Mult
@@ -4367,7 +4370,7 @@ return(x)
 			l++
 		End While
 
-	Return(GetcN(@c,@k))
+	Return(GetcN(c,k))
 	
 	/*
 		Funcao		: aNumber

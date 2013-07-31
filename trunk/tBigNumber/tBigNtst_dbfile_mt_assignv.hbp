@@ -1,0 +1,23 @@
+#
+# $Id: tbignumber.hbp 17099 2013-02-05 12:15:39Z marinaldo.jesus $
+#
+#/D__HB_Q_SQRT__
+
+-mt
+
+/DTBN_DBFILE
+/D__MT__
+/D__POWMT__
+/D__ROOTMT__
+/D__ADDMT__
+/D__SUBTMT__
+/D__MULTMT__
+
+tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
+tbignumber.prg -w3
+tfread.prg -w3
+tprime.prg -w3
+__hbeTthD.prg -w3
+__hbPITthD.prg -w3
+
+-otBigNtst_dbfile_mt_assignv

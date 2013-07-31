@@ -12,7 +12,7 @@
 /D__SUBTMT__
 /D__MULTMT__
 
-tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
+tBigNtst.prg -w2
 tbignumber.prg -w3
 tfread.prg -w3
 tprime.prg -w3

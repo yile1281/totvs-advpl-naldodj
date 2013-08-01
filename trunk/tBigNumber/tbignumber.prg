@@ -79,7 +79,7 @@ CLASS tBigNumber
 	DATA nInt
 	DATA nSize
 	
-	Method Normalize(uBigN1,uBigN2)
+	Method Normalize(oBigN)
 
 #IFNDEF __PROTHEUS__
 	EXPORTED:
@@ -625,8 +625,10 @@ Method eq(uBigN) CLASS tBigNumber
 	DEFAULT __eqoN1 := tBigNumber():New()
 	DEFAULT __eqoN2 := tBigNumber():New()
 
-	__eqoN1:SetValue(__eqoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__eqoN2:SetValue(__eqoN2:Normalize(uBigN,__eqoN1),NIL,NIL,.F.)
+	__eqoN1:SetValue(self)
+	__eqoN2:SetValue(uBigN)
+	
+	__eqoN1:Normalize(@__eqoN2)
 
 	leq	:= __eqoN1:GetValue(.T.)==__eqoN2:GetValue(.T.) .and. __eqoN1:lNeg==__eqoN2:lNeg
 
@@ -662,8 +664,10 @@ Method gt(uBigN) CLASS tBigNumber
 	DEFAULT __gtoN1 := tBigNumber():New()	
 	DEFAULT __gtoN2 := tBigNumber():New()
 
-	__gtoN1:SetValue(__gtoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__gtoN2:SetValue(__gtoN2:Normalize(uBigN,__gtoN1),NIL,NIL,.F.)
+	__gtoN1:SetValue(self)
+	__gtoN2:SetValue(uBigN)
+	
+	__gtoN1:Normalize(@__gtoN2)
 
 	cN1	:= __gtoN1:GetValue(.T.)
 	cN2	:= __gtoN2:GetValue(.T.)
@@ -702,9 +706,11 @@ Method lt(uBigN) CLASS tBigNumber
 	DEFAULT __ltoN1 := tBigNumber():New()	
 	DEFAULT __ltoN2 := tBigNumber():New()
 
-	__ltoN1:SetValue(__ltoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__ltoN2:SetValue(__ltoN2:Normalize(uBigN,__ltoN1),NIL,NIL,.F.)
-
+	__ltoN1:SetValue(self)
+	__ltoN2:SetValue(uBigN)
+	
+	__ltoN1:Normalize(@__ltoN2)
+	
 	cN1	:= __ltoN1:GetValue(.T.)
 	cN2	:= __ltoN2:GetValue(.T.)
 
@@ -832,8 +838,10 @@ Method Add(uBigN) CLASS tBigNumber
 	DEFAULT __adoN1 := tBigNumber():New()
 	DEFAULT __adoN2 := tBigNumber():New()
 
-	__adoN1:SetValue(__adoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__adoN2:SetValue(__adoN2:Normalize(uBigN,__adoN1),NIL,NIL,.F.)
+	__adoN1:SetValue(self)
+	__adoN2:SetValue(uBigN)
+	
+	__adoN1:Normalize(@__adoN2)
 
 	BEGIN SEQUENCE
 
@@ -1161,8 +1169,10 @@ Method Sub(uBigN) CLASS tBigNumber
 	DEFAULT __sboN1 := tBigNumber():New()
 	DEFAULT __sboN2 := tBigNumber():New()
 
-	__sboN1:SetValue(__sboN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__sboN2:SetValue(__sboN2:Normalize(uBigN,__sboN1),NIL,NIL,.F.)
+	__sboN1:SetValue(self)
+	__sboN2:SetValue(uBigN)
+	
+	__sboN1:Normalize(@__sboN2)
 
 	BEGIN SEQUENCE
 
@@ -1275,8 +1285,10 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	DEFAULT __mtoN1 := tBigNumber():New()
 	DEFAULT __mtoN2 := tBigNumber():New()
 
-	__mtoN1:SetValue(__mtoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-	__mtoN2:SetValue(__mtoN2:Normalize(uBigN,__mtoN1),NIL,NIL,.F.)
+	__mtoN1:SetValue(self)
+	__mtoN2:SetValue(uBigN)
+	
+	__mtoN1:Normalize(@__mtoN2)
 
 	BEGIN SEQUENCE
 
@@ -1378,8 +1390,10 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		DEFAULT __dvoN1 	:= tBigNumber():New()
 		DEFAULT __dvoN2 	:= tBigNumber():New()
 	
-		__dvoN1:SetValue(__dvoN1:Normalize(self,uBigN),NIL,NIL,.F.)
-		__dvoN2:SetValue(__dvoN2:Normalize(uBigN,__dvoN1),NIL,NIL,.F.)
+		__dvoN1:SetValue(self)
+		__dvoN2:SetValue(uBigN)
+		
+		__dvoN1:Normalize(@__dvoN2)
 	
 	    lNeg1 	:= __dvoN1:lNeg
 	    lNeg2	:= __dvoN2:lNeg	
@@ -1416,9 +1430,8 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		
 				While __dvoRDiv:gte(__dvoN2)
 					
-					__dvoRDiv:SetValue(__dvoRDiv:Normalize(__dvoRDiv,__dvoN2),NIL,NIL,.F.)
-					__dvoN2:SetValue(__dvoN2:Normalize(__dvoN2,__dvoRDiv),NIL,NIL,.F.)
-		
+					__dvoRDiv:Normalize(@__dvoN2)
+			
 		    		cN1	:= __dvoRDiv:cInt
 		    		cN1	+= __dvoRDiv:cDec
 		
@@ -1599,9 +1612,8 @@ Method Pow(uBigN) CLASS tBigNumber
 				#ENDIF
 			EndIF
 
-			__pwoA:SetValue(__pwoA:Normalize(__pwoA,__pwoB),NIL,NIL,.F.)
-			__pwoB:SetValue(__pwoB:Normalize(__pwoB,__pwoA),NIL,NIL,.F.)
-
+			__pwoA:Normalize(@__pwoB)
+	
 			__pwoNP:SetValue(__pwoA)
 
 		EndIF
@@ -2775,38 +2787,36 @@ Return(oTrc)
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
 	Descricao	: Normaliza os Dados
-	Sintaxe		: tBigNumber():Normalize(uBigN1,uBigN2) -> __NoN1
+	Sintaxe		: tBigNumber():Normalize(oBigN) -> self
 */
-Method Normalize(uBigN1,uBigN2) CLASS tBigNumber
+Method Normalize(oBigN) CLASS tBigNumber
 
 	Local cInt
 	Local cDec
 
-	Local nPadL
-	Local nPadR
+	Local nPadL	:= Max(self:nInt,oBigN:nInt)
+	Local nPadR := Max(self:nDec,oBigN:nDec)
+	Local nSize := (nPadL+nPadR)
 
-	THREAD Static __NoN1
-	THREAD Static __NoN2
+    cInt := PadL(self:cInt,nPadL,"0")
+    cDec := PadR(self:cDec,nPadR,"0")
 
-	DEFAULT __NoN1 := tBigNumber():New()
-	DEFAULT __NoN2 := tBigNumber():New()
+	self:cInt	:= cInt
+	self:nInt	:= nPadL
+	self:cDec	:= cDec
+	self:nDec	:= nPadR
+	self:nSize	:= nSize
 
-	__NoN1:SetValue(uBigN1)
-	__NoN2:SetValue(uBigN2)
+    cInt := PadL(oBigN:cInt,nPadL,"0")
+    cDec := PadR(oBigN:cDec,nPadR,"0")
 
-	nPadL	:= Max(__NoN1:nInt,__NoN2:nInt)
-	nPadR	:= Max(__NoN1:nDec,__NoN2:nDec)
+	oBigN:cInt	:= cInt
+	oBigN:nInt	:= nPadL
+	oBigN:cDec	:= cDec
+	oBigN:nDec	:= nPadR
+	oBigN:nSize	:= nSize
 
-    cInt	:= PadL(__NoN1:cInt,nPadL,"0")
-    cDec	:= PadR(__NoN1:cDec,nPadR,"0")
-
-	__NoN1:cInt		:= cInt
-	__NoN1:nInt		:= nPadL
-	__NoN1:cDec		:= cDec
-	__NoN1:nDec		:= nPadR
-	__NoN1:nSize	:= (nPadL+nPadR)
-
-Return(__NoN1)
+Return(self)
 
 /*
 	Method		: D2H

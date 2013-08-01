@@ -1,0 +1,15 @@
+#
+# $Id: _tbigNumber.hbp 17099 2013-02-05 12:15:39Z marinaldo.jesus $
+#
+
+-hblib
+-inc
+
+-olib/${hb_plat}/${hb_comp}/${hb_name}
+
+-w3 -es2
+
+tfread.prg
+tprime.prg
+__hbeTthD.prg
+__hbPITthD.prg

@@ -53,7 +53,7 @@ CLASS tfRead
 	METHOD MoreToRead()					// Returns .T. if more to be read
 	METHOD Error()						// Returns .T. if error occurred
 	METHOD ErrorNo()					// Returns current error code
-	METHOD ErrorMsg()					// Returns formatted error message
+	METHOD ErrorMsg( cText )			// Returns formatted error message
 
 END CLASS
 
@@ -173,7 +173,6 @@ METHOD ReadLine() CLASS tfRead
          ELSE
             // Add what was read to the readahead buffer.
             self:cBuffer += cLine
-            cLine := ""
          ENDIF
          // Is there a whole line in the readahead buffer yet?
          nPos := f_EOL_pos( Self )

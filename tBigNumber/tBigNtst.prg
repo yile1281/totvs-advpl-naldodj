@@ -16,6 +16,7 @@
 #IFDEF __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
+#DEFINE __NROWAT	14
 Function Main()
 	#IFDEF __HARBOUR__
 	    #IFDEF __ALT_D__	// Compile with -b
@@ -93,11 +94,28 @@ User Function tBigNTst()
 	Local laLog		AS LOGICAL
 
 #IFDEF __HARBOUR__
+	
 	MEMVAR __CRLF
 	MEMVAR __cSep
+
+	MEMVAR __nProgress
+	MEMVAR __nMaxRow
+	MEMVAR __nMaxCol
+	MEMVAR __nCol
+	MEMVAR __nRow
+	
 	Private __cSep	:= Replicate("-",MaxCol())
+
+	Private __nProgress := 0
+	Private __nMaxRow	:= MaxRow()
+	Private __nMaxCol	:= MaxCol()
+	Private __nCol		:= ((__nMaxCol+1)/2)
+	Private __nRow	    := 0
+	
 #ELSE
+
 	Private __cSep	:= "---------------------------------------------------------"
+
 #ENDIF	
 
 	Private __CRLF	AS CHARACTER VALUE CRLF
@@ -1135,6 +1153,10 @@ User Function tBigNTst()
 	__ConOut(fhLog,__cSep)
 	__ConOut(fhLog,"")
 	__ConOut(fhLog,__cSep)
+	
+#IFDEF __HARBOUR__
+	__nRow := __nMaxRow
+#ENDIF
 
 	__ConOut(fhLog,"END ")
 
@@ -1163,6 +1185,7 @@ User Function tBigNTst()
 	
 #IFDEF __HARBOUR__
 	WAIT "Press any key to end"
+	CLS
 #ENDIF	
 	
 Return(NIL)
@@ -1189,15 +1212,17 @@ Static Procedure __ConOut(fhLog,e,d)
 	
 	Local x		AS UNDEFINED
 	Local y		AS UNDEFINED
+	
+	MEMVAR __CRLF
+	MEMVAR __cSep
 
 #IFDEF __HARBOUR__
-    Static __nRow	
-	Static __nCol
-	Static __nMaxRow
-	Static __nMaxCol
-	Static __nProgress
-	MEMVAR __CRLF
-#ENDIF	
+	MEMVAR __nProgress
+	MEMVAR __nMaxRow
+	MEMVAR __nMaxCol
+	MEMVAR __nCol
+	MEMVAR __nRow
+#ENDIF
 
 	PARAMTYPE 1 VAR fhLog	AS NUMBER
 	PARAMTYPE 2 VAR e     	AS UNDEFINED
@@ -1217,15 +1242,11 @@ Static Procedure __ConOut(fhLog,e,d)
 	ASSIGN p := x + IF(ld , " " + y , "")
 	
 #IFDEF __HARBOUR__
-	DEFAULT __nProgress := 0
-	DEFAULT __nMaxRow	:= MaxRow()
-	DEFAULT __nMaxCol	:= MaxCol()
-	DEFAULT __nCol		:= ((__nMaxCol+1)/2)
 	Progress(@__nProgress,2,@__nCol)
 	DEFAULT __nRow := 0
 	IF ++__nRow >= __nMaxRow
-		@ 14, 0 CLEAR TO __nMaxRow,__nMaxCol
-		__nRow := 14
+		@ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
+		__nRow := __NROWAT
 	EndIF
 	DispOutAt(__nRow,0,p,'w+/n')
 #ELSE	

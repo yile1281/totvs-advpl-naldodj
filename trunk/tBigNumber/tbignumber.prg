@@ -69,15 +69,15 @@ CLASS tBigNumber
 #ENDIF
 
 	/* Keep in alphabetical order */
-	DATA cDec
-	DATA cInt
-	DATA cRDiv
-	DATA cSig
-	DATA lNeg
-	DATA nBase
-	DATA nDec
-	DATA nInt
-	DATA nSize
+	DATA cDec  AS CHARACTER INIT ""
+	DATA cInt  AS CHARACTER INIT ""
+	DATA cRDiv AS CHARACTER INIT ""
+	DATA cSig  AS CHARACTER INIT ""
+	DATA lNeg  AS LOGICAL   INIT .F. 
+	DATA nBase AS NUMERIC   INIT 0
+	DATA nDec  AS NUMERIC   INIT 0
+	DATA nInt  AS NUMERIC   INIT 0
+	DATA nSize AS NUMERIC   INIT 0
 	
 	Method Normalize(oBigN)
 
@@ -855,8 +855,8 @@ Method Add(uBigN) CLASS tBigNumber
 			EndIF
 		EndIF	
 
-	    nDec	:= __adoN1:nDec
-	    nSize	:= __adoN1:nSize
+	    nDec  := __adoN1:nDec
+	    nSize := __adoN1:nSize
 	
 	    cN1	:= __adoN1:cInt
 	    cN1	+= __adoN1:cDec
@@ -883,25 +883,24 @@ Method Add(uBigN) CLASS tBigNumber
 		IF lAdd
 			#IFDEF __ADDMT__
 		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
-			        __adoNR:SetValue(AddThread(cN1,cN2,nSize),NIL,NIL,.F.)
+			        __adoNR:SetValue(AddThread(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 		        Else
-		        	__adoNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
+		        	__adoNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 		        EndIF
 			#ELSE
-				__adoNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			#ENDIF
 		Else
 			#IFDEF __SUBMT__
-				__adoNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			#ELSE
-				__adoNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
+				__adoNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			#ENDIF
 		EndIF
 	
-	    cNT	:= __adoNR:cInt
-	    
-	    cDec	:= SubStr(cNT,-nDec)
-	    cInt	:= SubStr(cNT, 1,Len(cNT)-nDec)
+	    cNT  := __adoNR:cInt
+	    cDec := SubStr(cNT,-nDec)
+	    cInt := SubStr(cNT, 1,Len(cNT)-nDec)
 	
 	    cNT	:= cInt
 	    cNT	+= "."
@@ -1213,19 +1212,19 @@ Method Sub(uBigN) CLASS tBigNumber
 	
 	    IF lSub
 			#IFDEF __SUBMT__
-				__sboNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
+				__sboNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 	    	#ELSE
-				__sboNR:SetValue(Sub(cN1,cN2,nSize),NIL,NIL,.F.)
+				__sboNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 	    	#ENDIF
 	    Else
 			#IFDEF __ADDMT__
 		        IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
-			        __sboNR:SetValue(AddThread(cN1,cN2,nSize),NIL,NIL,.F.)
+			        __sboNR:SetValue(AddThread(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 		        Else
-		        	__sboNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)
+		        	__sboNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 		        EndIF
 	    	#ELSE
-				__sboNR:SetValue(Add(cN1,cN2,nSize),NIL,NIL,.F.)    		
+				__sboNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)    		
 	    	#ENDIF
 	    EndIF
 	
@@ -1320,7 +1319,7 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	    IF leMult
 			__mtoNR:SetValue(eMult(cN1,cN2),NIL,NIL,.F.)    		
 	    Else
-			__mtoNR:SetValue(Mult(cN1,cN2,nSize),NIL,NIL,.F.)
+			__mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 	    EndIF	
 	
 	    cNT	:= __mtoNR:cInt
@@ -3619,7 +3618,7 @@ Static Function eMult(cN1,cN2,nAcc)
 
 	Local oNR
 	
-	Local nBakAcc	:= __nSetDecimals 
+	Local nBkpAcc	:= __nSetDecimals 
 
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
@@ -3658,7 +3657,7 @@ Static Function eMult(cN1,cN2,nAcc)
 		EndIF
 	Next nI
 
-	__nSetDecimals := nBakAcc
+	__nSetDecimals := nBkpAcc
 
 Return(oNR)
 	
@@ -3686,7 +3685,7 @@ Static Function Div(cN,cD,nAcc,lFloat)
 
 	Local oNR
     
-	Local nBakAcc	:= __nSetDecimals
+	Local nBkpAcc	:= __nSetDecimals
 
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
@@ -3738,7 +3737,7 @@ Static Function Div(cN,cD,nAcc,lFloat)
 		EndIF
 	EndIF
 
-	__nSetDecimals := nBakAcc
+	__nSetDecimals := nBkpAcc
 
 Return(oNR)
 
@@ -3770,7 +3769,7 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 	Local othRoot	:= tBigNumber():New()
 	Local othRootT	:= tBigNumber():New()
 	      	
-	Local nBakAcc	:= __nSetDecimals
+	Local nBkpAcc	:= __nSetDecimals
 
 	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
@@ -3806,10 +3805,10 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 		__anthExit[nIDEx] := oAccNo:Clone()
 		nExit	:= 0
 		nScan	:= 0
-		While ((nScan := aScan(__anthExit,{|uExit|oAccNo:eq(uExit)},++nScan))>0)
+		While ((nScan:=aScan(__anthExit,{|uExit|oAccNo:eq(uExit)},++nScan))>0)
 			++nExit
 		End While
-		lExit	:= (nExit>1)
+		lExit	:= nExit>1
 		IF lExit
 			Exit
 		EndIF
@@ -3817,7 +3816,7 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 	
 	aFill(__anthExit,"0")
 
-	__nSetDecimals := nBakAcc
+	__nSetDecimals := nBkpAcc
 
 Return(othRoot)  
 
@@ -3868,7 +3867,6 @@ return(x)
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
-		DEFAULT nBase	:= 10
 
 		While n>0
 			(a)->(dbGoTo(n))
@@ -3942,8 +3940,6 @@ return(x)
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
-
-		DEFAULT nBase	:= 10
 	
 		While n>0
 			(a)->(dbGoTo(n))
@@ -4026,8 +4022,6 @@ return(x)
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
-
-		DEFAULT nBase	:= 10
 	
 		While i<=n
 			s := 1
@@ -4139,7 +4133,11 @@ return(x)
 	
 		While ++y<=n
 			(a)->(dbAppend(.T.))
+		#IFDEF __PROTHEUS__
 			(a)->FN	:= Val(SubStr(c,y,1))
+		#ELSE
+			(a)->FN	:= Val(c[y])
+		#ENDIF	
 			(a)->(dbUnLock())
 		End While
 	
@@ -4212,7 +4210,7 @@ return(x)
 				cFile := CriaTrab(aStru,cAlias)
 			#ENDIF	
 	#ENDIF
-			DEFAULT __aFiles := {}
+			DEFAULT __aFiles := Array(0)
 			aAdd(__aFiles,cFile)
 		Else
 			(cAlias)->(dbRLock())
@@ -4271,18 +4269,23 @@ return(x)
 		Descricao	: Adicao
 		Sintaxe		: Add(cN1,cN2,n,nBase) -> cNR
 	*/
+#IFDEF __PROTHEUS__
 	Static Function Add(cN1,cN2,n,nBase)
-	
 		Local a			:= aNumber(cN1,n)
 		Local b 		:= aNumber(cN2,n)
+#ELSE
+	Static Function Add(a,b,n,nBase)
+#ENDIF
 		Local y 		:= n+1
 		Local c 		:= aFill(Array(y),0)
 		Local k 		:= 1
-		
-		DEFAULT nBase	:= 10
 
 		While n>0
+#IFDEF __PROTHEUS__
 			c[k] += a[n]+b[n]
+#ELSE
+			c[k] += Val(a[n])+Val(b[n])
+#ENDIF		
 			IF c[k]>=nBase
 				c[k+1]	+= 1
 				c[k]	-= nBase
@@ -4300,18 +4303,23 @@ return(x)
 		Descricao	: Subtracao
 		Sintaxe		: Sub(cN1,cN2,n,nBase) -> cNR
 	*/
+#IFDEF __PROTHEUS__
 	Static Function Sub(cN1,cN2,n,nBase)
-	
 		Local a			:= aNumber(cN1,n)
 		Local b 		:= aNumber(cN2,n)
+#ELSE
+	Static Function Sub(a,b,n,nBase)
+#ENDIF		
 		Local y 		:= n
 		Local c 		:= aFill(Array(y),0)
 		Local k 		:= 1
 	
-		DEFAULT nBase	:= 10
-	
 		While n>0
+#IFDEF __PROTHEUS__
 			c[k] += a[n]-b[n]
+#ELSE
+			c[k] += Val(a[n])-Val(b[n])
+#ENDIF
 			IF c[k]<0
 				c[k+1]	-= 1
 				c[k]	+= nBase
@@ -4331,11 +4339,15 @@ return(x)
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
-	
+#IFDEF __PROTHEUS__
 		Local a			:= aNumber(Invert(cN1,n),n)
 		Local b			:= aNumber(Invert(cN2,n),n)
+#ELSE
+		Local a			:= Invert(cN1,n)
+		Local b			:= Invert(cN2,n)
+#ENDIF
 		Local y			:= n+n
-		Local c			:= afill(Array(y),0)
+		Local c			:= aFill(Array(y),0)
 	
 		Local i 		:= 1
 		Local k 		:= 1
@@ -4345,13 +4357,15 @@ return(x)
 		Local x
 		Local j
 	
-		DEFAULT nBase	:= 10
-	
 		While i<=n
 			s := 1
 			j := i
 			While s<=i
+#IFDEF __PROTHEUS__
 				c[k]	+= a[s++]*b[j--]
+#ELSE
+				c[k]	+= Val(a[s++])*Val(b[j--])
+#ENDIF
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -4366,7 +4380,11 @@ return(x)
 			s := n
 			j := l
 			While s>=l
+#IFDEF __PROTHEUS__
 				c[k]	+= a[s--]*b[j++]
+#ELSE
+				c[k]	+= Val(a[s--])*Val(b[j++])	
+#ENDIF
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -4381,6 +4399,8 @@ return(x)
 		End While
 
 	Return(GetcN(c,k))
+
+#IFDEF __PROTHEUS__
 	
 	/*
 		Funcao		: aNumber
@@ -4401,6 +4421,8 @@ return(x)
 	
 	Return(a)
 	
+#ENDIF
+
 	/*
 		Funcao		: GetcN
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4424,7 +4446,7 @@ return(x)
 		End While
 	
 		IF s==""
-			s := "0"	
+			s := "0"
 		EndIF
 	
 		IF Len(s)<n
@@ -4445,10 +4467,14 @@ return(x)
 Static Function Invert(c,n)
 
 	Local s := ""
-	Local y	:= n	
+	Local y	:= n
 
 	While y>0
+#IFDEF __PROTHEUS__
 		s += SubStr(c,y--,1)
+#ELSE
+		s += c[y--]
+#ENDIF		
 	End While
 
 Return(s)

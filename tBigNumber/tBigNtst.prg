@@ -1161,6 +1161,10 @@ User Function tBigNTst()
 
 	fClose(fhLog)
 	
+#IFDEF __HARBOUR__
+	WAIT "Press any key to end"
+#ENDIF	
+	
 Return(NIL)
 
 /*

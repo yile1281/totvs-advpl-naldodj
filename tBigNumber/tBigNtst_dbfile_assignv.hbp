@@ -3,8 +3,6 @@
 #
 #/D__HB_Q_SQRT__
 
--mt
-
 /DTBN_DBFILE
 
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR

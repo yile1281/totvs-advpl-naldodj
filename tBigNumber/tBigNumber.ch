@@ -33,7 +33,7 @@
 		#IFDEF __HARBOUR__
 			#include "common.ch"
 			#include "hbclass.ch"
-			#include "hbCompat.ch"
+*			#include "hbCompat.ch"
 			#IFDEF TBN_DBFILE
 				#IFNDEF TBN_MEMIO
 					REQUEST DBFCDX , DBFFPT
@@ -43,6 +43,9 @@
 				#ENDIF
 			#ENDIF
 		#ENDIF
+		#ifndef __XHARBOUR__
+			#include "xhb.ch" //add xHarbour emulation to Harbour
+		#endif
 	#ENDIF
 
 	#DEFINE MAX_DECIMAL_PRECISION	999999999999999

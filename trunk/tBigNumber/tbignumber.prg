@@ -4267,25 +4267,20 @@ return(x)
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add(cN1,cN2,n,nBase) -> cNR
+		Sintaxe		: Add(a,b,n,nBase) -> cNR
 	*/
-#IFDEF __PROTHEUS__
-	Static Function Add(cN1,cN2,n,nBase)
-		Local a			:= aNumber(cN1,n)
-		Local b 		:= aNumber(cN2,n)
-#ELSE
 	Static Function Add(a,b,n,nBase)
-#ENDIF
-		Local y 		:= n+1
-		Local c 		:= aFill(Array(y),0)
-		Local k 		:= 1
+
+		Local y	:= n+1
+		Local c := aFill(Array(y),0)
+		Local k := 1
 
 		While n>0
-#IFDEF __PROTHEUS__
-			c[k] += a[n]+b[n]
-#ELSE
+		#IFDEF __PROTHEUS__
+			c[k] += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
+		#ELSE
 			c[k] += Val(a[n])+Val(b[n])
-#ENDIF		
+		#ENDIF
 			IF c[k]>=nBase
 				c[k+1]	+= 1
 				c[k]	-= nBase
@@ -4301,25 +4296,20 @@ return(x)
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub(cN1,cN2,n,nBase) -> cNR
+		Sintaxe		: Sub(a,b,n,nBase) -> cNR
 	*/
-#IFDEF __PROTHEUS__
-	Static Function Sub(cN1,cN2,n,nBase)
-		Local a			:= aNumber(cN1,n)
-		Local b 		:= aNumber(cN2,n)
-#ELSE
 	Static Function Sub(a,b,n,nBase)
-#ENDIF		
-		Local y 		:= n
-		Local c 		:= aFill(Array(y),0)
-		Local k 		:= 1
+
+		Local y := n
+		Local c := aFill(Array(y),0)
+		Local k := 1
 	
 		While n>0
-#IFDEF __PROTHEUS__
-			c[k] += a[n]-b[n]
-#ELSE
+		#IFDEF __PROTHEUS__
+			c[k] += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
+		#ELSE
 			c[k] += Val(a[n])-Val(b[n])
-#ENDIF
+		#ENDIF
 			IF c[k]<0
 				c[k+1]	-= 1
 				c[k]	+= nBase
@@ -4339,19 +4329,16 @@ return(x)
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
-#IFDEF __PROTHEUS__
-		Local a			:= aNumber(Invert(cN1,n),n)
-		Local b			:= aNumber(Invert(cN2,n),n)
-#ELSE
-		Local a			:= Invert(cN1,n)
-		Local b			:= Invert(cN2,n)
-#ENDIF
-		Local y			:= n+n
-		Local c			:= aFill(Array(y),0)
+
+		Local a	:= Invert(cN1,n)
+		Local b	:= Invert(cN2,n)
+
+		Local y	:= n+n
+		Local c	:= aFill(Array(y),0)
 	
-		Local i 		:= 1
-		Local k 		:= 1
-		Local l 		:= 2
+		Local i := 1
+		Local k := 1
+		Local l := 2
 		
 		Local s
 		Local x
@@ -4361,11 +4348,11 @@ return(x)
 			s := 1
 			j := i
 			While s<=i
-#IFDEF __PROTHEUS__
-				c[k]	+= a[s++]*b[j--]
-#ELSE
-				c[k]	+= Val(a[s++])*Val(b[j--])
-#ENDIF
+			#IFDEF __PROTHEUS__
+				c[k] += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+			#ELSE
+				c[k] += Val(a[s++])*Val(b[j--])
+			#ENDIF
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -4380,11 +4367,11 @@ return(x)
 			s := n
 			j := l
 			While s>=l
-#IFDEF __PROTHEUS__
-				c[k]	+= a[s--]*b[j++]
-#ELSE
-				c[k]	+= Val(a[s--])*Val(b[j++])	
-#ENDIF
+		#IFDEF __PROTHEUS__
+				c[k] += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
+		#ELSE
+				c[k] += Val(a[s--])*Val(b[j++])	
+		#ENDIF
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -4399,29 +4386,6 @@ return(x)
 		End While
 
 	Return(GetcN(c,k))
-
-#IFDEF __PROTHEUS__
-	
-	/*
-		Funcao		: aNumber
-		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
-		Data		: 04/02/2013
-		Descricao	: Array OF Numbers
-		Sintaxe		: aNumber(c,n) -> a
-	*/
-	Static Function aNumber(c,n)
-	
-		Local a	:= Array(n)
-	
-		Local y	:= 0
-	
-		While ++y<=n
-			a[y] := Val(SubStr(c,y,1))
-		End While
-	
-	Return(a)
-	
-#ENDIF
 
 	/*
 		Funcao		: GetcN

@@ -3852,12 +3852,10 @@ return(x)
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Adicao
-		Sintaxe		: Add(cN1,cN2,n,nBase) -> cNR
+		Sintaxe		: Add(a,b,n,nBase) -> cNR
 	*/
-	Static Function Add(cN1,cN2,n,nBase)
+	Static Function Add(a,b,n,nBase)
 	
-		Local a			:= aNumber(cN1,n,"ADD_A")
-		Local b 		:= aNumber(cN2,n,"ADD_B")
 		Local y 		:= n+1
 		Local c 		:= aNumber(Replicate("0",y),y,"ADD_C")
 		Local k 		:= 1
@@ -3869,11 +3867,13 @@ return(x)
 		#ENDIF	
 
 		While n>0
-			(a)->(dbGoTo(n))
-			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				(c)->FN += ((a)->FN+(b)->FN)
+				#IFDEF __PROTHEUS__
+					(c)->FN += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
+				#ELSE
+					(c)->FN += Val(a[n])+Val(b[n])
+				#ENDIF
 				IF (c)->FN>=nBase
 					(c)->FN	-= nBase
 					(c)->(dbUnLock())
@@ -3891,14 +3891,6 @@ return(x)
 		cNR	:= GetcN(c,y)
 
 		#IFDEF __ADDMT__
-		
-			IF Select(a)>0
-				(a)->(dbCloseArea())
-			EndIF	
-			
-			IF Select(b)>0
-				(b)->(dbCloseArea())
-			EndIF	
 			
 			IF Select(c)>0
 				(c)->(dbCloseArea())
@@ -3925,12 +3917,10 @@ return(x)
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Subtracao
-		Sintaxe		: Sub(cN1,cN2,n,nBase) -> cNR
+		Sintaxe		: Sub(a,b,n,nBase) -> cNR
 	*/
-	Static Function Sub(cN1,cN2,n,nBase)
+	Static Function Sub(a,b,n,nBase)
 	
-		Local a			:= aNumber(cN1,n,"SUB_A")
-		Local b 		:= aNumber(cN2,n,"SUB_B")
 		Local y 		:= n
 		Local c 		:= aNumber(Replicate("0",y),y,"SUB_C")
 		Local k 		:= 1
@@ -3942,11 +3932,13 @@ return(x)
 		#ENDIF	
 	
 		While n>0
-			(a)->(dbGoTo(n))
-			(b)->(dbGoTo(n))
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				(c)->FN += (a)->FN-(b)->FN
+				#IFDEF __PROTHEUS__
+					(c)->FN += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
+				#ELSE
+					(c)->FN += Val(a[n])-Val(b[n])
+				#ENDIF
 				IF (c)->FN<0
 					(c)->FN += nBase
 					(c)->(dbUnLock())
@@ -3964,15 +3956,7 @@ return(x)
 		cNR	:= GetcN(c,y)
 
 		#IFDEF __SUBMT__
-		
-			IF Select(a)>0
-				(a)->(dbCloseArea())
-			EndIF	
-			
-			IF Select(b)>0
-				(b)->(dbCloseArea())
-			EndIF	
-			
+
 			IF Select(c)>0
 				(c)->(dbCloseArea())
 			EndIF	
@@ -4003,8 +3987,8 @@ return(x)
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
 		
-		Local a			:= aNumber(Invert(cN1,n),n,"MULT_A")
-		Local b			:= aNumber(Invert(cN2,n),n,"MULT_B")
+		Local a			:= Invert(cN1,n)
+		Local b			:= Invert(cN2,n)
 		Local y			:= n+n
 		Local c			:= aNumber(Replicate("0",y),y,"MULT_C")
 	
@@ -4029,13 +4013,15 @@ return(x)
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				While s<=i
-					(a)->(dbGoTo(s++))
-					(b)->(dbGoTo(j--))
-					(c)->FN += ((a)->FN*(b)->FN)
+					#IFDEF __PROTHEUS__
+						(c)->FN += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+					#ELSE
+						(c)->FN += Val(a[s++])*Val(b[j--])
+					#ENDIF
 				End While
 				IF (c)->FN>=nBase
-					x		:= k+1
-					w		:= Int((c)->FN/nBase)
+					x := k+1
+					w := Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN	:= w
@@ -4057,13 +4043,15 @@ return(x)
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				While s>=l
-					(a)->(dbGoTo(s--))
-					(b)->(dbGoTo(j++))
-					(c)->FN	+= ((a)->FN*(b)->FN)
+				#IFDEF __PROTHEUS__
+					(c)->FN	+= Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
+				#ELSE
+					(c)->FN	+= Val(a[s--])*Val(b[j++])	
+				#ENDIF
 				End While
 				IF (c)->FN>=nBase
-					x		:= k+1
-					w		:= Int((c)->FN/nBase)
+					x := k+1
+					w := Int((c)->FN/nBase)
 					(c)->(dbGoTo(x))
 					IF (c)->(rLock())
 						(c)->FN := w
@@ -4085,19 +4073,11 @@ return(x)
 		cNR	:= GetcN(c,k)
 		
 		#IFDEF __MULTMT__
-		
-			IF Select(a)>0
-				(a)->(dbCloseArea())
-			EndIF	
-			
-			IF Select(b)>0
-				(b)->(dbCloseArea())
-			EndIF	
-			
+
 			IF Select(c)>0
 				(c)->(dbCloseArea())
 			EndIF	
-			
+
 			#IFDEF __PROTHEUS__
 				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
 			#ELSE
@@ -4367,11 +4347,11 @@ return(x)
 			s := n
 			j := l
 			While s>=l
-		#IFDEF __PROTHEUS__
+			#IFDEF __PROTHEUS__
 				c[k] += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
-		#ELSE
+			#ELSE
 				c[k] += Val(a[s--])*Val(b[j++])	
-		#ENDIF
+			#ENDIF
 			End While
 			IF c[k]>=nBase
 				x		:= k+1

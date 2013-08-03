@@ -34,6 +34,7 @@ THREAD Static __nSetDecimals
 	Alternative Compile Options: /D
 
 	#IFDEF __PROTHEUS__
+		/DTBN_ARRAY
 		/DTBN_DBFILE 
 		/D__TBN_DYN_OBJ_SET__ 
 		/D__POWMT__
@@ -42,6 +43,7 @@ THREAD Static __nSetDecimals
 		/D__SUBTMT__
 		/D__MULTMT__
 	#ELSE //__HARBOUR__
+		/DTBN_ARRAY
 		/DTBN_DBFILE 
 		/DTBN_MEMIO 
 		/D__TBN_DYN_OBJ_SET__ 
@@ -3888,7 +3890,7 @@ return(x)
 			--n
 		End While
 
-		cNR	:= GetcN(c,y)
+		cNR	:= dbGetcN(c,y)
 
 		#IFDEF __ADDMT__
 			
@@ -3953,7 +3955,7 @@ return(x)
 			--n
 		End While
 		
-		cNR	:= GetcN(c,y)
+		cNR	:= dbGetcN(c,y)
 
 		#IFDEF __SUBMT__
 
@@ -4070,7 +4072,7 @@ return(x)
 			l++
 		End While
 		
-		cNR	:= GetcN(c,k)
+		cNR	:= dbGetcN(c,k)
 		
 		#IFDEF __MULTMT__
 
@@ -4124,13 +4126,13 @@ return(x)
 	Return(a)
 	
 	/*
-		Funcao		: GetcN
+		Funcao		: dbGetcN
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Montar a String de Retorno
-		Sintaxe		: GetcN(a,x) -> s
+		Sintaxe		: dbGetcN(a,x) -> s
 	*/
-	Static Function GetcN(a,n)
+	Static Function dbGetcN(a,n)
 	
 		Local s	:= ""
 		Local y	:= n
@@ -4242,6 +4244,8 @@ return(x)
 
 #ELSE
 
+	#IFDEF TBN_ARRAY
+
 	/*
 		Funcao		: Add
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4269,7 +4273,7 @@ return(x)
 			--n
 		End While
 
-	Return(GetcN(c,y))
+	Return(aGetcN(c,y))
 	
 	/*
 		Funcao		: Sub
@@ -4298,7 +4302,7 @@ return(x)
 			--n
 		End While
 
-	Return(GetcN(c,y))
+	Return(aGetcN(c,y))
 	
 	/*
 		Funcao		: Mult
@@ -4365,16 +4369,16 @@ return(x)
 			l++
 		End While
 
-	Return(GetcN(c,k))
+	Return(aGetcN(c,k))
 
 	/*
-		Funcao		: GetcN
+		Funcao		: aGetcN
 		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data		: 04/02/2013
 		Descricao	: Montar a String de Retorno
-		Sintaxe		: GetcN(a,x) -> s
+		Sintaxe		: aGetcN(a,x) -> s
 	*/
-	Static Function GetcN(a,n)
+	Static Function aGetcN(a,n)
 	
 		Local s	:= ""
 		Local y	:= n
@@ -4398,6 +4402,227 @@ return(x)
 		EndIF
 	
 	Return(s)
+	
+	#ELSE
+
+	/*
+		Funcao		: Add
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+		Data		: 04/02/2013
+		Descricao	: Adicao
+		Sintaxe		: Add(a,b,n,nBase) -> cNR
+	*/
+	Static Function Add(a,b,n,nBase)
+
+		Local y	:= n+1
+		Local k := 1
+
+		Local c := Replicate("0",y)
+		
+		Local v := 0
+		Local v1
+
+		While n>0
+			#IFDEF __PROTHEUS__
+				v += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
+			#ELSE
+				v += Val(a[n])+Val(b[n])
+			#ENDIF
+			IF v>=nBase
+				v  -= nBase
+				v1 := 1
+			Else
+				v1 := 0
+			EndIF
+			#IFDEF __PROTHEUS__
+				c := Stuff(c,k,1,hb_ntos(v))
+				c := Stuff(c,k+1,1,hb_ntos(v1)) 
+			#ELSE
+				c[k]   := hb_ntos(v)
+				c[k+1] := hb_ntos(v1)
+			#ENDIF
+			v := v1
+			++k
+			--n
+		End While
+
+	Return(cGetcN(c,y))
+	
+	/*
+		Funcao		: Sub
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+		Data		: 04/02/2013
+		Descricao	: Subtracao
+		Sintaxe		: Sub(a,b,n,nBase) -> cNR
+	*/
+	Static Function Sub(a,b,n,nBase)
+
+		Local y := n
+		Local k := 1
+
+		Local c := Replicate("0",y)
+		
+		Local v := 0
+		Local v1
+	
+		While n>0
+			#IFDEF __PROTHEUS__
+				v += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
+			#ELSE
+				v += Val(a[n])-Val(b[n])
+			#ENDIF
+			IF v<0
+				v  += nBase
+				v1 := -1
+			Else
+				v1 := 0
+			EndIF
+			#IFDEF __PROTHEUS__
+				c := Stuff(c,k,1,hb_ntos(v)) 
+			#ELSE
+				c[k] := hb_ntos(v)
+			#ENDIF
+			v := v1
+			++k
+			--n
+		End While
+
+	Return(cGetcN(c,y))
+	
+	/*
+		Funcao		: Mult
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+		Data		: 04/02/2013
+		Descricao	: Multiplicacao de Inteiros
+		Sintaxe		: Mult(cN1,cN2,n,nBase) -> cNR
+		Obs.		: Mais rapida, usa a multiplicacao nativa
+	*/
+	Static Function Mult(cN1,cN2,n,nBase)
+
+		Local a	:= Invert(cN1,n)
+		Local b	:= Invert(cN2,n)
+
+		Local y	:= n+n
+		Local c	:= Replicate("0",y)
+	
+		Local i := 1
+		Local k := 1
+		Local l := 2
+		
+		Local s
+		Local j
+		
+		Local v	:= 0
+		Local v1
+	
+		While i<=n
+			s := 1
+			j := i
+			While s<=i
+			#IFDEF __PROTHEUS__
+				v += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+			#ELSE
+				v += Val(a[s++])*Val(b[j--])
+			#ENDIF
+			End While
+			IF v>=nBase
+				v1	:= Int(v/nBase)
+				v	-= v1*nBase
+			Else
+				v1	:= 0	
+			EndIF
+			#IFDEF __PROTHEUS__
+				c := Stuff(c,k,1,hb_ntos(v))
+				c := Stuff(c,k+1,1,hb_ntos(v1)) 
+			#ELSE
+				c[k]   := hb_ntos(v)
+				c[k+1] := hb_ntos(v1)
+			#ENDIF
+			v := v1
+			k++
+			i++
+		End While
+		
+		#IFDEF __PROTHEUS__
+			v := Val(SubStr(c,k,1))
+		#ELSE
+			v := Val(c[k])
+		#ENDIF	
+	
+		While l<=n
+			s := n
+			j := l
+			While s>=l
+			#IFDEF __PROTHEUS__
+				v += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
+			#ELSE
+				v += Val(a[s--])*Val(b[j++])	
+			#ENDIF
+			End While
+			IF v>=nBase
+				v1	:= Int(v/nBase)
+				v	-= v1*nBase
+			Else
+				v1	:= 0	
+			EndIF
+			#IFDEF __PROTHEUS__
+				c := Stuff(c,k,1,hb_ntos(v))
+				c := Stuff(c,k+1,1,hb_ntos(v1)) 
+			#ELSE
+				c[k]   := hb_ntos(v)
+				c[k+1] := hb_ntos(v1)
+			#ENDIF
+			v := v1
+			k++
+			IF k>=y
+				Exit
+			EndIF
+			l++
+		End While
+
+	Return(cGetcN(c,k))
+
+	/*
+		Funcao		: cGetcN
+		Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+		Data		: 04/02/2013
+		Descricao	: Montar a String de Retorno
+		Sintaxe		: cGetcN(c,n) -> s
+	*/
+	Static Function cGetcN(c,n)
+	
+		Local s	:= ""
+		Local y	:= n
+	
+		While y>=1
+		#IFDEF __PROTHEUS__
+			While y>=1 .and. SubStr(c,y,1)=="0"
+		#ELSE
+			While y>=1 .and. c[y]=="0"
+		#ENDIF	
+				y--
+			End While
+			While y>=1
+			#IFDEF __PROTHEUS__
+				s += SubStr(c,y,1)
+			#ELSE
+				s += c[y]
+			#ENDIF
+				y--
+			End While
+		End While
+	
+		IF s==""
+			s := "0"
+		EndIF
+	
+		IF Len(s)<n
+			s := PadL(s,n,"0")
+		EndIF
+	
+	Return(s)
+	
+	#ENDIF
 
 #ENDIF
 

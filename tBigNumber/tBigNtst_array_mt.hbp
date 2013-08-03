@@ -5,6 +5,8 @@
 
 -mt
 
+/DTBN_ARRAY
+
 /D__MT__
 /D__POWMT__
 /D__ROOTMT__

@@ -89,11 +89,11 @@ THREAD Static __lsthdSet
 */
 
 /*
-	Class		: tBigNumber
+	Class		: tBigNComplex
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
-	Descricao	: Instancia um novo objeto do tipo BigNumber
-	Sintaxe		: tBigNumber():New(uBigN) -> self
+	Descricao	: Instancia um novo objeto do tipo tBigNComplex
+	Sintaxe		: tBigNComplex():New() -> self
 */
 CLASS tBigNComplex
 #IFNDEF __PROTHEUS__
@@ -4312,7 +4312,7 @@ Return(x)
 	#IFDEF __HARBOUR__
 		#IFNDEF TBN_MEMIO
 			Static Function CriaTrab(aStru,cRDD)
-				Local cFolder	:= GetCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
+				Local cFolder	:= tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
 				Local cFile 	:= cFolder+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
 				Local lSuccess	:= .F.
 				While .NOT.(lSuccess)
@@ -4326,8 +4326,6 @@ Return(x)
 					End
 				End While	
 			Return(cFile)
-			Static Function GetCurrentFolder()
-			Return(hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
 		#ELSE
 			Static Function CriaTrab(aStru,cAlias)
 				Local cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)

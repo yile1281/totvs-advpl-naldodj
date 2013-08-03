@@ -5,6 +5,18 @@ SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
 SET HB_PATH=c:\hb32\
 
+    %HB_PATH%bin\hbmk2.exe -cpp tBigNtst.hbp
+    %HB_PATH%bin\upx.exe   tBigNtst.exe
+	
+    %HB_PATH%bin\hbmk2.exe -cpp tBigNtst_assignv.hbp
+    %HB_PATH%bin\upx.exe   tBigNtst_assignv.exe
+	
+    %HB_PATH%bin\hbmk2.exe -cpp tBigNtst_mt.hbp
+    %HB_PATH%bin\upx.exe   tBigNtst_mt.exe
+	
+    %HB_PATH%bin\hbmk2.exe -cpp tBigNtst_mt_assignv.hbp
+    %HB_PATH%bin\upx.exe   tBigNtst_mt_assignv.exe
+
     %HB_PATH%bin\hbmk2.exe -cpp tBigNtst_array.hbp
     %HB_PATH%bin\upx.exe   tBigNtst_array.exe
 	

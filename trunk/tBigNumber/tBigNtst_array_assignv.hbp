@@ -5,6 +5,8 @@
 #/D__ALT_D__
 #-b
 
+/DTBN_ARRAY
+
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3
 

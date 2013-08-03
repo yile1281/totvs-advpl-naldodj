@@ -152,12 +152,16 @@ User Function tBigNTst()
 
 	#IFDEF TBN_DBFILE
 		#IFNDEF TBN_MEMIO
-			__ConOut(fhLog,"USING       : " , "DBFILE")
+			__ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")
 		#ELSE
-			__ConOut(fhLog,"USING       : " , "DBMEMIO")
+			__ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")
 		#ENDIF	
 	#ELSE
-		__ConOut(fhLog,"USING       : " , "ARRAY")
+		#IFNDEF TBN_ARRAY
+			__ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")
+		#ELSE
+			__ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")
+		#ENDIF
 	#ENDIF	
 
 	#ifdef __POWMT__
@@ -1212,16 +1216,18 @@ Static Procedure __ConOut(fhLog,e,d)
 	
 	Local x		AS UNDEFINED
 	Local y		AS UNDEFINED
-	
+
+#IFDEF __HARBOUR__
+
 	MEMVAR __CRLF
 	MEMVAR __cSep
 
-#IFDEF __HARBOUR__
 	MEMVAR __nProgress
 	MEMVAR __nMaxRow
 	MEMVAR __nMaxCol
 	MEMVAR __nCol
 	MEMVAR __nRow
+
 #ENDIF
 
 	PARAMTYPE 1 VAR fhLog	AS NUMBER

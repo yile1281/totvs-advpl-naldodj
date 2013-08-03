@@ -12,14 +12,25 @@ SET cygwin_PATH=c:\cygwin\
 	SET PATH=%PATH%;%HB_PATH%comp\mingwarm\libexec\gcc\arm-mingw32ce\4.4.0\
 	SET PATH=%PATH%;%cygwin_PATH%bin\
 	SET PATH=%PATH%;%cygwin_PATH%usr\bin\
+	
+	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst.hbp
+	%HB_PATH%bin\upx.exe   tBigNtst.exe
+	
+	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst_mt.hbp
+	%HB_PATH%bin\upx.exe   tBigNtst_mt.exe
+	
 	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst_array.hbp
 	%HB_PATH%bin\upx.exe   tBigNtst_array.exe
+	
 	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst_array_mt.hbp
 	%HB_PATH%bin\upx.exe   tBigNtst_array_mt.exe
+	
 	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst_dbfile.hbp
 	%HB_PATH%bin\upx.exe   tBigNtst_dbfile.exe
+	
 	%HB_PATH%bin\hbmk2.exe -cpp -comp=mingwarm tBigNtst_dbfile_mt.hbp
 	%HB_PATH%bin\upx.exe   tBigNtst_dbfile_mt.exe
+	
 	move /Y *.exe exe\mingwarm
 SET cygwin_PATH=%_cygwin_PATH%
 SET HB_PATH=%_HB_PATH%

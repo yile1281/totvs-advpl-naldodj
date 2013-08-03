@@ -1163,6 +1163,8 @@ User Function tBigNTst()
 	__nRow := __nMaxRow
 #ENDIF
 
+	otBigW:tBigNGC(.T.)
+
 	__ConOut(fhLog,"END ")
 
 	dEndDate := Date()

@@ -1,0 +1,11 @@
+#
+# $Id: tbignumber.hbp 17099 2013-02-05 12:15:39Z marinaldo.jesus $
+#
+#/D__HB_Q_SQRT__
+#/D__ALT_D__
+#-b
+
+tBigNtst.prg -w2
+tbignumber.prg -w3
+
+-otBigNtst

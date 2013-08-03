@@ -46,6 +46,7 @@
 		#ifndef __XHARBOUR__
 			#include "xhb.ch" //add xHarbour emulation to Harbour
 		#endif
+		#xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
 	#ENDIF
 
 	#DEFINE MAX_DECIMAL_PRECISION	999999999999999

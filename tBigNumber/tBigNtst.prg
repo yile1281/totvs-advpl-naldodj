@@ -27,6 +27,7 @@ Function Main()
 Return(tBigNTst())
 Static Function tBigNTst()
 #ELSE
+#xtranslate ExeName() => ProcName()
 User Function tBigNTst()
 #ENDIF	
 

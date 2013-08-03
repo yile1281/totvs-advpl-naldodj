@@ -7,6 +7,27 @@ Static __o5
 Static __o10
 Static __ltbN
 
+THREAD Static __cZPow
+THREAD Static __cZRoot
+THREAD Static __cZRnd
+THREAD Static __cZAdd
+THREAD Static __cZSub
+THREAD Static __cZMult
+
+THREAD Static __aZAdd
+THREAD Static __aZSub
+THREAD Static __aZMult
+
+THREAD Static __nZPow
+THREAD Static __nZRoot
+THREAD Static __nZRnd
+THREAD Static __nZAdd
+THREAD Static __nZSub
+THREAD Static __nZMult
+
+THREAD Static __c9Rand
+THREAD Static __n9Rand
+
 THREAD Static __lSet
 THREAD Static __aFiles
 THREAD Static __anthExit
@@ -250,13 +271,42 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	self:SetValue(uBigN,nBase)
 
 	IF __ltbN==NIL
+
 		__ltbN := .F.
-		__o0  	:= tBigNumber():New("0",nBase)
-		__o1  	:= tBigNumber():New("1",nBase)
-		__o2  	:= tBigNumber():New("2",nBase)
-		__o5	:= tBigNumber():New("5",nBase)
-		__o10	:= tBigNumber():New("10",nBase)		 	
+
+		__o0  		:= tBigNumber():New("0",nBase)
+		__o1  		:= tBigNumber():New("1",nBase)
+		__o2  		:= tBigNumber():New("2",nBase)
+		__o5		:= tBigNumber():New("5",nBase)
+		__o10		:= tBigNumber():New("10",nBase)		 	
+
+		__cZPow		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZPow		:= 100
+		
+		__cZRoot	:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZRoot	:= 100
+	
+		__cZRnd		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZRnd		:= 100
+
+		__cZAdd		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZAdd		:= 100
+
+		__cZSub		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZSub		:= 100
+
+		__cZMult	:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZMult	:= 100	
+
+		__c9Rand	:= "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+		__n9Rand	:= 100
+		
+		__aZAdd		:= Array(0)
+		__aZSub		:= Array(0)
+		__aZMult	:= Array(0)
+
 		__ltbN := .T.
+
 	EndIF
 
 Return(self)
@@ -1516,6 +1566,8 @@ Method Pow(uBigN) CLASS tBigNumber
 	
 	Local lPoWN
 	Local lPowF
+	
+	Local nZS
 
 #IFDEF __HARBOUR__
 	#IFDEF __POWMT__
@@ -1578,9 +1630,15 @@ Method Pow(uBigN) CLASS tBigNumber
 
 			DEFAULT __pwoB	:= tBigNumber():New()
 
+			nZS := Len(__pwoNP:Dec(NIL,NIL,.T.))
+			IF nZS>__nZPow
+				__cZPow+=Replicate("0",nZS-Len(__cZPow))
+				__nZPow+=nZS-Len(__cZPow)
+			EndIF
+			
 			cM10	:= "1"
-			cM10	+= Replicate("0",Len(__pwoNP:Dec(NIL,NIL,.T.)))
-
+			cM10	+= SubStr(__cZPow,1,nZS)
+			
 			cPowB	:= cM10
 
 			IF __pwoB:SetValue(cPowB):gt(__o1)
@@ -2092,6 +2150,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	Local nPF
 #ENDIF
 
+	Local nZS
 	Local nPFs
 	Local nAcc		:= __nSetDecimals
 
@@ -2142,9 +2201,13 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		cFExit	:= "0."
-		cFExit	+= Replicate("0",(__nthRootAcc-1))
-		cFExit	+= "1"
+		nZS		:= __nthRootAcc-1
+		IF nZS>__nZRoot
+			__cZRoot+=Replicate("0",nZS-Len(__cZRoot))
+			__nZRoot+=nZS-Len(__cZRoot)
+		EndIF
+	
+		cFExit	:= "0."+SubStr(__cZRoot,1,nZS)+"1"
 			
 		oFExit	:= tBigNumber():New()
 
@@ -2152,7 +2215,12 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		IF oRootB:Dec(.T.):gt(__o0)
 			
-			oRootD	:= tBigNumber():New("1"+Replicate("0",Len(oRootB:Dec(NIL,NIL,.T.))))
+			nZS		:= Len(oRootB:Dec(NIL,NIL,.T.))
+			IF nZS>__nZRoot
+				__cZRoot+=Replicate("0",nZS-Len(__cZRoot))
+				__nZRoot+=nZS-Len(__cZRoot)
+			EndIF
+			oRootD	:= tBigNumber():New("1"+SubStr(__cZRoot,1,nZS))
 			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
 			
 			#IFDEF __HARBOUR__
@@ -2731,14 +2799,22 @@ Method Rnd(nAcc) CLASS tBigNumber
 		IF oAcc:gte(__o5)
 			oDec:SetValue(__o10)
 			cAdd := "0."
-			cAdd += Replicate("0",nAcc)
+			IF nAcc>__nZRnd
+				__cZRnd+=Replicate("0",nAcc-Len(__cZRnd))
+				__nZRnd+=nAcc-Len(__cZRnd)
+			EndIF
+			cAdd += SubStr(__cZRnd,1,nAcc)
 			cAdd += oDec:Sub(oAcc):cInt
 		Else
 			oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc,1))
 			IF oAcc:gte(__o5)
 				oDec:SetValue(__o10)
 				cAdd := "0."
-				cAdd += Replicate("0",nAcc-1)
+				IF nAcc>__nZRnd
+					__cZRnd+=Replicate("0",nAcc-Len(__cZRnd))
+					__nZRnd+=nAcc-Len(__cZRnd)
+				EndIF
+				cAdd += SubStr(__cZRnd,1,nAcc-1)
 				cAdd += oDec:Sub(oAcc):cInt
 			Else
 				cAdd := "0"
@@ -3358,7 +3434,11 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 	IF oR:lt(oB) .or. oR:gt(oE)
 
 		nT	:= Min(oE:nInt,oM:nInt)
-		cR	:= Replicate("9",nT)
+		IF nT>__n9Rand
+			__c9Rand+=Replicate("9",nT-Len(__c9Rand))
+			__n9Rand+=nT-Len(__c9Rand)
+		EndIF
+		cR	:= SubStr(__c9Rand,1,nT)
 		oT:SetValue(cR)
 		cR	:= oM:Min(oE:Min(oT)):ExactValue()
 		nT	:= Val(cR)
@@ -3858,16 +3938,24 @@ return(x)
 	*/
 	Static Function Add(a,b,n,nBase)
 	
-		Local y 		:= n+1
-		Local c 		:= aNumber(Replicate("0",y),y,"ADD_C")
-		Local k 		:= 1
+		Local c
+
+		Local y := n+1
+		Local k := 1
 
 		Local cNR
 		
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
+		
+		IF y>__nZAdd
+			__cZAdd+=Replicate("0",y-Len(__cZAdd))
+			__nZAdd+=y-Len(__cZAdd)
+		EndIF
 
+		c := aNumber(SubStr(__cZAdd,1,y),y,"ADD_C")
+	
 		While n>0
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
@@ -3922,17 +4010,25 @@ return(x)
 		Sintaxe		: Sub(a,b,n,nBase) -> cNR
 	*/
 	Static Function Sub(a,b,n,nBase)
-	
-		Local y 		:= n
-		Local c 		:= aNumber(Replicate("0",y),y,"SUB_C")
-		Local k 		:= 1
+
+		Local c
+
+		Local y := n
+		Local k := 1
 		
 		Local cNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
-		#ENDIF	
-	
+		#ENDIF
+		
+		IF y>__nZSub
+			__cZSub+=Replicate("0",y-Len(__cZSub))
+			__nZSub+=y-Len(__cZSub)
+		EndIF
+		
+		c := aNumber(SubStr(__cZSub,1,y),y,"SUB_C")
+
 		While n>0
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
@@ -3988,15 +4084,16 @@ return(x)
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
+
+		Local c
 		
-		Local a			:= Invert(cN1,n)
-		Local b			:= Invert(cN2,n)
-		Local y			:= n+n
-		Local c			:= aNumber(Replicate("0",y),y,"MULT_C")
+		Local a	:= Invert(cN1,n)
+		Local b	:= Invert(cN2,n)
+		Local y	:= n+n
 	
-		Local i 		:= 1
-		Local k 		:= 1
-		Local l 		:= 2
+		Local i := 1
+		Local k := 1
+		Local l := 2
 		
 		Local s
 		Local x
@@ -4007,7 +4104,14 @@ return(x)
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
-		#ENDIF	
+		#ENDIF
+		
+		IF y>__nZMult
+			__cZMult+=Replicate("0",y-Len(__cZMult))
+			__nZMult+=y-Len(__cZMult)
+		EndIF
+		
+		c := aNumber(SubStr(__cZMult,1,y),y,"MULT_C")
 	
 		While i<=n
 			s := 1
@@ -4256,7 +4360,7 @@ return(x)
 	Static Function Add(a,b,n,nBase)
 
 		Local y	:= n+1
-		Local c := aFill(Array(y),0)
+		Local c := aFill(aSize(__aZAdd,y),0)
 		Local k := 1
 
 		While n>0
@@ -4285,7 +4389,7 @@ return(x)
 	Static Function Sub(a,b,n,nBase)
 
 		Local y := n
-		Local c := aFill(Array(y),0)
+		Local c := aFill(aSize(__aZSub,y),0)
 		Local k := 1
 	
 		While n>0
@@ -4318,7 +4422,7 @@ return(x)
 		Local b	:= Invert(cN2,n)
 
 		Local y	:= n+n
-		Local c	:= aFill(Array(y),0)
+		Local c	:= aFill(aSize(__aZMult,y),0)
 	
 		Local i := 1
 		Local k := 1
@@ -4414,13 +4518,20 @@ return(x)
 	*/
 	Static Function Add(a,b,n,nBase)
 
+		Local c
+
 		Local y	:= n+1
 		Local k := 1
-
-		Local c := Replicate("0",y)
-		
+	
 		Local v := 0
 		Local v1
+		
+		IF y>__nZAdd
+			__cZAdd+=Replicate("0",y-Len(__cZAdd))
+			__nZAdd+=y-Len(__cZAdd)
+		EndIF
+		
+		c := SubStr(__cZAdd,1,y)
 
 		While n>0
 			#IFDEF __PROTHEUS__
@@ -4457,13 +4568,20 @@ return(x)
 	*/
 	Static Function Sub(a,b,n,nBase)
 
+		Local c
+
 		Local y := n
 		Local k := 1
-
-		Local c := Replicate("0",y)
 		
 		Local v := 0
 		Local v1
+		
+		IF y>__nZSub
+			__cZSub+=Replicate("0",y-Len(__cZSub))
+			__nZSub+=y-Len(__cZSub)
+		EndIF
+		
+		c := SubStr(__cZSub,1,y)
 	
 		While n>0
 			#IFDEF __PROTHEUS__
@@ -4499,12 +4617,13 @@ return(x)
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
 
+		Local c
+
 		Local a	:= Invert(cN1,n)
 		Local b	:= Invert(cN2,n)
 
 		Local y	:= n+n
-		Local c	:= Replicate("0",y)
-	
+
 		Local i := 1
 		Local k := 1
 		Local l := 2
@@ -4514,7 +4633,14 @@ return(x)
 		
 		Local v	:= 0
 		Local v1
-	
+		
+		IF y>__nZMult
+			__cZMult+=Replicate("0",y-Len(__cZMult))
+			__nZMult+=y-Len(__cZMult)
+		EndIF
+		
+		c	:= SubStr(__cZMult,1,y)
+			
 		While i<=n
 			s := 1
 			j := i

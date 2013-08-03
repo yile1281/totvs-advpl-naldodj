@@ -1,43 +1,53 @@
 #include "tBigNumber.ch"
 
+#IFDEF __PROTHEUS__
+	Static __cEnvSrv
+#ENDIF
+
 Static __o0
 Static __o1
 Static __o2
 Static __o5
 Static __o10
-Static __ltbN
+Static __lstbNSet
 
 THREAD Static __cZPow
-THREAD Static __cZRoot
-THREAD Static __cZRnd
-THREAD Static __cZAdd
-THREAD Static __cZSub
-THREAD Static __cZMult
-
-THREAD Static __aZAdd
-THREAD Static __aZSub
-THREAD Static __aZMult
-
 THREAD Static __nZPow
+
+THREAD Static __cZRoot
 THREAD Static __nZRoot
+
+THREAD Static __cZRnd
 THREAD Static __nZRnd
+
+THREAD Static __cZAdd
 THREAD Static __nZAdd
+
+THREAD Static __cZSub
 THREAD Static __nZSub
+
+THREAD Static __cZMult
 THREAD Static __nZMult
 
 THREAD Static __c9Rand
 THREAD Static __n9Rand
 
-THREAD Static __lSet
-THREAD Static __aFiles
-THREAD Static __anthExit
-
-#IFDEF __PROTHEUS__
-	Static __cEnvSrv
+#IFDEF TBN_ARRAY
+	THREAD Static __aZAdd
+	THREAD Static __aZSub
+	THREAD Static __aZMult
 #ENDIF
 
+#IFDEF TBN_DBFILE
+	THREAD Static __aFiles
+	Static __nThdID
+#ENDIF
+
+THREAD Static __anthExit
 THREAD Static __nthRootAcc
 THREAD Static __nSetDecimals
+
+THREAD Static __lsthdSet
 
 #DEFINE RANDOM_MAX_EXIT			5
 #DEFINE EXIT_MAX_RANDOM			50
@@ -85,12 +95,10 @@ THREAD Static __nSetDecimals
 	Descricao	: Instancia um novo objeto do tipo BigNumber
 	Sintaxe		: tBigNumber():New(uBigN) -> self
 */
-CLASS tBigNumber
-	
+CLASS tBigNComplex
 #IFNDEF __PROTHEUS__
 	PROTECTED:
 #ENDIF
-
 	/* Keep in alphabetical order */
 	DATA cDec  AS CHARACTER INIT ""
 	DATA cInt  AS CHARACTER INIT ""
@@ -101,7 +109,23 @@ CLASS tBigNumber
 	DATA nDec  AS NUMERIC   INIT 0
 	DATA nInt  AS NUMERIC   INIT 0
 	DATA nSize AS NUMERIC   INIT 0
-	
+	Method New() CONSTRUCTOR
+ENDCLASS
+Method New() CLASS tBigNComplex
+Return(Self)
+/*
+	Class		: tBigNumber
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data		: 04/02/2013
+	Descricao	: Instancia um novo objeto do tipo BigNumber
+	Sintaxe		: tBigNumber():New(uBigN) -> self
+*/
+CLASS tBigNumber FROM tBigNComplex
+
+#IFNDEF __PROTHEUS__
+	PROTECTED:
+#ENDIF
+
 	Method Normalize(oBigN)
 
 #IFNDEF __PROTHEUS__
@@ -109,6 +133,11 @@ CLASS tBigNumber
 #ENDIF	
 	
 	Method New(uBigN,nBase) CONSTRUCTOR
+#IFNDEF __PROTHEUS__
+	DESTRUCTOR tBigNGC(lGC)
+#ELSE
+	Method tBigNGC(lGC)
+#ENDIF	
 
 	Method Clone()
 	Method ClassName()
@@ -214,8 +243,8 @@ CLASS tBigNumber
 	OPERATOR "*"  ARG uBigN INLINE (self:Mult(uBigN))
 	OPERATOR "*=" ARG uBigN INLINE (self:SetValue(self:Mult(uBigN)))
 
-	OPERATOR "/"  ARG uBigN INLINE (self:Div(uBigN))
-	OPERATOR "/=" ARG uBigN INLINE (self:SetValue(self:Div(uBigN)))
+	OPERATOR "/"  ARGS uBigN,lFloat INLINE (self:Div(uBigN,lFloat))
+	OPERATOR "/=" ARGS uBigN,lFloat INLINE (self:SetValue(self:Div(uBigN,lFloat)))
 	
 	OPERATOR "%"  ARG uBigN INLINE (self:Mod(uBigN))
 	OPERATOR "%=" ARG uBigN INLINE (self:SetValue(self:Mod(uBigN)))
@@ -224,12 +253,12 @@ CLASS tBigNumber
 	OPERATOR "**" ARG uBigN INLINE (self:Pow(uBigN))
 	OPERATOR "^=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
 	
-	OPERATOR ":=" ARG uBigN INLINE (self:SetValue(uBigN))
-	OPERATOR "="  ARG uBigN INLINE (self:SetValue(uBigN))
+	OPERATOR ":=" ARGS uBigN,nBase,cRDiv,lLRmvZ,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc))
+	OPERATOR "="  ARGS uBigN,nBase,cRDiv,lLRmvZ,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLRmvZ,nAcc))
 
 #ENDIF
                     
-End Class
+ENDCLASS
 
 /*
 	Função		: tBigNumber():New
@@ -256,60 +285,99 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	DEFAULT nBase	:= 10
 	
 	self:nBase		:= nBase
-	
-	#IFDEF __PROTHEUS__
-		DEFAULT __cEnvSrv := GetEnvServer()
-	#ENDIF
 
-	IF __lSet==NIL
-		__lSet := .F.
+	IF __lsthdSet==NIL
+		__lsthdSet := .F.
 		self:SetDecimals()
 		self:nthRootAcc()
-		__lSet := .T.
+		__cZPow	 := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZPow	 := 140
+		__cZRoot := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZRoot := 140
+		__cZRnd	 := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZRnd	 := 140
+		__cZAdd	 := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZAdd	 := 140
+		__cZSub	 := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZSub	 := 140
+		__cZMult := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nZMult := 140
+		__c9Rand := "9999999999"
+		__n9Rand := 10
+		#IFDEF TBN_ARRAY
+			__aZAdd	 := Array(0)
+			__aZSub	 := Array(0)
+			__aZMult := Array(0)
+		#ENDIF    
+		#IFDEF TBN_DBFILE
+			__aFiles := Array(0)
+		#ENDIF
+		__lsthdSet := .T.
 	EndIF	
 
 	self:SetValue(uBigN,nBase)
 
-	IF __ltbN==NIL
-
-		__ltbN := .F.
-
-		__o0  		:= tBigNumber():New("0",nBase)
-		__o1  		:= tBigNumber():New("1",nBase)
-		__o2  		:= tBigNumber():New("2",nBase)
-		__o5		:= tBigNumber():New("5",nBase)
-		__o10		:= tBigNumber():New("10",nBase)		 	
-
-		__cZPow		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZPow		:= 100
-		
-		__cZRoot	:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZRoot	:= 100
-	
-		__cZRnd		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZRnd		:= 100
-
-		__cZAdd		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZAdd		:= 100
-
-		__cZSub		:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZSub		:= 100
-
-		__cZMult	:= "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nZMult	:= 100	
-
-		__c9Rand	:= "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-		__n9Rand	:= 100
-		
-		__aZAdd		:= Array(0)
-		__aZSub		:= Array(0)
-		__aZMult	:= Array(0)
-
-		__ltbN := .T.
-
+	IF __lstbNSet==NIL
+		__lstbNSet := .F.
+		__o0  := tBigNumber():New("0",nBase)
+		__o1  := tBigNumber():New("1",nBase)
+		__o2  := tBigNumber():New("2",nBase)
+		__o5  := tBigNumber():New("5",nBase)
+		__o10 := tBigNumber():New("10",nBase)		 	
+		#IFDEF __PROTHEUS__
+			DEFAULT __cEnvSrv := GetEnvServer()
+		#ENDIF
+		#IFDEF TBN_DBFILE
+			#IFDEF __PROTHEUS__
+				__nThdID := ThreadID()
+			#ELSE
+				__nThdID := hb_ThreadID()
+			#ENDIF	
+		#ENDIF
+		__lstbNSet := .T.
 	EndIF
 
-Return(self)
+
+Return(self) 
+
+/*
+	Method		: tBigNGC
+	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data		: 03/03/2013
+	Descricao	: DESTRUCTOR
+*/
+#IFDEF TBN_DBFILE
+	METHOD tBigNGC(lGC) CLASS tBigNumber
+		Local nFile
+		Local nFiles
+		#IFDEF __PROTHEUS__
+			DEFAULT lGC	:= .NOT.(__nThdID==ThreadID())
+		#ELSE
+			DEFAULT lGC	:= .NOT.(__nThdID==hb_ThreadID())
+		#ENDIF
+		IF lGC
+			nFiles	:= Len(__aFiles)
+			For nFile := 1 To nFiles
+				IF Select(__aFiles[nFile][1])>0
+					(__aFiles[nFile][1])->(dbCloseArea())
+				EndIF			
+				#IFDEF __PROTHEUS__
+					MsErase(__aFiles[nFile][2],NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))
+				#ELSE
+					#IFDEF TBN_MEMIO
+						dbDrop(__aFiles[nFile][2])
+					#ELSE
+						fErase(__aFiles[nFile][2])
+					#ENDIF
+				#ENDIF
+			Next nFile
+			aSize(__aFiles,0)
+		ENDIF
+	Return(lGC)
+#ELSE
+	METHOD tBigNGC(lGC) CLASS tBigNumber
+	Return(lGC)
+#ENDIF
 
 /*
 	Method		: Clone
@@ -3925,7 +3993,7 @@ Static Function __sqrt(p,n)
 			x:SetValue(x:pow(t):Add(p):Div(t:Mult(x)))
 		next i
 	EndIF
-return(x)
+Return(x)
 
 #IFDEF TBN_DBFILE
 
@@ -3943,8 +4011,6 @@ return(x)
 		Local y := n+1
 		Local k := 1
 
-		Local cNR
-		
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF	
@@ -3977,30 +4043,8 @@ return(x)
 			++k
 			--n
 		End While
-
-		cNR	:= dbGetcN(c,y)
-
-		#IFDEF __ADDMT__
-			
-			IF Select(c)>0
-				(c)->(dbCloseArea())
-			EndIF	
-			
-			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
-			#ELSE
-				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile|dbDrop(cFile)})
-				#ELSE
-					aEval(__aFiles,{|cFile|fErase(cFile)})
-				#ENDIF
-			#ENDIF
-
-			aSize(__aFiles,0)
-					
-		#ENDIF
-
-	Return(cNR)
+	
+	Return(dbGetcN(c,y))
 	
 	/*
 		Funcao		: Sub
@@ -4015,8 +4059,6 @@ return(x)
 
 		Local y := n
 		Local k := 1
-		
-		Local cNR
 	
 		#IFDEF __HARBOUR__
 			FIELD FN
@@ -4051,29 +4093,7 @@ return(x)
 			--n
 		End While
 		
-		cNR	:= dbGetcN(c,y)
-
-		#IFDEF __SUBMT__
-
-			IF Select(c)>0
-				(c)->(dbCloseArea())
-			EndIF	
-			
-			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
-			#ELSE
-				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile|dbDrop(cFile)})
-				#ELSE
-					aEval(__aFiles,{|cFile|fErase(cFile)})
-				#ENDIF
-			#ENDIF
-
-			aSize(__aFiles,0)
-		
-		#ENDIF
-
-	Return(cNR)
+	Return(dbGetcN(c,y))
 	
 	/*
 		Funcao		: Mult
@@ -4099,9 +4119,7 @@ return(x)
 		Local x
 		Local j
 		Local w
-		
-		Local cNR
-	
+			
 		#IFDEF __HARBOUR__
 			FIELD FN
 		#ENDIF
@@ -4176,29 +4194,7 @@ return(x)
 			l++
 		End While
 		
-		cNR	:= dbGetcN(c,k)
-		
-		#IFDEF __MULTMT__
-
-			IF Select(c)>0
-				(c)->(dbCloseArea())
-			EndIF	
-
-			#IFDEF __PROTHEUS__
-				aEval(__aFiles,{|cFile|MsErase(cFile,NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))})
-			#ELSE
-				#IFDEF TBN_MEMIO
-					aEval(__aFiles,{|cFile|dbDrop(cFile)})
-				#ELSE
-					aEval(__aFiles,{|cFile|fErase(cFile)})
-				#ENDIF
-			#ENDIF
-
-			aSize(__aFiles,0)
-			
-		#ENDIF
-
-	Return(cNR)
+	Return(dbGetcN(c,k))
 
 	/*
 		Funcao		: aNumber
@@ -4296,8 +4292,7 @@ return(x)
 				cFile := CriaTrab(aStru,cAlias)
 			#ENDIF	
 	#ENDIF
-			DEFAULT __aFiles := Array(0)
-			aAdd(__aFiles,cFile)
+			aAdd(__aFiles,{cAlias,cFile})
 		Else
 			(cAlias)->(dbRLock())
 	#IFDEF __HARBOUR__		
@@ -4317,28 +4312,32 @@ return(x)
 	#IFDEF __HARBOUR__
 		#IFNDEF TBN_MEMIO
 			Static Function CriaTrab(aStru,cRDD)
-				Local cFile 	:= "TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
+				Local cFolder	:= GetCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
+				Local cFile 	:= cFolder+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
 				Local lSuccess	:= .F.
 				While .NOT.(lSuccess)
 					Try
+					  MakeDir(cFolder)
 					  dbCreate(cFile,aStru,cRDD)
 					  lSuccess	:= .T.
 					Catch
-					  cFile		:= "TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
+					  cFile		:= "TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
 					  lSuccess	:= .F.
 					End
 				End While	
 			Return(cFile)
+			Static Function GetCurrentFolder()
+			Return(hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
 		#ELSE
 			Static Function CriaTrab(aStru,cAlias)
-				Local cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
+				Local cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)
 				Local lSuccess	:= .F. 	
 				While .NOT.(lSuccess)
 					Try
 					  dbCreate(cFile,aStru,NIL,.T.,cAlias)
 					  lSuccess	:= .T.
 					Catch
-					  cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)
+					  cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)
 					  lSuccess	:= .F.
 					End
 				End While	

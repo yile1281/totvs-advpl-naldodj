@@ -157,7 +157,7 @@ User Function tBigNTst()
 			__ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")
 		#ENDIF	
 	#ELSE
-		#IFNDEF TBN_ARRAY
+		#IFDEF TBN_ARRAY
 			__ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")
 		#ELSE
 			__ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")

@@ -93,7 +93,7 @@ THREAD Static __lsthdSet
 	Descricao	: Instancia um novo objeto do tipo BigNumber
 	Sintaxe		: tBigNumber():New(uBigN) -> self
 */
-CLASS tBigNumber FROM tBigNComplex
+CLASS tBigNumber
 
 #IFNDEF __PROTHEUS__
 	PROTECTED:

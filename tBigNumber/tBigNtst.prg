@@ -33,8 +33,8 @@ Function Main()
 	Private N_TEST
 	IF .NOT.(File(cIni) ) .or. Empty( hIni )
 		hIni["GENERAL"] := hb_Hash() 
-		hIni["GENERAL"]["ACC_SET"] 		:= "50"
-		hIni["GENERAL"]["ROOT_ACC_SET"]	:= "25"
+		hIni["GENERAL"]["ACC_SET"] 		:= "25"
+		hIni["GENERAL"]["ROOT_ACC_SET"]	:= "15"
 		hIni["GENERAL"]["ACC_ALOG"]		:= "25"
 		hIni["GENERAL"]["__SLEEP"]		:= "0"
 		hIni["GENERAL"]["N_TEST"]		:= "10"
@@ -63,9 +63,9 @@ Function Main()
 			NEXT cKey
 		NEXT cSection
 	EndIF
-	ACC_SET			:= IF(Empty(ACC_SET),50,ACC_SET)
-	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),25,ROOT_ACC_SET)
-	ACC_ALOG		:= IF(Empty(ACC_ALOG),ROOT_ACC_SET,ACC_ALOG)
+	ACC_SET			:= IF(Empty(ACC_SET),25,ACC_SET)
+	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),15,ROOT_ACC_SET)
+	ACC_ALOG		:= IF(Empty(ACC_ALOG),ACC_SET,ACC_ALOG)
 	__SLEEP 		:= 0
 	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)	
 Return(tBigNTst())
@@ -84,15 +84,15 @@ User Function tBigNTst()
 		otFIni := U_TFINI(cIni)
 		IF .NOT.File(cIni)
 			otFIni:AddNewSession("GENERAL")
-			otFIni:AddNewProperty("GENERAL","ACC_SET","50")
-			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET","25")
+			otFIni:AddNewProperty("GENERAL","ACC_SET","25")
+			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET","15")
 			otFIni:AddNewProperty("GENERAL","ACC_ALOG","25")
 			otFIni:AddNewProperty("GENERAL","__SLEEP","0")
 			otFIni:AddNewProperty("GENERAL","N_TEST","10")
 			otFIni:SaveAs(cIni)
 		Else
-			ACC_SET			:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET","50"))
-			ROOT_ACC_SET	:= Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET","25"))
+			ACC_SET			:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET","25"))
+			ROOT_ACC_SET	:= Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET","15"))
 			ACC_ALOG		:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG","25"))
 			__SLEEP			:= Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP","0"))
 			N_TEST			:= Val(oTFINI:GetPropertyValue("GENERAL","N_TEST","10"))
@@ -100,7 +100,7 @@ User Function tBigNTst()
 	EndIF
 	ACC_SET			:= IF(Empty(ACC_SET),50,ACC_SET)
 	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),25,ROOT_ACC_SET)
-	ACC_ALOG		:= IF(Empty(ACC_ALOG),ROOT_ACC_SET,ACC_ALOG)
+	ACC_ALOG		:= IF(Empty(ACC_ALOG),ACC_SET,ACC_ALOG)
 	__SLEEP 		:= 0
 	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)
 Return(tBigNTst())

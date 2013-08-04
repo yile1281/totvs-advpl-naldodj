@@ -61,41 +61,40 @@ THREAD Static __lsthdSet
 #DEFINE MAX_SYS_SQRT		"9999999999999999"
 
 /*
-
-	Alternative Compile Options: /D
-
-	#IFDEF __PROTHEUS__
-		/DTBN_ARRAY
-		/DTBN_DBFILE 
-		/D__TBN_DYN_OBJ_SET__ 
-		/D__POWMT__
-		/D__ROOTMT__
-		/D__ADDMT__
-		/D__SUBTMT__
-		/D__MULTMT__
-	#ELSE //__HARBOUR__
-		/DTBN_ARRAY
-		/DTBN_DBFILE 
-		/DTBN_MEMIO 
-		/D__TBN_DYN_OBJ_SET__ 
-		/D__POWMT__ 
-		/D__ROOTMT__
-		/D__ADDMT__
-		/D__SUBTMT__
-		/D__MULTMT__
-		/D__HB_Q_SQRT__
-	#ENDIF
-
+*	Alternative Compile Options: /D
+*
+*	#IFDEF __PROTHEUS__
+*		/DTBN_ARRAY
+*		/DTBN_DBFILE 
+*		/D__TBN_DYN_OBJ_SET__ 
+*		/D__POWMT__
+*		/D__ROOTMT__
+*		/D__ADDMT__
+*		/D__SUBTMT__
+*		/D__MULTMT__
+*	#ELSE //__HARBOUR__
+*		/DTBN_ARRAY
+*		/DTBN_DBFILE 
+*		/DTBN_MEMIO 
+*		/D__TBN_DYN_OBJ_SET__ 
+*		/D__POWMT__ 
+*		/D__ROOTMT__
+*		/D__ADDMT__
+*		/D__SUBTMT__
+*		/D__MULTMT__
+*		/D__HB_Q_SQRT__
+*	#ENDIF
 */
 
 /*
-	Class		: tBigNComplex
+	Class		: tBigNumber
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 04/02/2013
-	Descricao	: Instancia um novo objeto do tipo tBigNComplex
-	Sintaxe		: tBigNComplex():New() -> self
+	Descricao	: Instancia um novo objeto do tipo BigNumber
+	Sintaxe		: tBigNumber():New(uBigN) -> self
 */
-CLASS tBigNComplex
+CLASS tBigNumber FROM tBigNComplex
+
 #IFNDEF __PROTHEUS__
 	PROTECTED:
 #ENDIF
@@ -110,17 +109,6 @@ CLASS tBigNComplex
 	DATA nInt  AS NUMERIC   INIT 0
 	DATA nSize AS NUMERIC   INIT 0
 	Method New() CONSTRUCTOR
-ENDCLASS
-Method New() CLASS tBigNComplex
-Return(Self)
-/*
-	Class		: tBigNumber
-	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
-	Data		: 04/02/2013
-	Descricao	: Instancia um novo objeto do tipo BigNumber
-	Sintaxe		: tBigNumber():New(uBigN) -> self
-*/
-CLASS tBigNumber FROM tBigNComplex
 
 #IFNDEF __PROTHEUS__
 	PROTECTED:

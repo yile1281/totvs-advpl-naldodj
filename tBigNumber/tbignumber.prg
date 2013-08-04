@@ -122,7 +122,9 @@ CLASS tBigNumber
 	Method New(uBigN,nBase) CONSTRUCTOR
 
 #IFNDEF __PROTHEUS__
-	DESTRUCTOR tBigNGC
+	#IFDEF TBN_DBFILE
+		DESTRUCTOR tBigNGC
+	#ENDIF	
 #ENDIF	
 
 	Method Clone()
@@ -325,17 +327,19 @@ Method New(uBigN,nBase) CLASS tBigNumber
 
 Return(self)
 
-#IFDEF __PROTHEUS__
-STATIC PROCEDURE tBigNGC(lGC)
-#ELSE
 /*
 	Method		: tBigNGC
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: DESTRUCTOR
 */
+#IFDEF __PROTHEUS__
+STATIC PROCEDURE tBigNGC(lGC)
+#ELSE
+#IFDEF TBN_DBFILE
 METHOD tBigNGC() CLASS tBigNumber		
 Return(tBigNGC())
+#ENDIF
 PROCEDURE tBigNGC(lGC)
 #ENDIF
 	#IFDEF TBN_DBFILE

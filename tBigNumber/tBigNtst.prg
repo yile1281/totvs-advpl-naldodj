@@ -80,12 +80,13 @@ User Function tBigNTst()
 	Private ACC_ALOG
 	Private __SLEEP
 	Private N_TEST
-	IF FindFunction("U_TFINI")	
+	IF FindFunction("U_TFINI") //NDJLIB020.PRG	
 		otFIni := U_TFINI(cIni)
 		IF .NOT.File(cIni)
 			otFIni:AddNewSession("GENERAL")
 			otFIni:AddNewProperty("GENERAL","ACC_SET","50")
 			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET","25")
+			otFIni:AddNewProperty("GENERAL","ACC_ALOG","25")
 			otFIni:AddNewProperty("GENERAL","__SLEEP","0")
 			otFIni:AddNewProperty("GENERAL","N_TEST","10")
 			otFIni:SaveAs(cIni)

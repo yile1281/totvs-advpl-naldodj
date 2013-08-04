@@ -29,6 +29,7 @@
 		#include "protheus.ch"
 		#xtranslate THREAD Static => Static
 		#xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
+		#xtranslate USER PROCEDURE => USER FUNCTION
 	#ELSE
 		#IFDEF __HARBOUR__
 			#include "common.ch"
@@ -73,6 +74,10 @@
 			#DEFINE CRLF CHR(13)+CHR(10)
 		#ENDIF
 	#ENDIF
+	
+	#IFNDEF SYMBOL_UNUSED
+		#DEFINE SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
+	#ENDIF 
 
 	#include "set.ch"
 	#include "fileio.ch"

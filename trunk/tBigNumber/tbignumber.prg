@@ -133,10 +133,9 @@ CLASS tBigNumber FROM tBigNComplex
 #ENDIF	
 	
 	Method New(uBigN,nBase) CONSTRUCTOR
+
 #IFNDEF __PROTHEUS__
-	DESTRUCTOR tBigNGC(lGC)
-#ELSE
-	Method tBigNGC(lGC)
+	DESTRUCTOR tBigNGC
 #ENDIF	
 
 	Method Clone()
@@ -337,17 +336,22 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__lstbNSet := .T.
 	EndIF
 
+Return(self)
 
-Return(self) 
-
+#IFDEF __PROTHEUS__
+STATIC PROCEDURE tBigNGC(lGC)
+#ELSE
 /*
 	Method		: tBigNGC
 	Autor		: Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data		: 03/03/2013
 	Descricao	: DESTRUCTOR
 */
-#IFDEF TBN_DBFILE
-	METHOD tBigNGC(lGC) CLASS tBigNumber
+METHOD tBigNGC() CLASS tBigNumber		
+Return(tBigNGC())
+PROCEDURE tBigNGC(lGC)
+#ENDIF
+	#IFDEF TBN_DBFILE
 		Local nFile
 		Local nFiles
 		#IFDEF __PROTHEUS__
@@ -373,11 +377,10 @@ Return(self)
 			Next nFile
 			aSize(__aFiles,0)
 		ENDIF
-	Return(lGC)
-#ELSE
-	METHOD tBigNGC(lGC) CLASS tBigNumber
-	Return(lGC)
-#ENDIF
+	#ELSE
+		SYMBOL_UNUSED( lGC )
+	#ENDIF
+Return
 
 /*
 	Method		: Clone
@@ -1245,6 +1248,7 @@ Return(__adoNR)
 		User Function ThAdd(cN1,cN2,nSize,nBase,cID)
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC]["+cN1+"+"+cN2+"]")
 				PutGlbValue(cID,Add(cN1,cN2,nSize,nBase))
+				tBigNGC(.T.)
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END]["+cN1+"+"+cN2+"]")
 		Return(.T.)
 	#ELSE
@@ -2014,6 +2018,8 @@ Return(__pwoNR)
 			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][CALC]["+cN1+" ^ "+cN2+"]")
 		
 			cNR			:= oN1:Pow(oN2):GetValue()
+			
+			tBigNGC(.T.)
 		
 			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][RESULT]["+cNR+"]")
 		
@@ -2608,6 +2614,8 @@ Return(othRoot)
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]")
 
 			cNR				:= nthRoot(oRootB,oRootE,oFExit,nSetDecimals):GetValue()
+			
+			tBigNGC(.T.)
 
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT]["+cNR+"]")
 
@@ -4282,7 +4290,10 @@ Return(x)
 	#ENDIF
 		IF Select(cAlias)==0
 	#IFNDEF __HARBOUR__
-			cFile := CriaTrab(aStru,.T.,".dbf")
+			cFile := CriaTrab(aStru,.T.,GetdbExtension())
+			IF .NOT.( GetdbExtension() $ cFile )
+				cFile += GetdbExtension()
+			EndIF
 			dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
 	#ELSE
 			#IFNDEF TBN_MEMIO

@@ -5,30 +5,105 @@
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
 
-#DEFINE ACC_SET			     100
-#DEFINE ROOT_ACC_SET	      99
-#DEFINE ACC_ALOG		 ACC_SET
-
-#DEFINE __SLEEP 0
-                                   
-#DEFINE N_TEST 10
-
 #IFDEF __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
 #DEFINE __NROWAT	14
 Function Main()
+	Local cIni	:= "tbigNtst.ini"
+	Local hIni	:= hb_iniRead(cIni)
+	Local cKey
+	Local aSect
+	Local cSection
+	MEMVAR  ACC_SET
+	MEMVAR  ROOT_ACC_SET
+	MEMVAR  ACC_ALOG
+	MEMVAR  __SLEEP
+	MEMVAR  N_TEST
 	#IFDEF __HARBOUR__
 	    #IFDEF __ALT_D__	// Compile with -b
 		   AltD(1)			// Enables the debugger. Press F5 to go.
 		   AltD()			// Invokes the debugger
 		#ENDIF
 	#ENDIF
+	Private ACC_SET
+	Private ROOT_ACC_SET
+	Private ACC_ALOG
+	Private __SLEEP
+	Private N_TEST
+	IF .NOT.(File(cIni) ) .or. Empty( hIni )
+		hIni["GENERAL"] := hb_Hash() 
+		hIni["GENERAL"]["ACC_SET"] 		:= "50"
+		hIni["GENERAL"]["ROOT_ACC_SET"]	:= "25"
+		hIni["GENERAL"]["ACC_ALOG"]		:= "25"
+		hIni["GENERAL"]["__SLEEP"]		:= "0"
+		hIni["GENERAL"]["N_TEST"]		:= "10"
+		hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
+	Else
+		FOR EACH cSection IN hIni:Keys
+			aSect := hIni[ cSection ]
+			FOR EACH cKey IN aSect:Keys
+				SWITCH Upper(cKey) 
+					CASE "ACC_SET"
+						ACC_SET			:= Val(aSect[cKey])
+						EXIT
+					CASE "ROOT_ACC_SET"
+						ROOT_ACC_SET	:= Val(aSect[cKey])
+						EXIT
+					CASE "ACC_ALOG"
+						ACC_ALOG		:= Val(aSect[cKey])
+						EXIT
+					CASE "__SLEEP"
+						__SLEEP			:= Val(aSect[cKey])
+						EXIT
+					CASE "N_TEST"
+						N_TEST			:= Val(aSect[cKey])
+						EXIT
+				ENDSWITCH
+			NEXT cKey
+		NEXT cSection
+	EndIF
+	ACC_SET			:= IF(Empty(ACC_SET),50,ACC_SET)
+	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),25,ROOT_ACC_SET)
+	ACC_ALOG		:= IF(Empty(ACC_ALOG),ROOT_ACC_SET,ACC_ALOG)
+	__SLEEP 		:= 0
+	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)	
 Return(tBigNTst())
 Static Function tBigNTst()
 #ELSE
 #xtranslate ExeName() => ProcName()
 User Function tBigNTst()
+	Local cIni := "tbigNtst.ini"
+	Local otFIni
+	Private ACC_SET
+	Private ROOT_ACC_SET
+	Private ACC_ALOG
+	Private __SLEEP
+	Private N_TEST
+	IF FindFunction("U_TFINI")	
+		otFIni := U_TFINI(cIni)
+		IF .NOT.File(cIni)
+			otFIni:AddNewSession("GENERAL")
+			otFIni:AddNewProperty("GENERAL","ACC_SET","50")
+			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET","25")
+			otFIni:AddNewProperty("GENERAL","__SLEEP","0")
+			otFIni:AddNewProperty("GENERAL","N_TEST","10")
+			otFIni:SaveAs(cIni)
+		Else
+			ACC_SET			:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET","50"))
+			ROOT_ACC_SET	:= Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET","25"))
+			ACC_ALOG		:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG","25"))
+			__SLEEP			:= Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP","0"))
+			N_TEST			:= Val(oTFINI:GetPropertyValue("GENERAL","N_TEST","10"))
+		EndIF
+	EndIF
+	ACC_SET			:= IF(Empty(ACC_SET),50,ACC_SET)
+	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),25,ROOT_ACC_SET)
+	ACC_ALOG		:= IF(Empty(ACC_ALOG),ROOT_ACC_SET,ACC_ALOG)
+	__SLEEP 		:= 0
+	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)
+Return(tBigNTst())
+Static Function tBigNTst()
 #ENDIF	
 
 #IFDEF __HARBOUR__
@@ -70,7 +145,8 @@ User Function tBigNTst()
 									} 
 
 #IFDEF __HARBOUR__
-	Local cLog		AS CHARACTER VALUE "tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+	Local cFld		AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
+	Local cLog		AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
 #ELSE
 	Local cLog		AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 #ENDIF
@@ -95,6 +171,12 @@ User Function tBigNTst()
 	Local laLog		AS LOGICAL
 
 #IFDEF __HARBOUR__
+
+	MEMVAR  ACC_SET
+	MEMVAR  ROOT_ACC_SET
+	MEMVAR  ACC_ALOG
+	MEMVAR  __SLEEP
+	MEMVAR  N_TEST
 	
 	MEMVAR __CRLF
 	MEMVAR __cSep
@@ -112,6 +194,8 @@ User Function tBigNTst()
 	Private __nMaxCol	:= MaxCol()
 	Private __nCol		:= ((__nMaxCol+1)/2)
 	Private __nRow	    := 0
+	
+	MakeDir(cFld)
 	
 #ELSE
 
@@ -1163,8 +1247,6 @@ User Function tBigNTst()
 	__nRow := __nMaxRow
 #ENDIF
 
-	otBigW:tBigNGC(.T.)
-
 	__ConOut(fhLog,"END ")
 
 	dEndDate := Date()
@@ -1189,6 +1271,8 @@ User Function tBigNTst()
 	__ConOut(fhLog,__cSep)
 
 	fClose(fhLog)
+
+	tBigNGC(.T.)
 	
 #IFDEF __HARBOUR__
 	WAIT "Press any key to end"
@@ -1324,4 +1408,7 @@ Return(lHarbour)
 		CLEAR SCREEN
 		__ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",maxcol()+1))
    Return( NIL )
-#ENDIF 
+#ELSE
+	Static Function tBigNGC(lGC)
+	Return(StaticCall(TBIGNUMBER,tBigNGC,lGC))
+#ENDIF

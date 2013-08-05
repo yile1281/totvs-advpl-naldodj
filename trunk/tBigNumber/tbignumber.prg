@@ -9,13 +9,11 @@ Static __o1
 Static __o2
 Static __o5
 Static __o10
+Static __cstcZ0
+Static __nstcZ0
+Static __cstcN9
+Static __nstcN9
 Static __lstbNSet
-
-THREAD Static __csthdZ0
-THREAD Static __nsthdZ0
-
-THREAD Static __csthdZ9
-THREAD Static __nsthdZ9
 
 #IFDEF TBN_ARRAY
 	THREAD Static __aZAdd
@@ -304,11 +302,11 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		self:SetDecimals()
 		self:nthRootAcc()
 		
-		__csthdZ0 := "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nsthdZ0 := 150
+		__cstcZ0 := "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+		__nstcZ0 := 150
 		
-		__csthdZ9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-		__nsthdZ9 := 150
+		__cstcN9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+		__nstcN9 := 150
 		
 		#IFDEF TBN_ARRAY
 			__aZAdd	 := Array(0)
@@ -1681,13 +1679,13 @@ Method Pow(uBigN) CLASS tBigNumber
 			__pwoA:SetValue(cPowA)
 
 			nZS := Len(__pwoNP:Dec(NIL,NIL,.T.))
-			While nZS>__nsthdZ0
-				__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-				__nsthdZ0+=__nsthdZ0
+			While nZS>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
 			End While
 			
 			cM10	:= "1"
-			cM10	+= SubStr(__csthdZ0,1,nZS)
+			cM10	+= SubStr(__cstcZ0,1,nZS)
 			
 			cPowB	:= cM10
 
@@ -2254,12 +2252,12 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		EndIF
 
 		nZS := __nthRootAcc-1
-		While nZS>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While nZS>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 	
-		cFExit := "0."+SubStr(__csthdZ0,1,nZS)+"1"
+		cFExit := "0."+SubStr(__cstcZ0,1,nZS)+"1"
 			
 		oFExit := tBigNumber():New()
 
@@ -2268,11 +2266,11 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		IF oRootB:Dec(.T.):gt(__o0)
 			
 			nZS := Len(oRootB:Dec(NIL,NIL,.T.))
-			While nZS>__nsthdZ0
-				__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-				__nsthdZ0+=__nsthdZ0
+			While nZS>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
 			End While
-			oRootD	:= tBigNumber():New("1"+SubStr(__csthdZ0,1,nZS))
+			oRootD	:= tBigNumber():New("1"+SubStr(__cstcZ0,1,nZS))
 			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
 			
 			#IFDEF __HARBOUR__
@@ -2850,22 +2848,22 @@ Method Rnd(nAcc) CLASS tBigNumber
 		IF oAcc:gte(__o5)
 			oDec:SetValue(__o10)
 			cAdd := "0."
-			While nAcc>__nsthdZ0
-				__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-				__nsthdZ0+=__nsthdZ0
+			While nAcc>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
 			End While
-			cAdd += SubStr(__csthdZ0,1,nAcc)
+			cAdd += SubStr(__cstcZ0,1,nAcc)
 			cAdd += oDec:Sub(oAcc):cInt
 		Else
 			oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc,1))
 			IF oAcc:gte(__o5)
 				oDec:SetValue(__o10)
 				cAdd := "0."
-				While nAcc>__nsthdZ0
-					__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-					__nsthdZ0+=__nsthdZ0
+				While nAcc>__nstcZ0
+					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+					__nstcZ0+=__nstcZ0
 				End While
-				cAdd += SubStr(__csthdZ0,1,nAcc-1)
+				cAdd += SubStr(__cstcZ0,1,nAcc-1)
 				cAdd += oDec:Sub(oAcc):cInt
 			Else
 				cAdd := "0"
@@ -3485,11 +3483,11 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 	IF oR:lt(oB) .or. oR:gt(oE)
 
 		nT	:= Min(oE:nInt,oM:nInt)
-		While nT>__nsthdZ9
-			__csthdZ9+=SubStr(__csthdZ9,1,__nsthdZ9)
-			__nsthdZ9+=__nsthdZ9
+		While nT>__nstcN9
+			__cstcN9+=SubStr(__cstcN9,1,__nstcN9)
+			__nstcN9+=__nstcN9
 		End While
-		cR	:= SubStr(__csthdZ9,1,nT)
+		cR	:= SubStr(__cstcN9,1,nT)
 		oT:SetValue(cR)
 		cR	:= oM:Min(oE:Min(oT)):ExactValue()
 		nT	:= Val(cR)
@@ -3998,12 +3996,12 @@ Return(x)
 			FIELD FN
 		#ENDIF	
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 
-		c := aNumber(SubStr(__csthdZ0,1,y),y,"ADD_C")
+		c := aNumber(SubStr(__cstcZ0,1,y),y,"ADD_C")
 	
 		While n>0
 			(c)->(dbGoTo(k))
@@ -4047,12 +4045,12 @@ Return(x)
 			FIELD FN
 		#ENDIF
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 		
-		c := aNumber(SubStr(__csthdZ0,1,y),y,"SUB_C")
+		c := aNumber(SubStr(__cstcZ0,1,y),y,"SUB_C")
 
 		While n>0
 			(c)->(dbGoTo(k))
@@ -4107,12 +4105,12 @@ Return(x)
 			FIELD FN
 		#ENDIF
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubSTr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubSTr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 		
-		c := aNumber(SubStr(__csthdZ0,1,y),y,"MULT_C")
+		c := aNumber(SubStr(__cstcZ0,1,y),y,"MULT_C")
 	
 		While i<=n
 			s := 1
@@ -4509,12 +4507,12 @@ Return(x)
 		Local v := 0
 		Local v1
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 		
-		c := SubStr(__csthdZ0,1,y)
+		c := SubStr(__cstcZ0,1,y)
 
 		While n>0
 			#IFDEF __PROTHEUS__
@@ -4559,12 +4557,12 @@ Return(x)
 		Local v := 0
 		Local v1
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 		
-		c := SubStr(__csthdZ0,1,y)
+		c := SubStr(__cstcZ0,1,y)
 	
 		While n>0
 			#IFDEF __PROTHEUS__
@@ -4617,12 +4615,12 @@ Return(x)
 		Local v	:= 0
 		Local v1
 		
-		While y>__nsthdZ0
-			__csthdZ0+=SubStr(__csthdZ0,1,__nsthdZ0)
-			__nsthdZ0+=__nsthdZ0
+		While y>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
 		End While
 		
-		c	:= SubStr(__csthdZ0,1,y)
+		c	:= SubStr(__cstcZ0,1,y)
 			
 		While i<=n
 			s := 1

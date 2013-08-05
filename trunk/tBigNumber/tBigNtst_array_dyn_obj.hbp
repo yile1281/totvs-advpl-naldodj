@@ -1,0 +1,11 @@
+#/D__HB_Q_SQRT__
+#/D__ALT_D__
+#-b
+
+/DTBN_ARRAY
+/D__TBN_DYN_OBJ_SET__
+
+tBigNtst.prg -w2
+tbignumber.prg -w3
+
+-otBigNtst_array_dyn_obj

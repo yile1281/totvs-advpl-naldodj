@@ -1,6 +1,12 @@
 #include "tBigNumber.ch"
 #include "paramtypex.ch"
 
+#DEFINE ACC_SET			  "100"
+#DEFINE ROOT_ACC_SET	   "99"
+#DEFINE ACC_ALOG        ACC_SET
+#DEFINE __SLEEP             "0"
+#DEFINE N_TEST             "10"
+
 #IFDEF __PROTHEUS__
 	#xcommand ? <e> => ConOut(<e>)
 #ENDIF	
@@ -15,29 +21,29 @@ Function Main()
 	Local cKey
 	Local aSect
 	Local cSection
-	MEMVAR  ACC_SET
-	MEMVAR  ROOT_ACC_SET
-	MEMVAR  ACC_ALOG
-	MEMVAR  __SLEEP
-	MEMVAR  N_TEST
+	MEMVAR  nACC_SET
+	MEMVAR  nROOT_ACC_SET
+	MEMVAR  nACC_ALOG
+	MEMVAR  __nSLEEP
+	MEMVAR  nN_TEST
 	#IFDEF __HARBOUR__
 	    #IFDEF __ALT_D__	// Compile with -b
 		   AltD(1)			// Enables the debugger. Press F5 to go.
 		   AltD()			// Invokes the debugger
 		#ENDIF
 	#ENDIF
-	Private ACC_SET
-	Private ROOT_ACC_SET
-	Private ACC_ALOG
-	Private __SLEEP
-	Private N_TEST
+	Private nACC_SET
+	Private nROOT_ACC_SET
+	Private nACC_ALOG
+	Private __nSLEEP
+	Private nN_TEST
 	IF .NOT.(File(cIni) ) .or. Empty( hIni )
 		hIni["GENERAL"] := hb_Hash() 
-		hIni["GENERAL"]["ACC_SET"] 		:= "25"
-		hIni["GENERAL"]["ROOT_ACC_SET"]	:= "15"
-		hIni["GENERAL"]["ACC_ALOG"]		:= "25"
-		hIni["GENERAL"]["__SLEEP"]		:= "0"
-		hIni["GENERAL"]["N_TEST"]		:= "10"
+		hIni["GENERAL"]["ACC_SET"]		:= ACC_SET
+		hIni["GENERAL"]["ROOT_ACC_SET"]	:= ROOT_ACC_SET
+		hIni["GENERAL"]["ACC_ALOG"]		:= ACC_ALOG
+		hIni["GENERAL"]["__SLEEP"]		:= __SLEEP
+		hIni["GENERAL"]["N_TEST"]		:= N_TEST
 		hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
 	Else
 		FOR EACH cSection IN hIni:Keys
@@ -45,29 +51,28 @@ Function Main()
 			FOR EACH cKey IN aSect:Keys
 				SWITCH Upper(cKey) 
 					CASE "ACC_SET"
-						ACC_SET			:= Val(aSect[cKey])
+						nACC_SET		:= Val(aSect[cKey])
 						EXIT
 					CASE "ROOT_ACC_SET"
-						ROOT_ACC_SET	:= Val(aSect[cKey])
+						nROOT_ACC_SET	:= Val(aSect[cKey])
 						EXIT
 					CASE "ACC_ALOG"
-						ACC_ALOG		:= Val(aSect[cKey])
+						nACC_ALOG		:= Val(aSect[cKey])
 						EXIT
 					CASE "__SLEEP"
-						__SLEEP			:= Val(aSect[cKey])
+						__nSLEEP		:= Val(aSect[cKey])
 						EXIT
 					CASE "N_TEST"
-						N_TEST			:= Val(aSect[cKey])
+						nN_TEST			:= Val(aSect[cKey])
 						EXIT
 				ENDSWITCH
 			NEXT cKey
 		NEXT cSection
 	EndIF
-	ACC_SET			:= IF(Empty(ACC_SET),25,ACC_SET)
-	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),15,ROOT_ACC_SET)
-	ACC_ALOG		:= IF(Empty(ACC_ALOG),ACC_SET,ACC_ALOG)
-	__SLEEP 		:= 0
-	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)	
+	nACC_SET		:= IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
+	nROOT_ACC_SET	:= IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
+	nACC_ALOG		:= IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
+	nN_TEST 		:= IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)	
 Return(tBigNTst())
 Static Function tBigNTst()
 #ELSE
@@ -75,34 +80,33 @@ Static Function tBigNTst()
 User Function tBigNTst()
 	Local cIni := "tbigNtst.ini"
 	Local otFIni
-	Private ACC_SET
-	Private ROOT_ACC_SET
-	Private ACC_ALOG
-	Private __SLEEP
-	Private N_TEST
+	Private nACC_SET
+	Private nROOT_ACC_SET
+	Private nACC_ALOG
+	Private __nSLEEP
+	Private nN_TEST
 	IF FindFunction("U_TFINI") //NDJLIB020.PRG	
 		otFIni := U_TFINI(cIni)
 		IF .NOT.File(cIni)
 			otFIni:AddNewSession("GENERAL")
-			otFIni:AddNewProperty("GENERAL","ACC_SET","25")
-			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET","15")
-			otFIni:AddNewProperty("GENERAL","ACC_ALOG","25")
-			otFIni:AddNewProperty("GENERAL","__SLEEP","0")
-			otFIni:AddNewProperty("GENERAL","N_TEST","10")
+			otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
+			otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET)
+			otFIni:AddNewProperty("GENERAL","ACC_ALOG",ACC_ALOG)
+			otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
+			otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
 			otFIni:SaveAs(cIni)
 		Else
-			ACC_SET			:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET","25"))
-			ROOT_ACC_SET	:= Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET","15"))
-			ACC_ALOG		:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG","25"))
-			__SLEEP			:= Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP","0"))
-			N_TEST			:= Val(oTFINI:GetPropertyValue("GENERAL","N_TEST","10"))
+			nACC_SET		:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
+			nROOT_ACC_SET	:= Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
+			nACC_ALOG		:= Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
+			__nSLEEP		:= Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
+			nN_TEST			:= Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
 		EndIF
 	EndIF
-	ACC_SET			:= IF(Empty(ACC_SET),50,ACC_SET)
-	ROOT_ACC_SET	:= IF(Empty(ROOT_ACC_SET),25,ROOT_ACC_SET)
-	ACC_ALOG		:= IF(Empty(ACC_ALOG),ACC_SET,ACC_ALOG)
-	__SLEEP 		:= 0
-	N_TEST 			:= IF(Empty(N_TEST),10,N_TEST)
+	nACC_SET		:= IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
+	nROOT_ACC_SET	:= IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
+	nACC_ALOG		:= IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
+	nN_TEST 		:= IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 Return(tBigNTst())
 Static Function tBigNTst()
 #ENDIF	
@@ -173,11 +177,11 @@ Static Function tBigNTst()
 
 #IFDEF __HARBOUR__
 
-	MEMVAR  ACC_SET
-	MEMVAR  ROOT_ACC_SET
-	MEMVAR  ACC_ALOG
-	MEMVAR  __SLEEP
-	MEMVAR  N_TEST
+	MEMVAR  nACC_SET
+	MEMVAR  nROOT_ACC_SET
+	MEMVAR  nACC_ALOG
+	MEMVAR  __nSLEEP
+	MEMVAR  nN_TEST
 	
 	MEMVAR __CRLF
 	MEMVAR __cSep
@@ -216,12 +220,12 @@ Static Function tBigNTst()
 	BuildScreen(fhLog)
 #ENDIF
 	
-	otBigN:SetDecimals(ACC_SET)
-	otBigN:nthRootAcc(ROOT_ACC_SET)
+	otBigN:SetDecimals(nACC_SET)
+	otBigN:nthRootAcc(nROOT_ACC_SET)
 	otBigN:SysSQRT(0)
 
-	otBigW:SetDecimals(ACC_SET)
-	otBigW:nthRootAcc(ROOT_ACC_SET)
+	otBigW:SetDecimals(nACC_SET)
+	otBigW:nthRootAcc(nROOT_ACC_SET)
 	otBigW:SysSQRT(0)
 	
 	Set(_SET_DECIMALS,8)
@@ -418,7 +422,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For n := 1 To ( N_TEST * 2 )
+	For n := 1 To ( nN_TEST * 2 )
 		__ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
 		__ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
 		__ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
@@ -437,9 +441,9 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cX := hb_ntos(x)
-		For n := N_TEST To 1 Step -1
+		For n := nN_TEST To 1 Step -1
 			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cW	:= otBigN:SetValue(cX):GCD(cN):GetValue()
 			__ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
@@ -529,7 +533,7 @@ Static Function tBigNTst()
 	otBigN:SetValue(o1)
 #ENDIF	
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= 9999.9999999999
 		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -557,11 +561,11 @@ Static Function tBigNTst()
 
 	__ConOut(fhLog,"")
 
-	ASSIGN cN	:= ("0."+Replicate("0",MIN(ACC_SET,10)))
+	ASSIGN cN	:= ("0."+Replicate("0",MIN(nACC_SET,10)))
 	ASSIGN n 	:= Val(cN)
 	otBigN:SetValue(cN)
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= 9999.9999999999
 		__ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -589,7 +593,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	+= -9999.9999999999
 		__ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -617,7 +621,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN n	-=9999.9999999999
 		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -643,7 +647,7 @@ Static Function tBigNTst()
 
 	__ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN := hb_ntos(n)
 		ASSIGN n  -= 9999.9999999999
 		__ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -669,7 +673,7 @@ Static Function tBigNTst()
 
 	__ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
 
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN := hb_ntos(n)
 		ASSIGN n  -= -9999.9999999999
 		__ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -701,7 +705,7 @@ Static Function tBigNTst()
 	otBigN:SetValue(o1)
 	otBigW:SetValue(o1)
 	
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN	:= hb_ntos(n)
 		ASSIGN z	:= Len(cN)
 		While ((SubStr(cN,-1) == "0") .and. (z>1))
@@ -779,9 +783,9 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For n := 0 TO N_TEST
+	For n := 0 TO nN_TEST
 		ASSIGN cN := hb_ntos(n)
-		For x := 0 TO N_TEST
+		For x := 0 TO nN_TEST
 			ASSIGN cX := hb_ntos(x)
 			__ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 #IFNDEF __PROTHEUS__
@@ -815,7 +819,7 @@ Static Function tBigNTst()
 	ASSIGN cN := hb_ntos(n)
 	otBigN:SetValue(cN)
 
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cW	:= hb_ntos(n)
 		ASSIGN n	/= 1.5
 		__ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
@@ -844,7 +848,7 @@ Static Function tBigNTst()
 	__ConOut(fhLog,"")
 
 	otBigN:SetValue(o1)
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN cN := hb_ntos(x)
 		otBigN:SetValue(cN)
 		__ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
@@ -870,7 +874,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For n := 1 To N_TEST
+	For n := 1 To nN_TEST
 		ASSIGN cN := hb_ntos(n)
 		__ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
 		__ConOut(fhLog,__cSep)
@@ -918,7 +922,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For x := 1 TO N_TEST
+	For x := 1 TO nN_TEST
 		ASSIGN n  	:= x
 		ASSIGN cN 	:= hb_ntos(n)
 		__ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
@@ -926,7 +930,7 @@ Static Function tBigNTst()
 		otBigN:SetValue(otBigN:SQRT())
 		ASSIGN cW	:= otBigN:GetValue()
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-		ASSIGN cW	:= otBigN:Rnd(ACC_SET):GetValue()
+		ASSIGN cW	:= otBigN:Rnd(nACC_SET):GetValue()
 		__ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
 		__ConOut(fhLog,__cSep)
 	Next x
@@ -949,7 +953,7 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 	
-	For x := 0 TO (N_TEST / 2)
+	For x := 0 TO (nN_TEST / 2)
 		ASSIGN n  := x
 		ASSIGN cN := hb_ntos(n)
 		__ConOut(fhLog,'Exp('+cN+')',"RESULT: " + hb_ntos(Exp(n)))
@@ -972,9 +976,9 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For x := IF(.NOT.(IsHb()) , 1 , 0) TO N_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+	For x := IF(.NOT.(IsHb()) , 1 , 0) TO nN_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
 		ASSIGN cN := hb_ntos(x)
-		For w := -N_TEST To 0
+		For w := -nN_TEST To 0
 			ASSIGN cW	:= hb_ntos(w)
 			ASSIGN n 	:= x
 			ASSIGN n	:= (n^w)
@@ -1006,9 +1010,9 @@ Static Function tBigNTst()
 	
 	__ConOut(fhLog,"")
 
-	For x := 0 TO N_TEST STEP 5
+	For x := 0 TO nN_TEST STEP 5
 		ASSIGN cN := hb_ntos(x)
-		For w := 0 To N_TEST STEP 5
+		For w := 0 To nN_TEST STEP 5
 			ASSIGN cW	:= hb_ntos(w+.5)
 			ASSIGN n 	:= x
 			ASSIGN n	:= (n^(w+.5))
@@ -1034,12 +1038,12 @@ Static Function tBigNTst()
 
 	__ConOut(fhLog,"")
 	
-	nSetDec 	:= otBigN:SetDecimals(ACC_ALOG)
-	nAccLog		:= otBigN:SetDecimals(ACC_ALOG)
+	nSetDec 	:= otBigN:SetDecimals(nACC_ALOG)
+	nAccLog		:= otBigN:SetDecimals(nACC_ALOG)
 	laLog		:= ( nAccLog >= 500 )
-	otBigW:SetDecimals(ACC_ALOG)
-	nAccRoot	:= otBigN:nthRootAcc(ACC_ALOG-1)
-	otBigW:nthRootAcc(ACC_ALOG-1)
+	otBigW:SetDecimals(nACC_ALOG)
+	nAccRoot	:= otBigN:nthRootAcc(nACC_ALOG-1)
+	otBigW:nthRootAcc(nACC_ALOG-1)
 
 	__ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
 	
@@ -1153,13 +1157,13 @@ Static Function tBigNTst()
 
 	//Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
-	For w := 0 TO N_TEST
+	For w := 0 TO nN_TEST
 		ASSIGN cW := hb_ntos(w)
 		otBigW:SetValue(cW)
 		__ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
 		__ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():GetValue()) 
 		__ConOut(fhLog,__cSep)
-		For n := 0 TO INT( MAX( N_TEST , 5 ) / 5 )
+		For n := 0 TO INT( MAX( nN_TEST , 5 ) / 5 )
 			ASSIGN cN	:= hb_ntos(n)
 			ASSIGN cX	:= otBigW:SetValue(cW):Log(cN):GetValue()
 			__ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")'  ,"RESULT: "+cX)
@@ -1187,7 +1191,7 @@ Static Function tBigNTst()
     
 	//Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 	
-	For w := 0 TO N_TEST
+	For w := 0 TO nN_TEST
 		ASSIGN cW	:= hb_ntos(w)
 		ASSIGN cX	:= otBigW:SetValue(cW):Ln():GetValue()
 		__ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
@@ -1271,6 +1275,14 @@ Static Function tBigNTst()
 
 	__ConOut(fhLog,__cSep)
 
+	__ConOut(fhLog,"ACC_SET     :",nACC_SET) 
+	__ConOut(fhLog,"ROOT_ACC_SET:",nROOT_ACC_SET)
+	__ConOut(fhLog,"ACC_ALOG    :",nACC_ALOG)
+	__ConOut(fhLog,"__SLEEP     :",__nSLEEP)
+	__ConOut(fhLog,"N_TEST      :",nN_TEST)
+	
+	__ConOut(fhLog,__cSep)
+	
 	fClose(fhLog)
 
 	tBigNGC(.T.)
@@ -1284,7 +1296,7 @@ Return(NIL)
 
 /*
 Static Procedure __tbnSleep(nSleep)
-	PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __SLEEP
+	PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
 	#IFDEF __PROTHEUS__
 		Sleep(nSleep*1000)
 	#ELSE

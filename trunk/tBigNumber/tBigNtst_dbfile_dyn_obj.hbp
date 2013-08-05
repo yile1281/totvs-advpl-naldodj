@@ -1,0 +1,9 @@
+#/D__HB_Q_SQRT__
+
+/DTBN_DBFILE
+/D__TBN_DYN_OBJ_SET__ 
+
+tBigNtst.prg -w2
+tbignumber.prg -w3
+
+-otBigNtst_dbfile

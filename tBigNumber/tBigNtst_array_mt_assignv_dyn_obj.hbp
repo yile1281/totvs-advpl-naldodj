@@ -2,8 +2,9 @@
 
 -mt
 
-/DTBN_DBFILE
-/DTBN_MEMIO
+/DTBN_ARRAY
+
+/D__MT__
 /D__POWMT__
 /D__ROOTMT__
 /D__ADDMT__
@@ -14,4 +15,4 @@
 tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
 tbignumber.prg -w3
 
--otBigNtst_dbfile_memio_mt_dyn_obj_assignv
+-otBigNtst_array_mt_assignv_dyn_obj

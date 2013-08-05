@@ -1392,7 +1392,7 @@ Return(__sboNR)
 	Method		: Mult
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
-	Descricao   : Multiplicacao (Mais rapida,usa a multiplicacao nativa)
+	Descricao   : Multiplicacao 
 	Sintaxe     : tBigNumber():Mult(uBigN,leMult) -> oBigNR
 */
 Method Mult(uBigN,leMult) CLASS tBigNumber
@@ -1524,7 +1524,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		__dvoNR:SetValue(Div(cN1,cN2,nAcc,lFloat))
+		__dvoNR:SetValue(eDiv(cN1,cN2,nAcc,lFloat))
 	
 		__dvoRDiv:SetValue(__dvoNR:cRDiv,NIL,NIL,.F.)
 	
@@ -1555,7 +1555,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		    		cN2	:= __dvoN2:cInt
 		    		cN2	+= __dvoN2:cDec
 
-					__dvoRDiv:SetValue(Div(cN1,cN2,nAcc,lFloat))
+					__dvoRDiv:SetValue(eDiv(cN1,cN2,nAcc,lFloat))
 
 					cDec += __dvoRDiv:ExactValue(.T.)
 					nDec := Len(cDec)
@@ -3793,13 +3793,13 @@ Static Function eMult(cN1,cN2,nAcc)
 Return(oNR)
 	
 /*
-	Funcao		: Div
+	Funcao		: eDiv
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-	Sintaxe     : Div(cN,cD,nAcc,lFloat) -> cNR
+	Sintaxe     : eDiv(cN,cD,nAcc,lFloat) -> cNR
 */
-Static Function Div(cN,cD,nAcc,lFloat)
+Static Function eDiv(cN,cD,nAcc,lFloat)
 
 	Local aE 		:= Array(0)
 	

@@ -2,6 +2,7 @@
 
 /DTBN_DBFILE
 /DTBN_MEMIO
+/D__TBN_DYN_OBJ_SET__ 
 
 tBigNtst.prg -w2
 tbignumber.prg -w3

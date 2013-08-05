@@ -55,13 +55,20 @@
 	#xcommand DEFAULT =>
 
 	/* Default parameters management */
-	#xcommand DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-				=> ;
-				<uVar1> := iif( <uVar1> == NIL, <uVal1>, <uVar1> ) ;
-				[; <uVarN> := iif( <uVarN> == NIL, <uValN>, <uVarN> ) ]
+	#IFDEF __PROTHEUS__
+		#xcommand DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
+					=> ;
+					<uVar1> := iif( <uVar1> == NIL, <uVal1>, <uVar1> ) ;
+					[; <uVarN> := iif( <uVarN> == NIL, <uValN>, <uVarN> ) ]
+	#ELSE
+		#xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
+					=> ;
+					hb_Default(@<uVar1>,<uVal1>);
+					[; hb_Default(@<uVarN>,<uValN>) ]
+	#ENDIF
 
 	/* by default create ST version */
-   #ifndef __ST__
+    #ifndef __ST__
 		#ifndef __MT__
 	      #define __ST__
 	   #endif

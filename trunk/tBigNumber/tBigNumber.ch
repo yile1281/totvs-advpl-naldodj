@@ -1,92 +1,52 @@
 #IFNDEF _TBigNumber_CH
 
-	#DEFINE _TBigNumber_CH
+    #DEFINE _TBigNumber_CH
 
-	#DEFINE OPERATOR_ADD			{ '+' , 'add' }
-	#DEFINE OPERATOR_SUBTRACT		{ '-' , 'sub' }
-	#DEFINE OPERATOR_MULTIPLY		{ '*' , 'x' , 'mult' }
-	#DEFINE OPERATOR_DIVIDE			{ '/' , ':' , 'div'  }
-	#DEFINE OPERATOR_POW			{ '^' , '**' , 'xx' , 'pow' }
-	#DEFINE OPERATOR_MOD			{ '%' , 'mod' }
-	#DEFINE OPERATOR_EXP			{ 'exp' }
-	#DEFINE OPERATOR_SQRT			{ 'sqrt' }
-	#DEFINE OPERATOR_ROOT			{ 'root' }
+    #DEFINE OPERATOR_ADD            { '+' , 'add' }
+    #DEFINE OPERATOR_SUBTRACT       { '-' , 'sub' }
+    #DEFINE OPERATOR_MULTIPLY       { '*' , 'x' , 'mult' }
+    #DEFINE OPERATOR_DIVIDE         { '/' , ':' , 'div'  }
+    #DEFINE OPERATOR_POW            { '^' , '**' , 'xx' , 'pow' }
+    #DEFINE OPERATOR_MOD            { '%' , 'mod' }
+    #DEFINE OPERATOR_EXP            { 'exp' }
+    #DEFINE OPERATOR_SQRT           { 'sqrt' }
+    #DEFINE OPERATOR_ROOT           { 'root' }
 
-	#DEFINE OPERATORS				{;
-										OPERATOR_ADD,		;
-										OPERATOR_SUBTRACT,	;
-										OPERATOR_MULTIPLY,	;
-										OPERATOR_DIVIDE,	;	
-										OPERATOR_POW,		;
-										OPERATOR_MOD,		;
-										OPERATOR_EXP,		;
-										OPERATOR_SQRT,		;
-										OPERATOR_ROOT,		;
-									}
+    #DEFINE OPERATORS               {;
+                                        OPERATOR_ADD,      ;
+                                        OPERATOR_SUBTRACT, ;
+                                        OPERATOR_MULTIPLY, ;
+                                        OPERATOR_DIVIDE,   ;    
+                                        OPERATOR_POW,      ;
+                                        OPERATOR_MOD,      ;
+                                        OPERATOR_EXP,      ;
+                                        OPERATOR_SQRT,     ;
+                                        OPERATOR_ROOT,     ;
+                                    }
 
-	#IFDEF PROTHEUS
-		#DEFINE __PROTHEUS__
-		#include "protheus.ch"
-		#xtranslate THREAD Static => Static
-		#xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
-		#xtranslate USER PROCEDURE => USER FUNCTION
-	#ELSE
-		#IFDEF __HARBOUR__
-			#include "common.ch"
-			#include "hbclass.ch"
-*			#include "hbCompat.ch"
-			#IFDEF TBN_DBFILE
-				#IFNDEF TBN_MEMIO
-					REQUEST DBFCDX , DBFFPT
-				#ELSE
-					#require "hbmemio"
-					REQUEST HB_MEMIO
-				#ENDIF
-			#ENDIF
-		#ENDIF
-		#ifndef __XHARBOUR__
-			#include "xhb.ch" //add xHarbour emulation to Harbour
-		#endif
-		#xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
-	#ENDIF
+    #IFDEF PROTHEUS
+        #DEFINE __PROTHEUS__        
+        #INCLUDE "pt_tBigNumber.ch"
+    #ELSE
+        #IFDEF __HARBOUR__
+            #INCLUDE "hb_tBigNumber.ch"
+        #ENDIF
+    #ENDIF
 
-	#DEFINE MAX_DECIMAL_PRECISION	999999999999999
-    
-	#xcommand DEFAULT =>
+    #INCLUDE "set.ch"
+    #INCLUDE "fileio.ch"
 
-	/* Default parameters management */
-	#IFDEF __PROTHEUS__
-		#xcommand DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-					=> ;
-					<uVar1> := iif( <uVar1> == NIL, <uVal1>, <uVar1> ) ;
-					[; <uVarN> := iif( <uVarN> == NIL, <uValN>, <uVarN> ) ]
-	#ELSE
-		#xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-					=> ;
-					hb_Default(@<uVar1>,<uVal1>);
-					[; hb_Default(@<uVarN>,<uValN>) ]
-	#ENDIF
+    #DEFINE MAX_DECIMAL_PRECISION    999999999999999 //999.999.999.999.999
 
-	/* by default create ST version */
-    #ifndef __ST__
-		#ifndef __MT__
-	      #define __ST__
-	   #endif
-	#endif
+    /* by default create ST version */
+    #IFNDEF __ST__
+        #IFNDEF __MT__
+          #DEFINE __ST__
+       #ENDIF
+    #ENDIF
 
-	#IFNDEF CRLF
-		#IFDEF __HARBOUR__	
-			#DEFINE CRLF hb_eol()
-		#ELSE
-			#DEFINE CRLF CHR(13)+CHR(10)
-		#ENDIF
-	#ENDIF
-	
-	#IFNDEF SYMBOL_UNUSED
-		#DEFINE SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
-	#ENDIF 
-
-	#include "set.ch"
-	#include "fileio.ch"
+    #IFNDEF SYMBOL_UNUSED
+        #DEFINE SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
+    #ENDIF
 
 #ENDIF

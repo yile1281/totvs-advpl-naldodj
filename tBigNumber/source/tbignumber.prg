@@ -114,7 +114,9 @@ THREAD Static __lsthdSet
 CLASS tBigNumber
 
 #IFNDEF __PROTHEUS__
-	PROTECTED:
+	#IFNDEF __TBN_DYN_OBJ_SET__
+		PROTECTED:
+	#ENDIF
 #ENDIF
 	/* Keep in alphabetical order */
 	DATA cDec  AS CHARACTER INIT ""

@@ -1,9 +1,0 @@
-#/D__HB_Q_SQRT__
-
-/DTBN_DBFILE
-/DTBN_MEMIO
-
-tBigNtst.prg -w2
-tbignumber.prg -w3
-
--otBigNtst_dbfile_memio

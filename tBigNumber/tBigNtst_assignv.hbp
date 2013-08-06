@@ -1,8 +1,0 @@
-#/D__HB_Q_SQRT__
-#/D__ALT_D__
-#-b
-
-tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
-tbignumber.prg -w3
-
--otBigNtst_assignv

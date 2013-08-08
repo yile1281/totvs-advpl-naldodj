@@ -17,35 +17,41 @@ Group tBigNumber
       Folder Fontes
          VSSPath=Fontes
          FilesCount=6
-         File \svn\totvs-advpl-naldodj\tBigNumber\tBigNtst.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\__pteTthD.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\tbignumber.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\__ptPITthD.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\tPrime.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\tBigNtst.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\tfRead.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\tbignumber.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\__ptPITthD.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\tfRead.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\__pteTthD.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\tPrime.prg
              Type=T
          End
       End
       Folder Definições
          VSSPath=Definições
-         FilesCount=3
-         File \svn\totvs-advpl-naldodj\tBigNumber\tBigNumber.ch
+         FilesCount=5
+         File \svn\totvs-advpl-naldodj\tBigNumber\include\directry.ch
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\paramtypex.ch
+         File \svn\totvs-advpl-naldodj\tBigNumber\include\hb_tBigNumber.ch
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\directry.ch
+         File \svn\totvs-advpl-naldodj\tBigNumber\include\paramtypex.ch
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\include\pt_tBigNumber.ch
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\include\tBigNumber.ch
              Type=T
          End
       End

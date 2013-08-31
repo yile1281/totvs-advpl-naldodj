@@ -293,12 +293,6 @@ Static Function tBigNTst()
     ASSIGN oPrime := tPrime():New() 
 
     __ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
-
-
-    otBigN:SetValue("1.5")
-    __ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
-    __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())  
-    __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())    
     
     __ConOut(fhLog,"")
     
@@ -438,9 +432,9 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO INT( nN_TEST / 2 )
         ASSIGN cX := hb_ntos(x)
-        For n := nN_TEST To 1 Step -1
+        For n := nISQRT To 1 Step -1
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):GetValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
@@ -788,7 +782,7 @@ Static Function tBigNTst()
 		#ELSE
 			otBigN := cN
 		#ENDIF
-		__ConOut(fhLog,cN+':tBigNumber():Factorial('+cN+')',"RESULT: "+otBigN:Factorial(cN):ExactValue())
+		__ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
     End While
 
     __ConOut(fhLog,"")
@@ -1072,8 +1066,24 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," ------------ Teste Pow 1 -------------- END ")
     
+*    __tbnSleep()
+
     __ConOut(fhLog,"")
 
+    __ConOut(fhLog," BEGIN ------------ Teste Pow 2 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+	    otBigN:SetValue("1.5")
+    __ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
+    __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())  
+    __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())    
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste Pow 2 -------------- END ")
+    
+*    __tbnSleep()
+	
     __ConOut(fhLog,"")
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)
